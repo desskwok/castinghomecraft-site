@@ -127,7 +127,7 @@ async function loadPortfolio() {
     
     // Render renovation cases
     const renovationGrid = document.getElementById('renovation-grid');
-    renovationGrid.innerHTML = data.revolution?.map(item => `
+    renovationGrid.innerHTML = data.renovation?.map(item => `
       <a href="case.html?id=${item.id}&type=renovation" class="portfolio-card" style="text-decoration:none; color:inherit;">
         <div class="portfolio-img">
           ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}">` : '🏠'}
