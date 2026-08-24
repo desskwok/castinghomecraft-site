@@ -221,9 +221,9 @@ function initCompareSlider() {
     pos = Math.max(0, Math.min(1, pos));
     
     const percent = pos * 100;
-    beforeImg.style.clipPath = \`inset(0 \${100 - percent}% 0 0)\`;
-    line.style.left = \`\${percent}%\`;
-    handle.style.left = \`\${percent}%\`;
+    beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+    line.style.left = `${percent}%`;
+    handle.style.left = `${percent}%`;
   }
   
   slider.addEventListener('mousedown', (e) => { isDragging = true; updateSlider(e.clientX); });
