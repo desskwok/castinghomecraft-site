@@ -107,6 +107,16 @@
     <p style="margin-bottom: 16px; color: var(--text-light);">改完之後撳「儲存」更新網站</p>
     <button class="btn-success" style="font-size: 1.1rem; padding: 16px 48px;" onclick="saveData()">💾 儲存並更新網站</button>
     <button class="btn-danger btn-sm" style="margin-left: 12px;" onclick="clearToken()">🔑 重新設定 Token</button>
+    <div id="token-section" style="display:none; margin-top: 20px; padding: 20px; background: #f0f0f0; border-radius: 8px;">
+      <p style="margin-bottom: 12px; color: var(--primary); font-weight: 600;">輸入 GitHub Token（一次性設定）</p>
+      <p style="margin-bottom: 12px; color: var(--text-light); font-size: 0.9rem;">
+        如果未有 Token，去 <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--accent-dark);">GitHub Settings</a> 建立一個，勾選「repo」權限。
+      </p>
+      <div style="display: flex; gap: 8px;">
+        <input type="password" id="token-input" placeholder="貼上你的 GitHub Token" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+        <button class="btn-success" onclick="saveToken()">確認</button>
+      </div>
+    </div>
     <p id="save-status" style="margin-top: 16px; font-weight: 600;"></p>
   </div>
   
@@ -204,7 +214,7 @@ function addCase() {
   const imagesText = document.getElementById('new-images').value;
   
   if (!title || !location) {
-    alert('請填寫標題和地區！');
+    document.getElementById('save-status').innerHTML = '<span style="color: red;">❌ 請填寫標題和地區！</span>';
     return;
   }
   
@@ -235,15 +245,19 @@ function addCase() {
   document.getElementById('new-images').value = '';
   document.getElementById('new-preview').style.display = 'none';
   
-  alert('案例已加入！請撳「儲存並更新網站」');
   showTab('renovation');
+  // Show status message instead of alert
+  document.getElementById('save-status').innerHTML = '<span style="color: green;">✅ 案例已加入！請撳「儲存並更新網站」。</span>';
 }
 
 function deleteCase(type, index) {
-  if (confirm('確定要刪除這個案例嗎？')) {
+  // Simple confirm without blocking
+  const confirmed = window.confirm('確定要刪除這個案例嗎？');
+  if (confirmed) {
     portfolioData[type].splice(index, 1);
     renderLists();
     updateJSON();
+    document.getElementById('save-status').innerHTML = '<span style="color: orange;">⚠️ 案例已刪除，請撳「儲存」更新。</span>';
   }
 }
 
@@ -265,13 +279,10 @@ async function saveData() {
   // Check if GitHub token is set
   let token = localStorage.getItem('github_token');
   if (!token) {
-    token = prompt('請輸入你的 GitHub Personal Access Token（用於自動儲存）：\n\n如果你未有，去 https://github.com/settings/tokens 建立一個，勾選 "repo" 權限。');
-    if (!token) {
-      statusEl.innerHTML = '<span style="color: orange;">⚠️ 未提供 Token，請手動複製 JSON。</span>';
-      document.getElementById('json-output').style.display = 'block';
-      return;
-    }
-    localStorage.setItem('github_token', token);
+    // Show token input section
+    document.getElementById('token-section').style.display = 'block';
+    statusEl.innerHTML = '<span style="color: orange;">⚠️ 請先輸入 GitHub Token。</span>';
+    return;
   }
   
   const repo = 'desskwok/castinghomecraft-site';
@@ -331,7 +342,19 @@ async function saveData() {
 
 function clearToken() {
   localStorage.removeItem('github_token');
-  alert('Token 已清除！下次儲存時會重新要求輸入。');
+  document.getElementById('save-status').innerHTML = '<span style="color: orange;">⚠️ Token 已清除！</span>';
+}
+
+function saveToken() {
+  const tokenInput = document.getElementById('token-input');
+  const token = tokenInput.value.trim();
+  if (!token) {
+    document.getElementById('save-status').innerHTML = '<span style="color: red;">❌ 請輸入 Token！</span>';
+    return;
+  }
+  localStorage.setItem('github_token', token);
+  document.getElementById('token-section').style.display = 'none';
+  document.getElementById('save-status').innerHTML = '<span style="color: green;">✅ Token 已儲存！</span>';
 }
 
 // Initialize
