@@ -47,6 +47,7 @@
       <button class="tab-btn active" data-tab="renovation" onclick="showTab('renovation')">全屋翻新工程</button>
       <button class="tab-btn" data-tab="maintenance" onclick="showTab('maintenance')">維修案例</button>
       <button class="tab-btn" data-tab="add" onclick="showTab('add')">➕ 加新案例</button>
+      <button class="tab-btn" data-tab="edit" onclick="showTab('edit')" id="edit-tab-btn" style="display:none;">✏️ 編輯案例</button>
     </div>
     
     <!-- Renovation List -->
@@ -61,6 +62,46 @@
       <ul class="case-list" id="maintenance-list"></ul>
     </div>
     
+    <!-- Edit Case -->
+    <div class="tab-content" id="tab-edit">
+      <h3>編輯案例</h3>
+      <input type="hidden" id="edit-index">
+      <input type="hidden" id="edit-type">
+      <div class="form-group">
+        <label>案例分類</label>
+        <input type="text" id="edit-type-display" disabled style="background:#f0f0f0;">
+      </div>
+      <div class="form-group">
+        <label>標題</label>
+        <input type="text" id="edit-title">
+      </div>
+      <div class="form-group">
+        <label>地區</label>
+        <input type="text" id="edit-location">
+      </div>
+      <div class="form-group">
+        <label>工程類型</label>
+        <input type="text" id="edit-category">
+      </div>
+      <div class="form-group">
+        <label>封面圖片 URL</label>
+        <input type="text" id="edit-thumbnail" oninput="previewEditImage()">
+        <img id="edit-preview" class="preview-img" style="display:none;">
+      </div>
+      <div class="form-group">
+        <label>介紹</label>
+        <textarea id="edit-description"></textarea>
+      </div>
+      <div class="form-group">
+        <label>圖片 URL（每行一個，可加多張）</label>
+        <textarea id="edit-images"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-success" onclick="updateCase()">✅ 更新案例</button>
+        <button class="btn-danger" onclick="cancelEdit()">取消</button>
+      </div>
+    </div>
+
     <!-- Add New Case -->
     <div class="tab-content" id="tab-add">
       <h3>加新案例</h3>
@@ -158,6 +199,7 @@ function renderLists() {
       </div>
       <div class="case-item-actions">
         <a href="case.html?id=${item.id}&type=renovation" target="_blank" class="btn-primary btn-sm">預覽</a>
+        <button class="btn-sm" style="background:#ffc107;color:#333;" onclick="editCase('renovation', ${index})">編輯</button>
         <button class="btn-danger btn-sm" onclick="deleteCase('renovation', ${index})">刪除</button>
       </div>
     </li>
@@ -174,6 +216,7 @@ function renderLists() {
       </div>
       <div class="case-item-actions">
         <a href="case.html?id=${item.id}&type=maintenance" target="_blank" class="btn-primary btn-sm">預覽</a>
+        <button class="btn-sm" style="background:#ffc107;color:#333;" onclick="editCase('maintenance', ${index})">編輯</button>
         <button class="btn-danger btn-sm" onclick="deleteCase('maintenance', ${index})">刪除</button>
       </div>
     </li>
@@ -251,7 +294,6 @@ function addCase() {
 }
 
 function deleteCase(type, index) {
-  // Simple confirm without blocking
   const confirmed = window.confirm('確定要刪除這個案例嗎？');
   if (confirmed) {
     portfolioData[type].splice(index, 1);
@@ -259,6 +301,87 @@ function deleteCase(type, index) {
     updateJSON();
     document.getElementById('save-status').innerHTML = '<span style="color: orange;">⚠️ 案例已刪除，請撳「儲存」更新。</span>';
   }
+}
+
+function editCase(type, index) {
+  const item = portfolioData[type][index];
+  
+  // Fill edit form
+  document.getElementById('edit-index').value = index;
+  document.getElementById('edit-type').value = type;
+  document.getElementById('edit-type-display').value = type === 'renovation' ? '全屋翻新工程' : '維修案例';
+  document.getElementById('edit-title').value = item.title;
+  document.getElementById('edit-location').value = item.location;
+  document.getElementById('edit-category').value = item.type;
+  document.getElementById('edit-thumbnail').value = item.thumbnail || '';
+  document.getElementById('edit-description').value = item.description;
+  document.getElementById('edit-images').value = (item.images || []).join('\n');
+  
+  // Preview image
+  if (item.thumbnail) {
+    document.getElementById('edit-preview').src = item.thumbnail;
+    document.getElementById('edit-preview').style.display = 'block';
+  } else {
+    document.getElementById('edit-preview').style.display = 'none';
+  }
+  
+  // Show edit tab
+  document.getElementById('edit-tab-btn').style.display = 'block';
+  showTab('edit');
+}
+
+function previewEditImage() {
+  const url = document.getElementById('edit-thumbnail').value;
+  const preview = document.getElementById('edit-preview');
+  if (url) {
+    preview.src = url;
+    preview.style.display = 'block';
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function updateCase() {
+  const index = parseInt(document.getElementById('edit-index').value);
+  const type = document.getElementById('edit-type').value;
+  const title = document.getElementById('edit-title').value;
+  const location = document.getElementById('edit-location').value;
+  const category = document.getElementById('edit-category').value;
+  const thumbnail = document.getElementById('edit-thumbnail').value;
+  const description = document.getElementById('edit-description').value;
+  const imagesText = document.getElementById('edit-images').value;
+  
+  if (!title || !location) {
+    document.getElementById('save-status').innerHTML = '<span style="color: red;">❌ 請填寫標題和地區！</span>';
+    return;
+  }
+  
+  const images = imagesText.split('\n').filter(url => url.trim());
+  
+  // Update the case
+  portfolioData[type][index] = {
+    ...portfolioData[type][index],
+    title: title,
+    location: location,
+    type: category,
+    thumbnail: thumbnail,
+    description: description,
+    images: images
+  };
+  
+  renderLists();
+  updateJSON();
+  
+  // Hide edit tab and go back to list
+  document.getElementById('edit-tab-btn').style.display = 'none';
+  showTab(type);
+  
+  document.getElementById('save-status').innerHTML = '<span style="color: green;">✅ 案例已更新！請撳「儲存」更新網站。</span>';
+}
+
+function cancelEdit() {
+  document.getElementById('edit-tab-btn').style.display = 'none';
+  showTab('renovation');
 }
 
 function updateJSON() {
