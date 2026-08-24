@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>後台管理 | 鑄家工藝</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #f5f5f5; }
+    .admin-container { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
+    .admin-card { background: white; border-radius: 12px; padding: 32px; margin-bottom: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .admin-card h2 { margin-bottom: 24px; color: var(--primary); }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--primary); }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: inherit;
+    }
+    .form-group textarea { min-height: 100px; resize: vertical; }
+    .btn-row { display: flex; gap: 12px; margin-top: 24px; }
+    .btn-success { background: #28a745; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-success:hover { background: #218838; }
+    .btn-danger { background: #dc3545; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-primary { background: var(--accent); color: var(--primary); padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .case-list { list-style: none; padding: 0; }
+    .case-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 12px; }
+    .case-item:hover { background: #f9f9f9; }
+    .case-item-actions { display: flex; gap: 8px; }
+    .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+    .tab-nav { display: flex; gap: 4px; margin-bottom: 24px; }
+    .tab-btn { padding: 12px 24px; border: none; background: #eee; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 600; }
+    .tab-btn.active { background: var(--primary); color: white; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .preview-img { max-width: 200px; max-height: 120px; object-fit: cover; border-radius: 8px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+
+<div class="admin-container">
+  <div class="admin-card">
+    <h1 style="margin-bottom: 8px;">🔧 後台管理系統</h1>
+    <p style="color: var(--text-light); margin-bottom: 32px;">管理你的裝修案例，改完之後撳「儲存」就會自動更新網站。</p>
+    
+    <!-- Tabs -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="showTab('renovation')">全屋翻新工程</button>
+      <button class="tab-btn" onclick="showTab('maintenance')">維修案例</button>
+      <button class="tab-btn" onclick="showTab('add')">➕ 加新案例</button>
+    </div>
+    
+    <!-- Renovation List -->
+    <div class="tab-content active" id="tab-renovation">
+      <h3>全屋翻新工程</h3>
+      <ul class="case-list" id="renovation-list"></ul>
+    </div>
+    
+    <!-- Maintenance List -->
+    <div class="tab-content" id="tab-maintenance">
+      <h3>維修案例</h3>
+      <ul class="case-list" id="maintenance-list"></ul>
+    </div>
+    
+    <!-- Add New Case -->
+    <div class="tab-content" id="tab-add">
+      <h3>加新案例</h3>
+      <div class="form-group">
+        <label>案例分類</label>
+        <select id="new-type">
+          <option value="renovation">全屋翻新工程</option>
+          <option value="maintenance">維修案例</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>標題</label>
+        <input type="text" id="new-title" placeholder="例：海怡半島 - 全屋翻新">
+      </div>
+      <div class="form-group">
+        <label>地區</label>
+        <input type="text" id="new-location" placeholder="例：海怡半島">
+      </div>
+      <div class="form-group">
+        <label>工程類型</label>
+        <input type="text" id="new-category" placeholder="例：全屋翻新 / 天花維修 / 牆身翻新">
+      </div>
+      <div class="form-group">
+        <label>封面圖片 URL</label>
+        <input type="text" id="new-thumbnail" placeholder="貼上圖片網址" oninput="previewNewImage()">
+        <img id="new-preview" class="preview-img" style="display:none;">
+      </div>
+      <div class="form-group">
+        <label>介紹</label>
+        <textarea id="new-description" placeholder="描述這個案例..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>圖片 URL（每行一個，可加多張）</label>
+        <textarea id="new-images" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-success" onclick="addCase()">✅ 加入案例</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Save Button -->
+  <div class="admin-card" style="text-align: center;">
+    <p style="margin-bottom: 16px; color: var(--text-light);">改完之後撳「儲存」更新網站</p>
+    <button class="btn-success" style="font-size: 1.1rem; padding: 16px 48px;" onclick="saveData()">💾 儲存並更新網站</button>
+    <p id="save-status" style="margin-top: 16px; font-weight: 600;"></p>
+  </div>
+  
+  <!-- Export JSON -->
+  <div class="admin-card">
+    <h3>匯出 JSON</h3>
+    <p style="color: var(--text-light); margin-bottom: 16px;">複製以下 JSON 檔案內容，覆蓋到 data/portfolio.json</p>
+    <textarea id="json-output" style="width: 100%; height: 300px; font-family: monospace; font-size: 0.85rem; padding: 12px; border: 1px solid #ddd; border-radius: 8px;" readonly></textarea>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="copyJSON()">📋 複製 JSON</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let portfolioData = { renovation: [], maintenance: [] };
+
+// Load existing data
+async function loadData() {
+  try {
+    const response = await fetch('data/portfolio.json');
+    portfolioData = await response.json();
+    renderLists();
+    updateJSON();
+  } catch (error) {
+    console.error('Error loading data:', error);
+  }
+}
+
+function renderLists() {
+  // Renovation list
+  const renovationList = document.getElementById('renovation-list');
+  renovationList.innerHTML = portfolioData.renovation.map((item, index) => `
+    <li class="case-item">
+      <div>
+        ${item.thumbnail ? `<img src="${item.thumbnail}" class="preview-img" style="width:80px;height:60px;margin-right:12px;">` : ''}
+        <strong>${item.title}</strong>
+        <span style="color: var(--text-light); margin-left: 8px;">${item.location}</span>
+      </div>
+      <div class="case-item-actions">
+        <a href="case.html?id=${item.id}&type=renovation" target="_blank" class="btn-primary btn-sm">預覽</a>
+        <button class="btn-danger btn-sm" onclick="deleteCase('renovation', ${index})">刪除</button>
+      </div>
+    </li>
+  `).join('') || '<li style="padding:16px;color:#999;">暫無案例</li>';
+  
+  // Maintenance list
+  const maintenanceList = document.getElementById('maintenance-list');
+  maintenanceList.innerHTML = portfolioData.maintenance.map((item, index) => `
+    <li class="case-item">
+      <div>
+        ${item.thumbnail ? `<img src="${item.thumbnail}" class="preview-img" style="width:80px;height:60px;margin-right:12px;">` : ''}
+        <strong>${item.title}</strong>
+        <span style="color: var(--text-light); margin-left: 8px;">${item.location}</span>
+      </div>
+      <div class="case-item-actions">
+        <a href="case.html?id=${item.id}&type=maintenance" target="_blank" class="btn-primary btn-sm">預覽</a>
+        <button class="btn-danger btn-sm" onclick="deleteCase('maintenance', ${index})">刪除</button>
+      </div>
+    </li>
+  `).join('') || '<li style="padding:16px;color:#999;">暫無案例</li>';
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function previewNewImage() {
+  const url = document.getElementById('new-thumbnail').value;
+  const preview = document.getElementById('new-preview');
+  if (url) {
+    preview.src = url;
+    preview.style.display = 'block';
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function addCase() {
+  const type = document.getElementById('new-type').value;
+  const title = document.getElementById('new-title').value;
+  const location = document.getElementById('new-location').value;
+  const category = document.getElementById('new-category').value;
+  const thumbnail = document.getElementById('new-thumbnail').value;
+  const description = document.getElementById('new-description').value;
+  const imagesText = document.getElementById('new-images').value;
+  
+  if (!title || !location) {
+    alert('請填寫標題和地區！');
+    return;
+  }
+  
+  const images = imagesText.split('\n').filter(url => url.trim());
+  const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  
+  const newCase = {
+    id: id,
+    title: title,
+    location: location,
+    type: category,
+    thumbnail: thumbnail,
+    description: description,
+    images: images,
+    order: portfolioData[type].length + 1
+  };
+  
+  portfolioData[type].push(newCase);
+  renderLists();
+  updateJSON();
+  
+  // Clear form
+  document.getElementById('new-title').value = '';
+  document.getElementById('new-location').value = '';
+  document.getElementById('new-category').value = '';
+  document.getElementById('new-thumbnail').value = '';
+  document.getElementById('new-description').value = '';
+  document.getElementById('new-images').value = '';
+  document.getElementById('new-preview').style.display = 'none';
+  
+  alert('案例已加入！請撳「儲存並更新網站」。
+  showTab('renovation');
+}
+
+function deleteCase(type, index) {
+  if (confirm('確定要刪除這個案例嗎？')) {
+    portfolioData[type].splice(index, 1);
+    renderLists();
+    updateJSON();
+  }
+}
+
+function updateJSON() {
+  document.getElementById('json-output').value = JSON.stringify(portfolioData, null, 2);
+}
+
+function copyJSON() {
+  const textarea = document.getElementById('json-output');
+  textarea.select();
+  document.execCommand('copy');
+  alert('已複製！請將內容貼到 data/portfolio.json');
+}
+
+function saveData() {
+  // In a real implementation, this would save to the server
+  // For now, we'll show the user how to save manually
+  const json = JSON.stringify(portfolioData, null, 2);
+  
+  // Try to save using fetch (will work if hosted on a server with write access)
+  fetch('data/portfolio.json', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: json
+  })
+  .then(response => {
+    if (response.ok) {
+      document.getElementById('save-status').innerHTML = '<span style="color: green;">✅ 已儲存！</span>';
+    } else {
+      throw new Error('Save failed');
+    }
+  })
+  .catch(error => {
+    // If direct save fails, show instructions
+    document.getElementById('save-status').innerHTML = `
+      <span style="color: orange;">
+        ⚠️ 無法自動儲存。請手動將以下 JSON 覆蓋到 data/portfolio.json：
+      </span>
+    `;
+  });
+}
+
+// Initialize
+loadData();
+</script>
+
+</body>
+</html>

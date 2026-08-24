@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>案例詳情 | 鑄家工藝</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .case-hero { min-height: 60vh; }
+    .case-info { max-width: 800px; margin: 0 auto; }
+    .case-meta { display: flex; gap: 24px; margin-bottom: 32px; flex-wrap: wrap; }
+    .case-meta-item { display: flex; align-items: center; gap: 8px; }
+    .case-meta-label { color: var(--text-light); font-size: 0.9rem; }
+    .case-meta-value { font-weight: 600; color: var(--primary); }
+    .case-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 40px; }
+    .case-gallery img { width: 100%; height: 300px; object-fit: cover; border-radius: var(--radius); }
+    .case-desc { font-size: 1.1rem; line-height: 1.8; color: var(--text); margin-bottom: 40px; }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--accent-dark); font-weight: 600; margin-bottom: 32px; }
+    .back-link:hover { color: var(--primary); }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header id="header">
+  <nav>
+    <a href="index.html" class="logo">鑄家<span>工藝</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="services.html">服務項目</a></li>
+      <li><a href="portfolio.html" class="active">精選作品</a></li>
+      <li><a href="contact.html">聯絡我們</a></li>
+      <li><a href="https://wa.me/85268427217" class="nav-cta" target="_blank">WhatsApp 查詢</a></li>
+    </ul>
+    <button class="menu-toggle" id="menuToggle" aria-label="選單">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- Case Content -->
+<section class="case-hero">
+  <div class="container">
+    <a href="portfolio.html" class="back-link">← 返回作品列表</a>
+    <div class="case-info" id="case-content">
+      <p>載入中...</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">鑄家<span>工藝</span></div>
+        <p>專業室內裝修服務，工藝定義品質生活。</p>
+      </div>
+      <div class="footer-col">
+        <h4>聯絡資料</h4>
+        <a href="tel:+85268427217">☎️ 68427217</a>
+        <a href="mailto:info@castinghomecraft.dpdns.org">✉️ info@castinghomecraft.dpdns.org</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024-2026 鑄家工藝 Casting Home Craft. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Menu toggle
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+window.addEventListener('scroll', () => {
+  document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Load case details
+async function loadCase() {
+  const params = new URLSearchParams(window.location.search);
+  const caseId = params.get('id');
+  const caseType = params.get('type');
+  
+  if (!caseId || !caseType) {
+    document.getElementById('case-content').innerHTML = '<p>找不到案例</p>';
+    return;
+  }
+  
+  try {
+    const response = await fetch('data/portfolio.json');
+    const data = await response.json();
+    
+    const cases = data[caseType] || [];
+    const caseData = cases.find(c => c.id === caseId);
+    
+    if (!caseData) {
+      document.getElementById('case-content').innerHTML = '<p>找不到案例</p>';
+      return;
+    }
+    
+    // Update page title
+    document.title = `${caseData.title} | 鑄家工藝`;
+    
+    // Render case content
+    document.getElementById('case-content').innerHTML = `
+      <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 24px; color: var(--primary);">${caseData.title}</h1>
+      
+      <div class="case-meta">
+        <div class="case-meta-item">
+          <span>📍</span>
+          <span class="case-meta-label">地區：</span>
+          <span class="case-meta-value">${caseData.location}</span>
+        </div>
+        <div class="case-meta-item">
+          <span>🔨</span>
+          <span class="case-meta-label">工程類型：</span>
+          <span class="case-meta-value">${caseData.type}</span>
+        </div>
+      </div>
+      
+      <p class="case-desc">${caseData.description}</p>
+      
+      ${caseData.images && caseData.images.length > 0 ? `
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; color: var(--primary);">工程圖片</h2>
+        <div class="case-gallery">
+          ${caseData.images.map(img => `<img src="${img}" alt="${caseData.title}">`).join('')}
+        </div>
+      ` : ''}
+    `;
+    
+  } catch (error) {
+    console.error('Error loading case:', error);
+    document.getElementById('case-content').innerHTML = '<p>載入失敗，請稍後再試。</p>';
+  }
+}
+
+loadCase();
+</script>
+
+</body>
+</html>

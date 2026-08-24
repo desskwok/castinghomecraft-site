@@ -1,0 +1,11 @@
+---
+title: "海怡半島 - 全屋翻新工程"
+location: "海怡半島"
+type: "全屋翻新"
+thumbnail: "https://lh3.googleusercontent.com/sitesv/AG8ngQVH1qBIEFZYZASWyOwGOb18ImCDE5WdyShZ1HTyJrs9az0QXB12eTsGB_u9dydLTUUBeOioTdhFzItYtDuWkG4Rk2pgOH38ojN3_LtGn3V9LIXoJpx2dCSkhzAaP6eOKf1Ax_oToCE_wQG4PAzU9H8UXc8RahJyJkgkxpXG_YVKS-ApqQbaBRiDGRCZffi8hjPnbn7SAK7t7EM87NDFIaOwjZV7dLx16k3XhAXyat0=w1280"
+description: "這間屋呈現現代簡約風，以白色、淺木色為主調，設計簡潔實用，線條流暢。強調儲物功能與空間利用，營造出明亮、溫馨且高效能的居家環境。"
+images:
+  - "https://lh3.googleusercontent.com/sitesv/AG8ngQVH1qBIEFZYZASWyOwGOb18ImCDE5WdyShZ1HTyJrs9az0QXB12eTsGB_u9dydLTUUBeOioTdhFzItYtDuWkG4Rk2pgOH38ojN3_LtGn3V9LIXoJpx2dCSkhzAaP6eOKf1Ax_oToCE_wQG4PAzU9H8UXc8RahJyJkgkxpXG_YVKS-ApqQbaBRiDGRCZffi8hjPnbn7SAK7t7EM87NDFIaOwjZV7dLx16k3XhAXyat0=w1280"
+date: "2024-01-01"
+order: 1
+---

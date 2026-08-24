@@ -37,53 +37,28 @@
   </div>
 </section>
 
-<!-- Portfolio -->
+<!-- Renovation Cases -->
 <section>
   <div class="container">
     <div class="section-header">
       <span class="section-tag">全屋翻新</span>
       <h2>精選項目案例</h2>
     </div>
-    <div class="portfolio-grid">
-      <div class="portfolio-card">
-        <div class="portfolio-img"><img src="https://lh3.googleusercontent.com/sitesv/AG8ngQVH1qBIEFZYZASWyOwGOb18ImCDE5WdyShZ1HTyJrs9az0QXB12eTsGB_u9dydLTUUBeOioTdhFzItYtDuWkG4Rk2pgOH38ojN3_LtGn3V9LIXoJpx2dCSkhzAaP6eOKf1Ax_oToCE_wQG4PAzU9H8UXc8RahJyJkgkxpXG_YVKS-ApqQbaBRiDGRCZffi8hjPnbn7SAK7t7EM87NDFIaOwjZV7dLx16k3XhAXyat0=w1280" alt="海怡半島全屋翻新"></div>
-        <div class="portfolio-info">
-          <h3>海怡半島 - 全屋翻新工程</h3>
-          <p>全面翻新設計，打造現代簡約風格的理想家居。包括客廳、睡房、廚房及浴室的全面翻新。</p>
-          <span class="portfolio-tag">全屋翻新</span>
-        </div>
-      </div>
-      <div class="portfolio-card">
-        <div class="portfolio-img">🏢</div>
-        <div class="portfolio-info">
-          <h3>利東邨 - 全屋翻新工程</h3>
-          <p>舊屋大改造，空間利用最大化。重新規劃間隔，提升居住舒適度。</p>
-          <span class="portfolio-tag">全屋翻新</span>
-        </div>
-      </div>
+    <div class="portfolio-grid" id="renovation-grid">
+      <!-- 動態載入 -->
     </div>
+  </div>
+</section>
 
-    <div class="section-header" style="margin-top: 60px;">
+<!-- Maintenance Cases -->
+<section style="background: white;">
+  <div class="container">
+    <div class="section-header">
       <span class="section-tag">小型工程及維修</span>
       <h2>維修案例</h2>
     </div>
-    <div class="portfolio-grid">
-      <div class="portfolio-card">
-        <div class="portfolio-img">🔨</div>
-        <div class="portfolio-info">
-          <h3>東威大廈 - 天花維修</h3>
-          <p>專業天花維修，恢復原有面貌。處理天花剝落、漏水等問題。</p>
-          <span class="portfolio-tag">維修工程</span>
-        </div>
-      </div>
-      <div class="portfolio-card">
-        <div class="portfolio-img">🎨</div>
-        <div class="portfolio-info">
-          <h3>太古康怡花園 - 10日牆身翻新</h3>
-          <p>快速牆身翻新服務，10日內完成全屋牆身翻新，減少對日常生活的影響。</p>
-          <span class="portfolio-tag">牆身翻新</span>
-        </div>
-      </div>
+    <div class="portfolio-grid" id="maintenance-grid">
+      <!-- 動態載入 -->
     </div>
   </div>
 </section>
@@ -136,12 +111,56 @@
 </footer>
 
 <script>
+// Menu toggle
 const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.getElementById('navLinks');
 menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
 window.addEventListener('scroll', () => {
   document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
 });
+
+// Load portfolio data
+async function loadPortfolio() {
+  try {
+    const response = await fetch('data/portfolio.json');
+    const data = await response.json();
+    
+    // Render renovation cases
+    const renovationGrid = document.getElementById('renovation-grid');
+    renovationGrid.innerHTML = data.revolution?.map(item => `
+      <a href="case.html?id=${item.id}&type=renovation" class="portfolio-card" style="text-decoration:none; color:inherit;">
+        <div class="portfolio-img">
+          ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}">` : '🏠'}
+        </div>
+        <div class="portfolio-info">
+          <h3>${item.title}</h3>
+          <p>${item.description}</p>
+          <span class="portfolio-tag">${item.type}</span>
+        </div>
+      </a>
+    `).join('') || '';
+    
+    // Render maintenance cases
+    const maintenanceGrid = document.getElementById('maintenance-grid');
+    maintenanceGrid.innerHTML = data.maintenance?.map(item => `
+      <a href="case.html?id=${item.id}&type=maintenance" class="portfolio-card" style="text-decoration:none; color:inherit;">
+        <div class="portfolio-img">
+          ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}">` : '🔧'}
+        </div>
+        <div class="portfolio-info">
+          <h3>${item.title}</h3>
+          <p>${item.description}</p>
+          <span class="portfolio-tag">${item.type}</span>
+        </div>
+      </a>
+    `).join('') || '';
+    
+  } catch (error) {
+    console.error('Error loading portfolio:', error);
+  }
+}
+
+loadPortfolio();
 </script>
 
 </body>
