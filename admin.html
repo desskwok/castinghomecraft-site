@@ -280,8 +280,9 @@ function showTab(tab) {
 function addImageToZone(context, zone) {
   const url = prompt(`貼上圖片 URL（加入「${zone === 'before' ? '工程前' : zone === 'after' ? '工程後' : '一般'}」）：`);
   if (!url || !url.trim()) return;
+  const caption = prompt('輸入圖片標題（例如：客廳、廚房、廁所）：') || '';
   const imgs = context === 'edit' ? editImages : newImages;
-  imgs[zone].push(url.trim());
+  imgs[zone].push({ url: url.trim(), caption: caption.trim() });
   renderZones(context);
 }
 
@@ -291,6 +292,16 @@ function removeImageFromZone(context, zone, index) {
   renderZones(context);
 }
 
+function editCaption(context, zone, index) {
+  const imgs = context === 'edit' ? editImages : newImages;
+  const current = imgs[zone][index].caption || '';
+  const newCaption = prompt('輸入圖片標題（例如：客廳、廚房）：', current);
+  if (newCaption !== null) {
+    imgs[zone][index].caption = newCaption.trim();
+    renderZones(context);
+  }
+}
+
 function renderZones(context) {
   const imgs = context === 'edit' ? editImages : newImages;
   
@@ -298,9 +309,10 @@ function renderZones(context) {
     const grid = document.getElementById(`${context}-${zone}-grid`);
     if (!grid) return;
     
-    grid.innerHTML = imgs[zone].map((url, i) => `
-      <div class="image-item">
-        <img src="${url}" alt="圖片">
+    grid.innerHTML = imgs[zone].map((img, i) => `
+      <div class="image-item" title="${img.caption || '無標題'}">
+        <img src="${img.url}" alt="${img.caption || '圖片'}" ondblclick="editCaption('${context}','${zone}',${i})">
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);color:white;font-size:10px;padding:2px 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;" ondblclick="editCaption('${context}','${zone}',${i})">${img.caption || '無標題'}</div>
         <button class="btn-remove" onclick="removeImageFromZone('${context}','${zone}',${i})">✕</button>
       </div>
     `).join('') || '<div class="empty-msg">拖入圖片或撳「+ 加圖」</div>';
@@ -338,9 +350,11 @@ function renderZones(context) {
   if (hasBefore || hasAfter) {
     liveEl.style.display = 'grid';
     document.getElementById(`${context}-before-preview`).innerHTML = imgs.before.length
-      ? imgs.before.map(u => `<img src="${u}">`).join('') : '<span class="empty-msg">尚未添加</span>';
+      ? imgs.before.map(img => `<div style="text-align:center;"><img src="${img.url}"><div style="font-size:11px;color:#666;margin-top:4px;">${img.caption || ''}</div></div>`).join('')
+      : '<span class="empty-msg">尚未添加</span>';
     document.getElementById(`${context}-after-preview`).innerHTML = imgs.after.length
-      ? imgs.after.map(u => `<img src="${u}">`).join('') : '<span class="empty-msg">尚未添加</span>';
+      ? imgs.after.map(img => `<div style="text-align:center;"><img src="${img.url}"><div style="font-size:11px;color:#666;margin-top:4px;">${img.caption || ''}</div></div>`).join('')
+      : '<span class="empty-msg">尚未添加</span>';
   } else {
     liveEl.style.display = 'none';
   }
@@ -363,15 +377,34 @@ function editCase(type, index) {
   else { document.getElementById('edit-preview').style.display = 'none'; }
   
   editImages = { before: [], after: [], normal: [] };
-  const bSet = new Set(item.before_images || []);
-  const aSet = new Set(item.after_images || []);
-  (item.images || []).forEach(url => {
-    if (bSet.has(url)) editImages.before.push(url);
-    else if (aSet.has(url)) editImages.after.push(url);
-    else editImages.normal.push(url);
+  
+  // Helper to normalize image to object format
+  const normalizeImg = (img) => {
+    if (typeof img === 'string') return { url: img, caption: '' };
+    return img;
+  };
+  
+  // Build sets of before/after URLs for categorization
+  const bUrls = new Set((item.before_images || []).map(img => normalizeImg(img).url));
+  const aUrls = new Set((item.after_images || []).map(img => normalizeImg(img).url));
+  
+  // Categorize images
+  (item.images || []).forEach(img => {
+    const normalized = normalizeImg(img);
+    if (bUrls.has(normalized.url)) editImages.before.push(normalized);
+    else if (aUrls.has(normalized.url)) editImages.after.push(normalized);
+    else editImages.normal.push(normalized);
   });
-  (item.before_images || []).forEach(u => { if (!(item.images||[]).includes(u)) editImages.before.push(u); });
-  (item.after_images || []).forEach(u => { if (!(item.images||[]).includes(u)) editImages.after.push(u); });
+  
+  // Add before/after images not in main array
+  (item.before_images || []).forEach(img => {
+    const n = normalizeImg(img);
+    if (!(item.images || []).some(i => normalizeImg(i).url === n.url)) editImages.before.push(n);
+  });
+  (item.after_images || []).forEach(img => {
+    const n = normalizeImg(img);
+    if (!(item.images || []).some(i => normalizeImg(i).url === n.url)) editImages.after.push(n);
+  });
   
   renderZones('edit');
   document.getElementById('edit-tab-btn').style.display = 'block';

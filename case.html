@@ -177,37 +177,61 @@ async function loadCase() {
       `;
     }
     
+    // Helper to normalize image
+    const normalizeImg = (img) => {
+      if (typeof img === 'string') return { url: img, caption: '' };
+      return img;
+    };
+    
+    // Normalize all images
+    const beforeImgs = (caseData.before_images || []).map(normalizeImg);
+    const afterImgs = (caseData.after_images || []).map(normalizeImg);
+    const allImgs = (caseData.images || []).map(normalizeImg);
+    const beforeUrls = new Set(beforeImgs.map(i => i.url));
+    const afterUrls = new Set(afterImgs.map(i => i.url));
+    const normalImgs = allImgs.filter(i => !beforeUrls.has(i.url) && !afterUrls.has(i.url));
+    
+    // Group images by caption
+    const groupByCaption = (imgs) => {
+      const groups = {};
+      imgs.forEach(img => {
+        const key = img.caption || '其他';
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(img);
+      });
+      return groups;
+    };
+    
+    // Render grouped images
+    const renderGroupedGallery = (imgs, color, label) => {
+      if (imgs.length === 0) return '';
+      const groups = groupByCaption(imgs);
+      let result = `<h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: ${color};">${label}</h2>`;
+      
+      Object.entries(groups).forEach(([caption, groupImgs]) => {
+        if (caption !== '其他' || Object.keys(groups).length === 1) {
+          result += `<h3 style="font-size: 1rem; font-weight: 600; margin: 20px 0 12px; color: #555;">${caption}</h3>`;
+        }
+        result += `<div class="case-gallery">`;
+        result += groupImgs.map(img => `
+          <div class="case-gallery-item">
+            <img src="${img.url}" alt="${img.caption || label}">
+            ${img.caption ? `<div style="padding:8px;text-align:center;font-size:0.9rem;color:#555;">${img.caption}</div>` : ''}
+          </div>
+        `).join('');
+        result += `</div>`;
+      });
+      return result;
+    };
+    
     // Before images
-    const beforeImgs = caseData.before_images || [];
-    const afterImgs = caseData.after_images || [];
-    const normalImgs = (caseData.images || []).filter(url => !beforeImgs.includes(url) && !afterImgs.includes(url));
+    html += renderGroupedGallery(beforeImgs, '#ff6b6b', '🔴 工程前');
     
-    if (beforeImgs.length > 0) {
-      html += `
-        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: #ff6b6b;">🔴 工程前</h2>
-        <div class="case-gallery">
-          ${beforeImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="工程前"></div>`).join('')}
-        </div>
-      `;
-    }
+    // After images
+    html += renderGroupedGallery(afterImgs, '#51cf66', '🟢 工程後');
     
-    if (afterImgs.length > 0) {
-      html += `
-        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: #51cf66;">🟢 工程後</h2>
-        <div class="case-gallery">
-          ${afterImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="工程後"></div>`).join('')}
-        </div>
-      `;
-    }
-    
-    if (normalImgs.length > 0) {
-      html += `
-        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: var(--primary);">📸 其他圖片</h2>
-        <div class="case-gallery">
-          ${normalImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="${caseData.title}"></div>`).join('')}
-        </div>
-      `;
-    }
+    // Normal images
+    html += renderGroupedGallery(normalImgs, 'var(--primary)', '📸 其他圖片');
     
     document.getElementById('case-content').innerHTML = html;
     
