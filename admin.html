@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>後台管理 | 鑄家工藝</title>
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
     body { background: #f5f5f5; }
     .admin-container { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
     .admin-card { background: white; border-radius: 12px; padding: 32px; margin-bottom: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-    .admin-card h2 { margin-bottom: 24px; color: var(--primary); }
     .form-group { margin-bottom: 20px; }
     .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--primary); }
     .form-group input, .form-group textarea, .form-group select {
@@ -22,17 +22,60 @@
     .btn-danger { background: #dc3545; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
     .btn-danger:hover { background: #c82333; }
     .btn-primary { background: var(--accent); color: var(--primary); padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-warning { background: #ffc107; color: #333; padding: 8px 16px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
     .case-list { list-style: none; padding: 0; }
     .case-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 12px; }
     .case-item:hover { background: #f9f9f9; }
     .case-item-actions { display: flex; gap: 8px; }
     .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
-    .tab-nav { display: flex; gap: 4px; margin-bottom: 24px; }
+    .tab-nav { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; }
     .tab-btn { padding: 12px 24px; border: none; background: #eee; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 600; }
     .tab-btn.active { background: var(--primary); color: white; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     .preview-img { max-width: 200px; max-height: 120px; object-fit: cover; border-radius: 8px; margin-top: 8px; }
+    
+    /* Image Manager */
+    .image-manager { margin-top: 16px; }
+    .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; margin-top: 12px; }
+    .image-item { 
+      position: relative; border-radius: 8px; overflow: hidden; cursor: grab;
+      border: 2px solid transparent; transition: border-color 0.2s;
+    }
+    .image-item:hover { border-color: var(--accent); }
+    .image-item.sortable-ghost { opacity: 0.4; border-color: var(--primary); }
+    .image-item img { width: 100%; height: 100px; object-fit: cover; display: block; }
+    .image-item .image-actions {
+      position: absolute; top: 4px; right: 4px; display: flex; gap: 4px;
+    }
+    .image-item .image-actions button {
+      width: 24px; height: 24px; border-radius: 50%; border: none; cursor: pointer;
+      font-size: 12px; display: flex; align-items: center; justify-content: center;
+    }
+    .image-item .btn-before { background: #ff6b6b; color: white; }
+    .image-item .btn-after { background: #51cf66; color: white; }
+    .image-item .btn-remove { background: #868e96; color: white; }
+    .image-item .image-label {
+      position: absolute; bottom: 4px; left: 4px; padding: 2px 8px;
+      border-radius: 4px; font-size: 11px; font-weight: 600; color: white;
+    }
+    .image-item .label-before { background: #ff6b6b; }
+    .image-item .label-after { background: #51cf66; }
+    
+    .add-image-btn {
+      width: 100%; height: 100px; border: 2px dashed #ddd; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      color: #999; font-size: 0.9rem; transition: border-color 0.2s;
+    }
+    .add-image-btn:hover { border-color: var(--accent); color: var(--accent); }
+    
+    /* Before/After Preview */
+    .compare-preview { display: flex; gap: 16px; margin-top: 16px; }
+    .compare-box { flex: 1; text-align: center; }
+    .compare-box h4 { margin-bottom: 8px; }
+    .compare-box.before h4 { color: #ff6b6b; }
+    .compare-box.after h4 { color: #51cf66; }
+    .compare-box img { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd; }
   </style>
 </head>
 <body>
@@ -92,10 +135,31 @@
         <label>介紹</label>
         <textarea id="edit-description"></textarea>
       </div>
+      
+      <!-- Image Manager -->
       <div class="form-group">
-        <label>圖片 URL（每行一個，可加多張）</label>
-        <textarea id="edit-images"></textarea>
+        <label>📸 圖片管理（拖拽排位，標記前/後）</label>
+        <p style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 8px;">
+          拖拽圖片排位 | 撳🔴標記為「工程前」 | 撳🟢標記為「工程後」
+        </p>
+        <div class="image-manager">
+          <div class="image-grid" id="edit-image-grid"></div>
+          <div class="add-image-btn" onclick="addImageToEdit()">+ 新增圖片</div>
+        </div>
+        
+        <!-- Before/After Preview -->
+        <div class="compare-preview" id="compare-preview" style="display:none;">
+          <div class="compare-box before">
+            <h4>🔴 工程前</h4>
+            <div id="before-preview"></div>
+          </div>
+          <div class="compare-box after">
+            <h4>🟢 工程後</h4>
+            <div id="after-preview"></div>
+          </div>
+        </div>
       </div>
+      
       <div class="btn-row">
         <button class="btn-success" onclick="updateCase()">✅ 更新案例</button>
         <button class="btn-danger" onclick="cancelEdit()">取消</button>
@@ -134,8 +198,11 @@
         <textarea id="new-description" placeholder="描述這個案例..."></textarea>
       </div>
       <div class="form-group">
-        <label>圖片 URL（每行一個，可加多張）</label>
-        <textarea id="new-images" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"></textarea>
+        <label>📸 圖片管理（拖拽排位，標記前/後）</label>
+        <div class="image-manager">
+          <div class="image-grid" id="new-image-grid"></div>
+          <div class="add-image-btn" onclick="addImageToNew()">+ 新增圖片</div>
+        </div>
       </div>
       <div class="btn-row">
         <button class="btn-success" onclick="addCase()">✅ 加入案例</button>
@@ -174,6 +241,10 @@
 
 <script>
 let portfolioData = { renovation: [], maintenance: [] };
+let editImages = []; // { url: string, type: 'normal'|'before'|'after' }
+let newImages = [];
+let sortableEdit = null;
+let sortableNew = null;
 
 // Load existing data
 async function loadData() {
@@ -196,10 +267,11 @@ function renderLists() {
         ${item.thumbnail ? `<img src="${item.thumbnail}" class="preview-img" style="width:80px;height:60px;margin-right:12px;">` : ''}
         <strong>${item.title}</strong>
         <span style="color: var(--text-light); margin-left: 8px;">${item.location}</span>
+        <span style="color: #999; margin-left: 8px; font-size: 0.85rem;">(${(item.images||[]).length}張圖)</span>
       </div>
       <div class="case-item-actions">
         <a href="case.html?id=${item.id}&type=renovation" target="_blank" class="btn-primary btn-sm">預覽</a>
-        <button class="btn-sm" style="background:#ffc107;color:#333;" onclick="editCase('renovation', ${index})">編輯</button>
+        <button class="btn-warning" onclick="editCase('renovation', ${index})">編輯</button>
         <button class="btn-danger btn-sm" onclick="deleteCase('renovation', ${index})">刪除</button>
       </div>
     </li>
@@ -213,10 +285,11 @@ function renderLists() {
         ${item.thumbnail ? `<img src="${item.thumbnail}" class="preview-img" style="width:80px;height:60px;margin-right:12px;">` : ''}
         <strong>${item.title}</strong>
         <span style="color: var(--text-light); margin-left: 8px;">${item.location}</span>
+        <span style="color: #999; margin-left: 8px; font-size: 0.85rem;">(${(item.images||[]).length}張圖)</span>
       </div>
       <div class="case-item-actions">
         <a href="case.html?id=${item.id}&type=maintenance" target="_blank" class="btn-primary btn-sm">預覽</a>
-        <button class="btn-sm" style="background:#ffc107;color:#333;" onclick="editCase('maintenance', ${index})">編輯</button>
+        <button class="btn-warning" onclick="editCase('maintenance', ${index})">編輯</button>
         <button class="btn-danger btn-sm" onclick="deleteCase('maintenance', ${index})">刪除</button>
       </div>
     </li>
@@ -224,89 +297,109 @@ function renderLists() {
 }
 
 function showTab(tab) {
-  // Hide all tab contents
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  // Remove active from all tab buttons
   document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-  // Show selected tab content
   const targetContent = document.getElementById(`tab-${tab}`);
   if (targetContent) targetContent.classList.add('active');
-  // Activate matching button
   const targetBtn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
   if (targetBtn) targetBtn.classList.add('active');
 }
 
-function previewNewImage() {
-  const url = document.getElementById('new-thumbnail').value;
-  const preview = document.getElementById('new-preview');
-  if (url) {
-    preview.src = url;
-    preview.style.display = 'block';
+// ============ Image Manager ============
+
+function renderImageGrid(containerId, images, sortableRef) {
+  const grid = document.getElementById(containerId);
+  grid.innerHTML = images.map((img, index) => `
+    <div class="image-item" data-index="${index}">
+      <img src="${img.url}" alt="圖片 ${index + 1}">
+      <div class="image-actions">
+        <button class="btn-before" onclick="toggleImageType('${containerId}', ${index}, 'before')" title="標記為工程前">🔴</button>
+        <button class="btn-after" onclick="toggleImageType('${containerId}', ${index}, 'after')" title="標記為工程後">🟢</button>
+        <button class="btn-remove" onclick="removeImage('${containerId}', ${index})" title="刪除">✕</button>
+      </div>
+      ${img.type === 'before' ? '<span class="image-label label-before">前</span>' : ''}
+      ${img.type === 'after' ? '<span class="image-label label-after">後</span>' : ''}
+    </div>
+  `).join('');
+  
+  // Initialize SortableJS
+  if (sortableRef) sortableRef.destroy();
+  const newSortable = Sortable.create(grid, {
+    animation: 150,
+    ghostClass: 'sortable-ghost',
+    onEnd: function(evt) {
+      const arr = containerId === 'edit-image-grid' ? editImages : newImages;
+      const item = arr.splice(evt.oldIndex, 1)[0];
+      arr.splice(evt.newIndex, 0, item);
+    }
+  });
+  
+  if (containerId === 'edit-image-grid') {
+    sortableEdit = newSortable;
+    updateComparePreview();
+  } else {
+    sortableNew = newSortable;
+  }
+}
+
+function addImageToEdit() {
+  const url = prompt('請貼上圖片 URL：');
+  if (url && url.trim()) {
+    editImages.push({ url: url.trim(), type: 'normal' });
+    renderImageGrid('edit-image-grid', editImages, sortableEdit);
+  }
+}
+
+function addImageToNew() {
+  const url = prompt('請貼上圖片 URL：');
+  if (url && url.trim()) {
+    newImages.push({ url: url.trim(), type: 'normal' });
+    renderImageGrid('new-image-grid', newImages, sortableNew);
+  }
+}
+
+function toggleImageType(containerId, index, type) {
+  const arr = containerId === 'edit-image-grid' ? editImages : newImages;
+  // Toggle: if already this type, set back to normal
+  if (arr[index].type === type) {
+    arr[index].type = 'normal';
+  } else {
+    arr[index].type = type;
+  }
+  renderImageGrid(containerId, arr, containerId === 'edit-image-grid' ? sortableEdit : sortableNew);
+}
+
+function removeImage(containerId, index) {
+  const arr = containerId === 'edit-image-grid' ? editImages : newImages;
+  arr.splice(index, 1);
+  renderImageGrid(containerId, arr, containerId === 'edit-image-grid' ? sortableEdit : sortableNew);
+}
+
+function updateComparePreview() {
+  const beforeImages = editImages.filter(img => img.type === 'before');
+  const afterImages = editImages.filter(img => img.type === 'after');
+  
+  const preview = document.getElementById('compare-preview');
+  if (beforeImages.length > 0 || afterImages.length > 0) {
+    preview.style.display = 'flex';
+    
+    document.getElementById('before-preview').innerHTML = beforeImages.length > 0
+      ? beforeImages.map(img => `<img src="${img.url}" alt="工程前">`).join('')
+      : '<p style="color:#999;">尚未標記</p>';
+    
+    document.getElementById('after-preview').innerHTML = afterImages.length > 0
+      ? afterImages.map(img => `<img src="${img.url}" alt="工程後">`).join('')
+      : '<p style="color:#999;">尚未標記</p>';
   } else {
     preview.style.display = 'none';
   }
 }
 
-function addCase() {
-  const type = document.getElementById('new-type').value;
-  const title = document.getElementById('new-title').value;
-  const location = document.getElementById('new-location').value;
-  const category = document.getElementById('new-category').value;
-  const thumbnail = document.getElementById('new-thumbnail').value;
-  const description = document.getElementById('new-description').value;
-  const imagesText = document.getElementById('new-images').value;
-  
-  if (!title || !location) {
-    document.getElementById('save-status').innerHTML = '<span style="color: red;">❌ 請填寫標題和地區！</span>';
-    return;
-  }
-  
-  const images = imagesText.split('\n').filter(url => url.trim());
-  const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  
-  const newCase = {
-    id: id,
-    title: title,
-    location: location,
-    type: category,
-    thumbnail: thumbnail,
-    description: description,
-    images: images,
-    order: portfolioData[type].length + 1
-  };
-  
-  portfolioData[type].push(newCase);
-  renderLists();
-  updateJSON();
-  
-  // Clear form
-  document.getElementById('new-title').value = '';
-  document.getElementById('new-location').value = '';
-  document.getElementById('new-category').value = '';
-  document.getElementById('new-thumbnail').value = '';
-  document.getElementById('new-description').value = '';
-  document.getElementById('new-images').value = '';
-  document.getElementById('new-preview').style.display = 'none';
-  
-  showTab('renovation');
-  // Show status message instead of alert
-  document.getElementById('save-status').innerHTML = '<span style="color: green;">✅ 案例已加入！請撳「儲存並更新網站」。</span>';
-}
-
-function deleteCase(type, index) {
-  const confirmed = window.confirm('確定要刪除這個案例嗎？');
-  if (confirmed) {
-    portfolioData[type].splice(index, 1);
-    renderLists();
-    updateJSON();
-    document.getElementById('save-status').innerHTML = '<span style="color: orange;">⚠️ 案例已刪除，請撳「儲存」更新。</span>';
-  }
-}
+// ============ Case Operations ============
 
 function editCase(type, index) {
   const item = portfolioData[type][index];
   
-  // Fill edit form
   document.getElementById('edit-index').value = index;
   document.getElementById('edit-type').value = type;
   document.getElementById('edit-type-display').value = type === 'renovation' ? '全屋翻新工程' : '維修案例';
@@ -315,9 +408,30 @@ function editCase(type, index) {
   document.getElementById('edit-category').value = item.type;
   document.getElementById('edit-thumbnail').value = item.thumbnail || '';
   document.getElementById('edit-description').value = item.description;
-  document.getElementById('edit-images').value = (item.images || []).join('\n');
   
-  // Preview image
+  // Load images into edit manager
+  editImages = [];
+  const allImages = item.images || [];
+  const beforeSet = new Set(item.before_images || []);
+  const afterSet = new Set(item.after_images || []);
+  
+  allImages.forEach(url => {
+    let type = 'normal';
+    if (beforeSet.has(url)) type = 'before';
+    else if (afterSet.has(url)) type = 'after';
+    editImages.push({ url, type });
+  });
+  
+  // Also add before/after images that might not be in main images array
+  (item.before_images || []).forEach(url => {
+    if (!allImages.includes(url)) editImages.push({ url, type: 'before' });
+  });
+  (item.after_images || []).forEach(url => {
+    if (!allImages.includes(url)) editImages.push({ url, type: 'after' });
+  });
+  
+  renderImageGrid('edit-image-grid', editImages, sortableEdit);
+  
   if (item.thumbnail) {
     document.getElementById('edit-preview').src = item.thumbnail;
     document.getElementById('edit-preview').style.display = 'block';
@@ -325,7 +439,6 @@ function editCase(type, index) {
     document.getElementById('edit-preview').style.display = 'none';
   }
   
-  // Show edit tab
   document.getElementById('edit-tab-btn').style.display = 'block';
   showTab('edit');
 }
@@ -333,12 +446,8 @@ function editCase(type, index) {
 function previewEditImage() {
   const url = document.getElementById('edit-thumbnail').value;
   const preview = document.getElementById('edit-preview');
-  if (url) {
-    preview.src = url;
-    preview.style.display = 'block';
-  } else {
-    preview.style.display = 'none';
-  }
+  if (url) { preview.src = url; preview.style.display = 'block'; }
+  else { preview.style.display = 'none'; }
 }
 
 function updateCase() {
@@ -349,33 +458,26 @@ function updateCase() {
   const category = document.getElementById('edit-category').value;
   const thumbnail = document.getElementById('edit-thumbnail').value;
   const description = document.getElementById('edit-description').value;
-  const imagesText = document.getElementById('edit-images').value;
   
   if (!title || !location) {
     document.getElementById('save-status').innerHTML = '<span style="color: red;">❌ 請填寫標題和地區！</span>';
     return;
   }
   
-  const images = imagesText.split('\n').filter(url => url.trim());
+  const images = editImages.map(img => img.url);
+  const before_images = editImages.filter(img => img.type === 'before').map(img => img.url);
+  const after_images = editImages.filter(img => img.type === 'after').map(img => img.url);
   
-  // Update the case
   portfolioData[type][index] = {
     ...portfolioData[type][index],
-    title: title,
-    location: location,
-    type: category,
-    thumbnail: thumbnail,
-    description: description,
-    images: images
+    title, location, type: category, thumbnail, description,
+    images, before_images, after_images
   };
   
   renderLists();
   updateJSON();
-  
-  // Hide edit tab and go back to list
   document.getElementById('edit-tab-btn').style.display = 'none';
   showTab(type);
-  
   document.getElementById('save-status').innerHTML = '<span style="color: green;">✅ 案例已更新！請撳「儲存」更新網站。</span>';
 }
 
@@ -383,6 +485,65 @@ function cancelEdit() {
   document.getElementById('edit-tab-btn').style.display = 'none';
   showTab('renovation');
 }
+
+function deleteCase(type, index) {
+  if (window.confirm('確定要刪除這個案例嗎？')) {
+    portfolioData[type].splice(index, 1);
+    renderLists();
+    updateJSON();
+    document.getElementById('save-status').innerHTML = '<span style="color: orange;">⚠️ 案例已刪除，請撳「儲存」更新。</span>';
+  }
+}
+
+function addCase() {
+  const type = document.getElementById('new-type').value;
+  const title = document.getElementById('new-title').value;
+  const location = document.getElementById('new-location').value;
+  const category = document.getElementById('new-category').value;
+  const thumbnail = document.getElementById('new-thumbnail').value;
+  const description = document.getElementById('new-description').value;
+  
+  if (!title || !location) {
+    document.getElementById('save-status').innerHTML = '<span style="color: red;">❌ 請填寫標題和地區！</span>';
+    return;
+  }
+  
+  const images = newImages.map(img => img.url);
+  const before_images = newImages.filter(img => img.type === 'before').map(img => img.url);
+  const after_images = newImages.filter(img => img.type === 'after').map(img => img.url);
+  const id = title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-').replace(/^-|-$/g, '') || `case-${Date.now()}`;
+  
+  portfolioData[type].push({
+    id, title, location, type: category, thumbnail, description,
+    images, before_images, after_images,
+    order: portfolioData[type].length + 1
+  });
+  
+  renderLists();
+  updateJSON();
+  
+  // Clear form
+  document.getElementById('new-title').value = '';
+  document.getElementById('new-location').value = '';
+  document.getElementById('new-category').value = '';
+  document.getElementById('new-thumbnail').value = '';
+  document.getElementById('new-description').value = '';
+  document.getElementById('new-preview').style.display = 'none';
+  newImages = [];
+  renderImageGrid('new-image-grid', newImages, sortableNew);
+  
+  showTab('renovation');
+  document.getElementById('save-status').innerHTML = '<span style="color: green;">✅ 案例已加入！請撳「儲存並更新網站」。</span>';
+}
+
+function previewNewImage() {
+  const url = document.getElementById('new-thumbnail').value;
+  const preview = document.getElementById('new-preview');
+  if (url) { preview.src = url; preview.style.display = 'block'; }
+  else { preview.style.display = 'none'; }
+}
+
+// ============ JSON / Save ============
 
 function updateJSON() {
   document.getElementById('json-output').value = JSON.stringify(portfolioData, null, 2);
@@ -392,17 +553,15 @@ function copyJSON() {
   const textarea = document.getElementById('json-output');
   textarea.select();
   document.execCommand('copy');
-  alert('已複製！請將內容貼到 data/portfolio.json');
+  document.getElementById('save-status').innerHTML = '<span style="color: green;">✅ 已複製！</span>';
 }
 
 async function saveData() {
   const statusEl = document.getElementById('save-status');
   statusEl.innerHTML = '<span style="color: blue;">⏳ 儲存中...</span>';
   
-  // Check if GitHub token is set
   let token = localStorage.getItem('github_token');
   if (!token) {
-    // Show token input section
     document.getElementById('token-section').style.display = 'block';
     statusEl.innerHTML = '<span style="color: orange;">⚠️ 請先輸入 GitHub Token。</span>';
     return;
@@ -413,16 +572,9 @@ async function saveData() {
   const json = JSON.stringify(portfolioData, null, 2);
   
   try {
-    // Get current file SHA
-    const getFileResponse = await fetch(
-      `https://api.github.com/repos/${repo}/contents/${filePath}`,
-      {
-        headers: {
-          'Authorization': `token ${token}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      }
-    );
+    const getFileResponse = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
     
     let sha = null;
     if (getFileResponse.ok) {
@@ -430,36 +582,26 @@ async function saveData() {
       sha = fileData.sha;
     }
     
-    // Create or update file
     const content = btoa(unescape(encodeURIComponent(json)));
     
-    const updateResponse = await fetch(
-      `https://api.github.com/repos/${repo}/contents/${filePath}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Authorization': `token ${token}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/vnd.github.v3+json'
-        },
-        body: JSON.stringify({
-          message: 'Update portfolio via admin panel',
-          content: content,
-          sha: sha
-        })
-      }
-    );
+    const updateResponse = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify({ message: 'Update portfolio via admin panel', content, sha })
+    });
     
     if (updateResponse.ok) {
-      statusEl.innerHTML = '<span style="color: green;">✅ 已儲存並提交到 GitHub！Cloudflare Pages 會自動更新（約1分鐘）。</span>';
+      statusEl.innerHTML = '<span style="color: green;">✅ 已儲存！Cloudflare 會自動更新（約1分鐘）。</span>';
     } else {
       const error = await updateResponse.json();
       throw new Error(error.message || 'Update failed');
     }
-    
   } catch (error) {
-    statusEl.innerHTML = `<span style="color: red;">❌ 儲存失敗：${error.message}</span><br><span style="color: orange;">請手動複製 JSON 貼到 GitHub。</span>`;
-    document.getElementById('json-output').style.display = 'block';
+    statusEl.innerHTML = `<span style="color: red;">❌ ${error.message}</span>`;
   }
 }
 
@@ -469,8 +611,7 @@ function clearToken() {
 }
 
 function saveToken() {
-  const tokenInput = document.getElementById('token-input');
-  const token = tokenInput.value.trim();
+  const token = document.getElementById('token-input').value.trim();
   if (!token) {
     document.getElementById('save-status').innerHTML = '<span style="color: red;">❌ 請輸入 Token！</span>';
     return;
