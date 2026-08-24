@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>精選作品 | 鑄家工藝</title>
+  <meta name="description" content="鑄家工藝裝修案例展示，包括全屋翻新、天花維修、牆身翻新等工程。">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Header -->
+<header id="header">
+  <nav>
+    <a href="index.html" class="logo">鑄家<span>工藝</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="services.html">服務項目</a></li>
+      <li><a href="portfolio.html" class="active">精選作品</a></li>
+      <li><a href="contact.html">聯絡我們</a></li>
+      <li><a href="https://wa.me/85268427217" class="nav-cta" target="_blank">WhatsApp 查詢</a></li>
+    </ul>
+    <button class="menu-toggle" id="menuToggle" aria-label="選單">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero" style="min-height: 50vh;">
+  <div class="container">
+    <div class="hero-content">
+      <span class="hero-badge">📸 作品展示</span>
+      <h1>精選<em>項目案例</em></h1>
+      <p>每一個項目都是我們工藝實力的見證</p>
+    </div>
+  </div>
+</section>
+
+<!-- Renovation Cases -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">全屋翻新</span>
+      <h2>精選項目案例</h2>
+    </div>
+    <div class="portfolio-grid" id="renovation-grid">
+      <!-- 動態載入 -->
+    </div>
+  </div>
+</section>
+
+<!-- Maintenance Cases -->
+<section style="background: white;">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">小型工程及維修</span>
+      <h2>維修案例</h2>
+    </div>
+    <div class="portfolio-grid" id="maintenance-grid">
+      <!-- 動態載入 -->
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="container">
+    <div class="cta-section">
+      <h2>想睇更多案例？</h2>
+      <p>聯絡我們，了解更多裝修方案</p>
+      <a href="contact.html" class="btn btn-primary">聯絡我們 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">鑄家<span>工藝</span></div>
+        <p>專業室內裝修服務，工藝定義品質生活。</p>
+      </div>
+      <div class="footer-col">
+        <h4>服務項目</h4>
+        <a href="services.html">室內裝修</a>
+        <a href="services.html">訂造傢俬</a>
+        <a href="services.html">家居翻新</a>
+        <a href="services.html">室內設計</a>
+        <a href="services.html">維修服務</a>
+      </div>
+      <div class="footer-col">
+        <h4>快速連結</h4>
+        <a href="index.html">首頁</a>
+        <a href="portfolio.html">精選作品</a>
+        <a href="contact.html">聯絡我們</a>
+      </div>
+      <div class="footer-col">
+        <h4>聯絡資料</h4>
+        <a href="tel:+85268427217">☎️ 68427217</a>
+        <a href="mailto:info@castinghomecraft.dpdns.org">✉️ info@castinghomecraft.dpdns.org</a>
+        <a>📌 荔枝角青山道688-690號<br>嘉名工廠大廈D座9樓12號室</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024-2026 鑄家工藝 Casting Home Craft. All rights reserved.</span>
+      <span>由 匠人電力工程有限公司 提供</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Menu toggle
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+window.addEventListener('scroll', () => {
+  document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Load portfolio data
+async function loadPortfolio() {
+  try {
+    const response = await fetch('data/portfolio.json');
+    const data = await response.json();
+    
+    // Render renovation cases
+    const renovationGrid = document.getElementById('renovation-grid');
+    renovationGrid.innerHTML = data.renovation?.map(item => `
+      <a href="case.html?id=${item.id}&type=renovation" class="portfolio-card" style="text-decoration:none; color:inherit;">
+        <div class="portfolio-img">
+          ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}">` : '🏠'}
+        </div>
+        <div class="portfolio-info">
+          <h3>${item.title}</h3>
+          <p>${item.description}</p>
+          <span class="portfolio-tag">${item.type}</span>
+        </div>
+      </a>
+    `).join('') || '';
+    
+    // Render maintenance cases
+    const maintenanceGrid = document.getElementById('maintenance-grid');
+    maintenanceGrid.innerHTML = data.maintenance?.map(item => `
+      <a href="case.html?id=${item.id}&type=maintenance" class="portfolio-card" style="text-decoration:none; color:inherit;">
+        <div class="portfolio-img">
+          ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}">` : '🔧'}
+        </div>
+        <div class="portfolio-info">
+          <h3>${item.title}</h3>
+          <p>${item.description}</p>
+          <span class="portfolio-tag">${item.type}</span>
+        </div>
+      </a>
+    `).join('') || '';
+    
+  } catch (error) {
+    console.error('Error loading portfolio:', error);
+  }
+}
+
+loadPortfolio();
+</script>
+
+</body>
+</html>

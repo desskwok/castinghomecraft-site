@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>案例詳情 | 鑄家工藝</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .case-hero { min-height: 60vh; padding-top: 120px; }
+    .case-info { max-width: 900px; margin: 0 auto; }
+    .case-meta { display: flex; gap: 24px; margin-bottom: 32px; flex-wrap: wrap; }
+    .case-meta-item { display: flex; align-items: center; gap: 8px; }
+    .case-meta-label { color: var(--text-light); font-size: 0.9rem; }
+    .case-meta-value { font-weight: 600; color: var(--primary); }
+    .case-desc { font-size: 1.1rem; line-height: 1.8; color: var(--text); margin-bottom: 40px; }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--accent-dark); font-weight: 600; margin-bottom: 32px; }
+    .back-link:hover { color: var(--primary); }
+    
+    /* Before/After Compare Slider */
+    .compare-section { margin: 40px 0; }
+    .compare-section h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; color: var(--primary); }
+    .compare-slider {
+      position: relative; width: 100%; max-width: 800px; margin: 0 auto;
+      overflow: hidden; border-radius: 12px; cursor: ew-resize; user-select: none;
+    }
+    .compare-slider img {
+      width: 100%; display: block; object-fit: cover;
+    }
+    .compare-slider .before-img {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      object-fit: cover; clip-path: inset(0 50% 0 0);
+    }
+    .compare-slider .slider-line {
+      position: absolute; top: 0; bottom: 0; width: 4px; background: white;
+      left: 50%; transform: translateX(-50%); z-index: 10;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .compare-slider .slider-handle {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 48px; height: 48px; background: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3); z-index: 11; font-size: 1.2rem;
+    }
+    .compare-labels {
+      display: flex; justify-content: space-between; margin-top: 12px;
+      max-width: 800px; margin-left: auto; margin-right: auto;
+    }
+    .compare-labels span { font-weight: 600; font-size: 0.9rem; }
+    .compare-labels .before-label { color: #ff6b6b; }
+    .compare-labels .after-label { color: #51cf66; }
+    
+    /* Gallery */
+    .case-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 40px; }
+    .case-gallery-item { border-radius: var(--radius); overflow: hidden; }
+    .case-gallery-item img { width: 100%; height: 300px; object-fit: cover; transition: transform 0.3s; }
+    .case-gallery-item:hover img { transform: scale(1.02); }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header id="header">
+  <nav>
+    <a href="index.html" class="logo">鑄家<span>工藝</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="services.html">服務項目</a></li>
+      <li><a href="portfolio.html" class="active">精選作品</a></li>
+      <li><a href="contact.html">聯絡我們</a></li>
+      <li><a href="https://wa.me/85268427217" class="nav-cta" target="_blank">WhatsApp 查詢</a></li>
+    </ul>
+    <button class="menu-toggle" id="menuToggle" aria-label="選單">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- Case Content -->
+<section class="case-hero">
+  <div class="container">
+    <a href="portfolio.html" class="back-link">← 返回作品列表</a>
+    <div class="case-info" id="case-content">
+      <p>載入中...</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">鑄家<span>工藝</span></div>
+        <p>專業室內裝修服務，工藝定義品質生活。</p>
+      </div>
+      <div class="footer-col">
+        <h4>聯絡資料</h4>
+        <a href="tel:+85268427217">☎️ 68427217</a>
+        <a href="mailto:info@castinghomecraft.dpdns.org">✉️ info@castinghomecraft.dpdns.org</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024-2026 鑄家工藝 Casting Home Craft. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Menu toggle
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+window.addEventListener('scroll', () => {
+  document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Load case details
+async function loadCase() {
+  const params = new URLSearchParams(window.location.search);
+  const caseId = params.get('id');
+  const caseType = params.get('type');
+  
+  if (!caseId || !caseType) {
+    document.getElementById('case-content').innerHTML = '<p>找不到案例</p>';
+    return;
+  }
+  
+  try {
+    const response = await fetch('data/portfolio.json');
+    const data = await response.json();
+    
+    const cases = data[caseType] || [];
+    const caseData = cases.find(c => c.id === caseId);
+    
+    if (!caseData) {
+      document.getElementById('case-content').innerHTML = '<p>找不到案例</p>';
+      return;
+    }
+    
+    document.title = `${caseData.title} | 鑄家工藝`;
+    
+    const hasBeforeAfter = (caseData.before_images?.length > 0) && (caseData.after_images?.length > 0);
+    
+    let html = `
+      <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 24px; color: var(--primary);">${caseData.title}</h1>
+      <div class="case-meta">
+        <div class="case-meta-item">
+          <span>📍</span>
+          <span class="case-meta-label">地區：</span>
+          <span class="case-meta-value">${caseData.location}</span>
+        </div>
+        <div class="case-meta-item">
+          <span>🔨</span>
+          <span class="case-meta-label">工程類型：</span>
+          <span class="case-meta-value">${caseData.type}</span>
+        </div>
+      </div>
+      <p class="case-desc">${caseData.description}</p>
+    `;
+    
+    // Before/After Compare
+    if (hasBeforeAfter) {
+      html += `
+        <div class="compare-section">
+          <h2>🔄 工程前後對比</h2>
+          <div class="compare-slider" id="compareSlider">
+            <img src="${caseData.after_images[0]}" alt="工程後" class="after-img">
+            <img src="${caseData.before_images[0]}" alt="工程前" class="before-img" id="beforeImg">
+            <div class="slider-line" id="sliderLine"></div>
+            <div class="slider-handle" id="sliderHandle">⟷</div>
+          </div>
+          <div class="compare-labels">
+            <span class="before-label">← 工程前</span>
+            <span class="after-label">工程後 →</span>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Before images
+    const beforeImgs = caseData.before_images || [];
+    const afterImgs = caseData.after_images || [];
+    const normalImgs = (caseData.images || []).filter(url => !beforeImgs.includes(url) && !afterImgs.includes(url));
+    
+    if (beforeImgs.length > 0) {
+      html += `
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: #ff6b6b;">🔴 工程前</h2>
+        <div class="case-gallery">
+          ${beforeImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="工程前"></div>`).join('')}
+        </div>
+      `;
+    }
+    
+    if (afterImgs.length > 0) {
+      html += `
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: #51cf66;">🟢 工程後</h2>
+        <div class="case-gallery">
+          ${afterImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="工程後"></div>`).join('')}
+        </div>
+      `;
+    }
+    
+    if (normalImgs.length > 0) {
+      html += `
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: var(--primary);">📸 其他圖片</h2>
+        <div class="case-gallery">
+          ${normalImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="${caseData.title}"></div>`).join('')}
+        </div>
+      `;
+    }
+    
+    document.getElementById('case-content').innerHTML = html;
+    
+    // Initialize compare slider
+    if (hasBeforeAfter) {
+      initCompareSlider();
+    }
+    
+  } catch (error) {
+    console.error('Error loading case:', error);
+    document.getElementById('case-content').innerHTML = '<p>載入失敗，請稍後再試。</p>';
+  }
+}
+
+// Compare Slider
+function initCompareSlider() {
+  const slider = document.getElementById('compareSlider');
+  const beforeImg = document.getElementById('beforeImg');
+  const line = document.getElementById('sliderLine');
+  const handle = document.getElementById('sliderHandle');
+  
+  if (!slider || !beforeImg) return;
+  
+  let isDragging = false;
+  
+  function updateSlider(x) {
+    const rect = slider.getBoundingClientRect();
+    let pos = (x - rect.left) / rect.width;
+    pos = Math.max(0, Math.min(1, pos));
+    
+    const percent = pos * 100;
+    beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+    line.style.left = `${percent}%`;
+    handle.style.left = `${percent}%`;
+  }
+  
+  slider.addEventListener('mousedown', (e) => { isDragging = true; updateSlider(e.clientX); });
+  slider.addEventListener('touchstart', (e) => { isDragging = true; updateSlider(e.touches[0].clientX); });
+  
+  document.addEventListener('mousemove', (e) => { if (isDragging) updateSlider(e.clientX); });
+  document.addEventListener('touchmove', (e) => { if (isDragging) updateSlider(e.touches[0].clientX); });
+  
+  document.addEventListener('mouseup', () => isDragging = false);
+  document.addEventListener('touchend', () => isDragging = false);
+}
+
+loadCase();
+</script>
+
+</body>
+</html>
