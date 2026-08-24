@@ -106,6 +106,7 @@
   <div class="admin-card" style="text-align: center;">
     <p style="margin-bottom: 16px; color: var(--text-light);">改完之後撳「儲存」更新網站</p>
     <button class="btn-success" style="font-size: 1.1rem; padding: 16px 48px;" onclick="saveData()">💾 儲存並更新網站</button>
+    <button class="btn-danger btn-sm" style="margin-left: 12px;" onclick="clearToken()">🔑 重新設定 Token</button>
     <p id="save-status" style="margin-top: 16px; font-weight: 600;"></p>
   </div>
   
@@ -257,32 +258,80 @@ function copyJSON() {
   alert('已複製！請將內容貼到 data/portfolio.json');
 }
 
-function saveData() {
-  // In a real implementation, this would save to the server
-  // For now, we'll show the user how to save manually
+async function saveData() {
+  const statusEl = document.getElementById('save-status');
+  statusEl.innerHTML = '<span style="color: blue;">⏳ 儲存中...</span>';
+  
+  // Check if GitHub token is set
+  let token = localStorage.getItem('github_token');
+  if (!token) {
+    token = prompt('請輸入你的 GitHub Personal Access Token（用於自動儲存）：\n\n如果你未有，去 https://github.com/settings/tokens 建立一個，勾選 "repo" 權限。');
+    if (!token) {
+      statusEl.innerHTML = '<span style="color: orange;">⚠️ 未提供 Token，請手動複製 JSON。</span>';
+      document.getElementById('json-output').style.display = 'block';
+      return;
+    }
+    localStorage.setItem('github_token', token);
+  }
+  
+  const repo = 'desskwok/castinghomecraft-site';
+  const filePath = 'data/portfolio.json';
   const json = JSON.stringify(portfolioData, null, 2);
   
-  // Try to save using fetch (will work if hosted on a server with write access)
-  fetch('data/portfolio.json', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: json
-  })
-  .then(response => {
-    if (response.ok) {
-      document.getElementById('save-status').innerHTML = '<span style="color: green;">✅ 已儲存！</span>';
-    } else {
-      throw new Error('Save failed');
+  try {
+    // Get current file SHA
+    const getFileResponse = await fetch(
+      `https://api.github.com/repos/${repo}/contents/${filePath}`,
+      {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      }
+    );
+    
+    let sha = null;
+    if (getFileResponse.ok) {
+      const fileData = await getFileResponse.json();
+      sha = fileData.sha;
     }
-  })
-  .catch(error => {
-    // If direct save fails, show instructions
-    document.getElementById('save-status').innerHTML = `
-      <span style="color: orange;">
-        ⚠️ 無法自動儲存。請手動將以下 JSON 覆蓋到 data/portfolio.json：
-      </span>
-    `;
-  });
+    
+    // Create or update file
+    const content = btoa(unescape(encodeURIComponent(json)));
+    
+    const updateResponse = await fetch(
+      `https://api.github.com/repos/${repo}/contents/${filePath}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: 'Update portfolio via admin panel',
+          content: content,
+          sha: sha
+        })
+      }
+    );
+    
+    if (updateResponse.ok) {
+      statusEl.innerHTML = '<span style="color: green;">✅ 已儲存並提交到 GitHub！Cloudflare Pages 會自動更新（約1分鐘）。</span>';
+    } else {
+      const error = await updateResponse.json();
+      throw new Error(error.message || 'Update failed');
+    }
+    
+  } catch (error) {
+    statusEl.innerHTML = `<span style="color: red;">❌ 儲存失敗：${error.message}</span><br><span style="color: orange;">請手動複製 JSON 貼到 GitHub。</span>`;
+    document.getElementById('json-output').style.display = 'block';
+  }
+}
+
+function clearToken() {
+  localStorage.removeItem('github_token');
+  alert('Token 已清除！下次儲存時會重新要求輸入。');
 }
 
 // Initialize
