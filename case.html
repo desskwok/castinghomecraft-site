@@ -177,16 +177,34 @@ async function loadCase() {
       `;
     }
     
-    // All images gallery
-    if (caseData.images && caseData.images.length > 0) {
+    // Before images
+    const beforeImgs = caseData.before_images || [];
+    const afterImgs = caseData.after_images || [];
+    const normalImgs = (caseData.images || []).filter(url => !beforeImgs.includes(url) && !afterImgs.includes(url));
+    
+    if (beforeImgs.length > 0) {
       html += `
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-top: 40px; margin-bottom: 24px; color: var(--primary);">📸 工程圖片</h2>
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: #ff6b6b;">🔴 工程前</h2>
         <div class="case-gallery">
-          ${caseData.images.map(img => `
-            <div class="case-gallery-item">
-              <img src="${img}" alt="${caseData.title}">
-            </div>
-          `).join('')}
+          ${beforeImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="工程前"></div>`).join('')}
+        </div>
+      `;
+    }
+    
+    if (afterImgs.length > 0) {
+      html += `
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: #51cf66;">🟢 工程後</h2>
+        <div class="case-gallery">
+          ${afterImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="工程後"></div>`).join('')}
+        </div>
+      `;
+    }
+    
+    if (normalImgs.length > 0) {
+      html += `
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: var(--primary);">📸 其他圖片</h2>
+        <div class="case-gallery">
+          ${normalImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="${caseData.title}"></div>`).join('')}
         </div>
       `;
     }
