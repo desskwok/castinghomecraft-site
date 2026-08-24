@@ -44,9 +44,9 @@
     
     <!-- Tabs -->
     <div class="tab-nav">
-      <button class="tab-btn active" onclick="showTab('renovation')">全屋翻新工程</button>
-      <button class="tab-btn" onclick="showTab('maintenance')">維修案例</button>
-      <button class="tab-btn" onclick="showTab('add')">➕ 加新案例</button>
+      <button class="tab-btn active" data-tab="renovation" onclick="showTab('renovation')">全屋翻新工程</button>
+      <button class="tab-btn" data-tab="maintenance" onclick="showTab('maintenance')">維修案例</button>
+      <button class="tab-btn" data-tab="add" onclick="showTab('add')">➕ 加新案例</button>
     </div>
     
     <!-- Renovation List -->
@@ -170,10 +170,16 @@ function renderLists() {
 }
 
 function showTab(tab) {
+  // Hide all tab contents
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  // Remove active from all tab buttons
   document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById(`tab-${tab}`).classList.add('active');
-  event.target.classList.add('active');
+  // Show selected tab content
+  const targetContent = document.getElementById(`tab-${tab}`);
+  if (targetContent) targetContent.classList.add('active');
+  // Activate matching button
+  const targetBtn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+  if (targetBtn) targetBtn.classList.add('active');
 }
 
 function previewNewImage() {
