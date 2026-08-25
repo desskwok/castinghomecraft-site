@@ -224,6 +224,7 @@
   <div class="admin-card" style="text-align: center;">
     <p style="margin-bottom: 16px; color: var(--text-light);">改完之後撳「儲存」更新網站</p>
     <button class="btn-success" style="font-size: 1.1rem; padding: 16px 48px;" onclick="saveData()">💾 儲存並更新網站</button>
+    <button class="btn-primary btn-sm" style="margin-left: 12px;" onclick="loadData()">🔄 重新載入</button>
     <button class="btn-danger btn-sm" style="margin-left: 12px;" onclick="clearToken()">🔑 重新設定 Token</button>
     <div id="token-section" style="display:none; margin-top: 20px; padding: 20px; background: #f0f0f0; border-radius: 8px;">
       <p style="margin-bottom: 12px; color: var(--primary); font-weight: 600;">輸入 GitHub Token</p>
@@ -345,9 +346,11 @@ function addImageToZone(context, zone) {
         });
         
         if (uploadResp.ok) {
+          // Use GitHub raw URL for immediate display, then switch to local path after deploy
+          const rawUrl = `https://raw.githubusercontent.com/${repo}/main/${path}`;
           const imgs = context === 'edit' ? editImages : newImages;
-          imgs[zone].push({ url: path, caption: caption.trim() });
-          statusEl.innerHTML = `<span style="color:green">✅ ${file.name} 上傳成功</span>`;
+          imgs[zone].push({ url: path, raw_url: rawUrl, caption: caption.trim() });
+          statusEl.innerHTML = `<span style="color:green">✅ ${file.name} 上傳成功（Cloudflare 約1分鐘後生效）</span>`;
         } else {
           const err = await uploadResp.json();
           throw new Error(err.message || 'Upload failed');
@@ -398,13 +401,16 @@ function renderZones(context) {
     const grid = document.getElementById(`${context}-${zone}-grid`);
     if (!grid) return;
     
-    grid.innerHTML = imgs[zone].map((img, i) => `
-      <div class="image-item" title="${img.caption || '無標題'}">
-        <img src="${img.url}" alt="${img.caption || '圖片'}" ondblclick="editCaption('${context}','${zone}',${i})">
-        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);color:white;font-size:10px;padding:2px 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;" ondblclick="editCaption('${context}','${zone}',${i})">${img.caption || '無標題'}</div>
-        <button class="btn-remove" onclick="removeImageFromZone('${context}','${zone}',${i})">✕</button>
-      </div>
-    `).join('') || '<div class="empty-msg">拖入圖片或撳「+ 加圖」</div>';
+    grid.innerHTML = imgs[zone].map((img, i) => {
+      const displayUrl = img.raw_url || img.url;
+      return `
+        <div class="image-item" title="${img.caption || '無標題'}">
+          <img src="${displayUrl}" alt="${img.caption || '圖片'}" ondblclick="editCaption('${context}','${zone}',${i})">
+          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);color:white;font-size:10px;padding:2px 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;" ondblclick="editCaption('${context}','${zone}',${i})">${img.caption || '無標題'}</div>
+          <button class="btn-remove" onclick="removeImageFromZone('${context}','${zone}',${i})">✕</button>
+        </div>
+      `;
+    }).join('') || '<div class="empty-msg">拖入圖片或撳「+ 加圖」</div>';
     
     // Destroy old sortable
     const key = `${context}-${zone}`;
@@ -558,14 +564,15 @@ function updateCase() {
   const location = document.getElementById('edit-location').value;
   if (!title || !location) { document.getElementById('save-status').innerHTML = '<span style="color:red">❌ 請填寫標題和地區</span>'; return; }
   
-  const images = [...editImages.before, ...editImages.after, ...editImages.normal];
+  const cleanImages = (arr) => arr.map(img => ({ url: img.url, caption: img.caption || '' }));
+  const images = [...cleanImages(editImages.before), ...cleanImages(editImages.after), ...cleanImages(editImages.normal)];
   portfolioData[type][index] = {
     ...portfolioData[type][index],
     title, location,
     type: document.getElementById('edit-category').value,
     thumbnail: document.getElementById('edit-thumbnail').value,
     description: document.getElementById('edit-description').value,
-    images, before_images: [...editImages.before], after_images: [...editImages.after]
+    images, before_images: cleanImages(editImages.before), after_images: cleanImages(editImages.after)
   };
   
   renderLists(); updateJSON();
@@ -592,7 +599,8 @@ function addCase() {
   const location = document.getElementById('new-location').value;
   if (!title || !location) { document.getElementById('save-status').innerHTML = '<span style="color:red">❌ 請填寫標題和地區</span>'; return; }
   
-  const images = [...newImages.before, ...newImages.after, ...newImages.normal];
+  const cleanImages = (arr) => arr.map(img => ({ url: img.url, caption: img.caption || '' }));
+  const images = [...cleanImages(newImages.before), ...cleanImages(newImages.after), ...cleanImages(newImages.normal)];
   const id = title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-').replace(/^-|-$/g, '') || `case-${Date.now()}`;
   
   portfolioData[type].push({
@@ -600,7 +608,7 @@ function addCase() {
     type: document.getElementById('new-category').value,
     thumbnail: document.getElementById('new-thumbnail').value,
     description: document.getElementById('new-description').value,
-    images, before_images: [...newImages.before], after_images: [...newImages.after],
+    images, before_images: cleanImages(newImages.before), after_images: cleanImages(newImages.after),
     order: portfolioData[type].length + 1
   });
   
