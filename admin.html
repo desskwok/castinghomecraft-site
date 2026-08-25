@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>後台管理 | 鑄家工藝</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>敺蝞∠? | ?振撌亥?</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">`n  <link rel="stylesheet" href="css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
     body { background: #f5f5f5; }
@@ -91,156 +91,156 @@
 
 <div class="admin-container">
   <div class="admin-card">
-    <h1 style="margin-bottom: 8px;">🔧 後台管理系統</h1>
-    <p style="color: var(--text-light); margin-bottom: 32px;">管理你的裝修案例，改完之後撳「儲存」就會自動更新網站。</p>
+    <h1 style="margin-bottom: 8px;">? 敺蝞∠?蝟餌絞</h1>
+    <p style="color: var(--text-light); margin-bottom: 32px;">蝞∠?雿?鋆耨獢?嚗摰?敺?摮停???啁雯蝡?/p>
     
     <div class="tab-nav">
-      <button class="tab-btn active" data-tab="renovation" onclick="showTab('renovation')">全屋翻新工程</button>
-      <button class="tab-btn" data-tab="maintenance" onclick="showTab('maintenance')">維修案例</button>
-      <button class="tab-btn" data-tab="add" onclick="showTab('add')">➕ 加新案例</button>
-      <button class="tab-btn" data-tab="edit" onclick="showTab('edit')" id="edit-tab-btn" style="display:none;">✏️ 編輯案例</button>
+      <button class="tab-btn active" data-tab="renovation" onclick="showTab('renovation')">?典?蝧餅撌亦?</button>
+      <button class="tab-btn" data-tab="maintenance" onclick="showTab('maintenance')">蝬凋耨獢?</button>
+      <button class="tab-btn" data-tab="add" onclick="showTab('add')">???獢?</button>
+      <button class="tab-btn" data-tab="edit" onclick="showTab('edit')" id="edit-tab-btn" style="display:none;">?? 蝺刻摩獢?</button>
     </div>
     
     <div class="tab-content active" id="tab-renovation">
-      <h3>全屋翻新工程</h3>
+      <h3>?典?蝧餅撌亦?</h3>
       <ul class="case-list" id="renovation-list"></ul>
     </div>
     
     <div class="tab-content" id="tab-maintenance">
-      <h3>維修案例</h3>
+      <h3>蝬凋耨獢?</h3>
       <ul class="case-list" id="maintenance-list"></ul>
     </div>
     
     <!-- Edit Case -->
     <div class="tab-content" id="tab-edit">
-      <h3>編輯案例</h3>
+      <h3>蝺刻摩獢?</h3>
       <input type="hidden" id="edit-index">
       <input type="hidden" id="edit-type">
       <div class="form-group">
-        <label>案例分類</label>
+        <label>獢???</label>
         <input type="text" id="edit-type-display" disabled style="background:#f0f0f0;">
       </div>
       <div class="form-group">
-        <label>標題</label>
+        <label>璅?</label>
         <input type="text" id="edit-title">
       </div>
       <div class="form-group">
-        <label>地區</label>
+        <label>?啣?</label>
         <input type="text" id="edit-location">
       </div>
       <div class="form-group">
-        <label>工程類型</label>
+        <label>撌亦?憿?</label>
         <input type="text" id="edit-category">
       </div>
       <div class="form-group">
-        <label>封面圖片</label>
+        <label>撠??</label>
         <div style="display:flex; gap:8px; align-items:center;">
-          <input type="text" id="edit-thumbnail" oninput="previewEditImage()" style="flex:1;" placeholder="貼上圖片 URL">
-          <button class="btn-warning" onclick="uploadThumbnail('edit')" style="white-space:nowrap;">📁 上傳</button>
+          <input type="text" id="edit-thumbnail" oninput="previewEditImage()" style="flex:1;" placeholder="鞎潔??? URL">
+          <button class="btn-warning" onclick="uploadThumbnail('edit')" style="white-space:nowrap;">?? 銝</button>
         </div>
         <img id="edit-preview" class="preview-img" style="display:none;">
       </div>
       <div class="form-group">
-        <label>介紹</label>
+        <label>隞晶</label>
         <textarea id="edit-description"></textarea>
       </div>
       
       <div class="form-group">
-        <label>📸 圖片管理（拖拽排位，跨區拖動）</label>
+        <label>? ??蝞∠?嚗??賣?雿?頝典???嚗?/label>
         <div class="image-zones">
           <div class="image-zone zone-before">
-            <div class="zone-header"><h4>🔴 工程前</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('edit','before')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('edit','before')" style="font-size:0.8rem;">🔗 網址</button></div></div>
+            <div class="zone-header"><h4>? 撌亦???/h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('edit','before')" style="font-size:0.8rem;">?? 銝</button><button class="btn-sm btn-primary" onclick="addImageUrl('edit','before')" style="font-size:0.8rem;">?? 蝬脣?</button></div></div>
             <div class="image-grid" id="edit-before-grid" data-zone="before"></div>
           </div>
           <div class="image-zone zone-after">
-            <div class="zone-header"><h4>🟢 工程後</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('edit','after')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('edit','after')" style="font-size:0.8rem;">🔗 網址</button></div></div>
+            <div class="zone-header"><h4>? 撌亦?敺?/h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('edit','after')" style="font-size:0.8rem;">?? 銝</button><button class="btn-sm btn-primary" onclick="addImageUrl('edit','after')" style="font-size:0.8rem;">?? 蝬脣?</button></div></div>
             <div class="image-grid" id="edit-after-grid" data-zone="after"></div>
           </div>
         </div>
         <div class="image-zone zone-normal">
-          <div class="zone-header"><h4>📷 一般圖片</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('edit','normal')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('edit','normal')" style="font-size:0.8rem;">🔗 網址</button></div></div>
+          <div class="zone-header"><h4>? 銝?砍???/h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('edit','normal')" style="font-size:0.8rem;">?? 銝</button><button class="btn-sm btn-primary" onclick="addImageUrl('edit','normal')" style="font-size:0.8rem;">?? 蝬脣?</button></div></div>
           <div class="image-grid" id="edit-normal-grid" data-zone="normal"></div>
         </div>
         <div class="compare-live" id="edit-compare-live" style="display:none;">
-          <div class="compare-live-box before-box"><h4>🔴 工程前預覽</h4><div class="preview-images" id="edit-before-preview"></div></div>
-          <div class="compare-live-box after-box"><h4>🟢 工程後預覽</h4><div class="preview-images" id="edit-after-preview"></div></div>
+          <div class="compare-live-box before-box"><h4>? 撌亦???閬?/h4><div class="preview-images" id="edit-before-preview"></div></div>
+          <div class="compare-live-box after-box"><h4>? 撌亦?敺?閬?/h4><div class="preview-images" id="edit-after-preview"></div></div>
         </div>
       </div>
       
       <div class="btn-row">
-        <button class="btn-success" onclick="updateCase()">✅ 更新案例</button>
-        <button class="btn-danger" onclick="cancelEdit()">取消</button>
+        <button class="btn-success" onclick="updateCase()">???湔獢?</button>
+        <button class="btn-danger" onclick="cancelEdit()">??</button>
       </div>
     </div>
 
     <!-- Add New Case -->
     <div class="tab-content" id="tab-add">
-      <h3>加新案例</h3>
+      <h3>?獢?</h3>
       <div class="form-group">
-        <label>案例分類</label>
-        <select id="new-type"><option value="renovation">全屋翻新工程</option><option value="maintenance">維修案例</option></select>
+        <label>獢???</label>
+        <select id="new-type"><option value="renovation">?典?蝧餅撌亦?</option><option value="maintenance">蝬凋耨獢?</option></select>
       </div>
-      <div class="form-group"><label>標題</label><input type="text" id="new-title" placeholder="例：海怡半島 - 全屋翻新"></div>
-      <div class="form-group"><label>地區</label><input type="text" id="new-location" placeholder="例：海怡半島"></div>
-      <div class="form-group"><label>工程類型</label><input type="text" id="new-category" placeholder="例：全屋翻新 / 天花維修"></div>
+      <div class="form-group"><label>璅?</label><input type="text" id="new-title" placeholder="靘?瘚瑟∪?撜?- ?典?蝧餅"></div>
+      <div class="form-group"><label>?啣?</label><input type="text" id="new-location" placeholder="靘?瘚瑟∪?撜?></div>
+      <div class="form-group"><label>撌亦?憿?</label><input type="text" id="new-category" placeholder="靘??典?蝧餅 / 憭抵蝬凋耨"></div>
       <div class="form-group">
-        <label>封面圖片</label>
+        <label>撠??</label>
         <div style="display:flex; gap:8px; align-items:center;">
-          <input type="text" id="new-thumbnail" placeholder="貼上圖片 URL" oninput="previewNewImage()" style="flex:1;">
-          <button class="btn-warning" onclick="uploadThumbnail('new')" style="white-space:nowrap;">📁 上傳</button>
+          <input type="text" id="new-thumbnail" placeholder="鞎潔??? URL" oninput="previewNewImage()" style="flex:1;">
+          <button class="btn-warning" onclick="uploadThumbnail('new')" style="white-space:nowrap;">?? 銝</button>
         </div>
         <img id="new-preview" class="preview-img" style="display:none;">
       </div>
-      <div class="form-group"><label>介紹</label><textarea id="new-description" placeholder="描述這個案例..."></textarea></div>
+      <div class="form-group"><label>隞晶</label><textarea id="new-description" placeholder="?膩??靘?.."></textarea></div>
       
       <div class="form-group">
-        <label>📸 圖片管理</label>
+        <label>? ??蝞∠?</label>
         <div class="image-zones">
           <div class="image-zone zone-before">
-            <div class="zone-header"><h4>🔴 工程前</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('new','before')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('new','before')" style="font-size:0.8rem;">🔗 網址</button></div></div>
+            <div class="zone-header"><h4>? 撌亦???/h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('new','before')" style="font-size:0.8rem;">?? 銝</button><button class="btn-sm btn-primary" onclick="addImageUrl('new','before')" style="font-size:0.8rem;">?? 蝬脣?</button></div></div>
             <div class="image-grid" id="new-before-grid" data-zone="before"></div>
           </div>
           <div class="image-zone zone-after">
-            <div class="zone-header"><h4>🟢 工程後</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('new','after')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('new','after')" style="font-size:0.8rem;">🔗 網址</button></div></div>
+            <div class="zone-header"><h4>? 撌亦?敺?/h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('new','after')" style="font-size:0.8rem;">?? 銝</button><button class="btn-sm btn-primary" onclick="addImageUrl('new','after')" style="font-size:0.8rem;">?? 蝬脣?</button></div></div>
             <div class="image-grid" id="new-after-grid" data-zone="after"></div>
           </div>
         </div>
         <div class="image-zone zone-normal">
-          <div class="zone-header"><h4>📷 一般圖片</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('new','normal')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('new','normal')" style="font-size:0.8rem;">🔗 網址</button></div></div>
+          <div class="zone-header"><h4>? 銝?砍???/h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="addImageToZone('new','normal')" style="font-size:0.8rem;">?? 銝</button><button class="btn-sm btn-primary" onclick="addImageUrl('new','normal')" style="font-size:0.8rem;">?? 蝬脣?</button></div></div>
           <div class="image-grid" id="new-normal-grid" data-zone="normal"></div>
         </div>
         <div class="compare-live" id="new-compare-live" style="display:none;">
-          <div class="compare-live-box before-box"><h4>🔴 工程前預覽</h4><div class="preview-images" id="new-before-preview"></div></div>
-          <div class="compare-live-box after-box"><h4>🟢 工程後預覽</h4><div class="preview-images" id="new-after-preview"></div></div>
+          <div class="compare-live-box before-box"><h4>? 撌亦???閬?/h4><div class="preview-images" id="new-before-preview"></div></div>
+          <div class="compare-live-box after-box"><h4>? 撌亦?敺?閬?/h4><div class="preview-images" id="new-after-preview"></div></div>
         </div>
       </div>
       
       <div class="btn-row">
-        <button class="btn-success" onclick="addCase()">✅ 加入案例</button>
+        <button class="btn-success" onclick="addCase()">???獢?</button>
       </div>
     </div>
   </div>
   
   <div class="admin-card" style="text-align: center;">
-    <p style="margin-bottom: 16px; color: var(--text-light);">改完之後撳「儲存」更新網站</p>
-    <button class="btn-success" style="font-size: 1.1rem; padding: 16px 48px;" onclick="saveData()">💾 儲存並更新網站</button>
-    <button class="btn-primary btn-sm" style="margin-left: 12px;" onclick="loadData()">🔄 重新載入</button>
-    <button class="btn-danger btn-sm" style="margin-left: 12px;" onclick="clearToken()">🔑 重新設定 Token</button>
+    <p style="margin-bottom: 16px; color: var(--text-light);">?孵?銋??喋摮?啁雯蝡?/p>
+    <button class="btn-success" style="font-size: 1.1rem; padding: 16px 48px;" onclick="saveData()">? ?脣?銝行?啁雯蝡?/button>
+    <button class="btn-primary btn-sm" style="margin-left: 12px;" onclick="loadData()">?? ?頛</button>
+    <button class="btn-danger btn-sm" style="margin-left: 12px;" onclick="clearToken()">?? ?閮剖? Token</button>
     <div id="token-section" style="display:none; margin-top: 20px; padding: 20px; background: #f0f0f0; border-radius: 8px;">
-      <p style="margin-bottom: 12px; color: var(--primary); font-weight: 600;">輸入 GitHub Token</p>
-      <p style="margin-bottom: 12px; color: var(--text-light); font-size: 0.9rem;">去 <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--accent-dark);">GitHub Settings</a> 建立一個，勾選「repo」權限。</p>
+      <p style="margin-bottom: 12px; color: var(--primary); font-weight: 600;">頛詨 GitHub Token</p>
+      <p style="margin-bottom: 12px; color: var(--text-light); font-size: 0.9rem;">??<a href="https://github.com/settings/tokens" target="_blank" style="color: var(--accent-dark);">GitHub Settings</a> 撱箇?銝???暸?epo????/p>
       <div style="display: flex; gap: 8px;">
-        <input type="password" id="token-input" placeholder="貼上你的 GitHub Token" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
-        <button class="btn-success" onclick="saveToken()">確認</button>
+        <input type="password" id="token-input" placeholder="鞎潔?雿? GitHub Token" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+        <button class="btn-success" onclick="saveToken()">蝣箄?</button>
       </div>
     </div>
     <p id="save-status" style="margin-top: 16px; font-weight: 600;"></p>
   </div>
   
   <div class="admin-card">
-    <h3>匯出 JSON</h3>
+    <h3>?臬 JSON</h3>
     <textarea id="json-output" style="width: 100%; height: 200px; font-family: monospace; font-size: 0.85rem; padding: 12px; border: 1px solid #ddd; border-radius: 8px;" readonly></textarea>
-    <div class="btn-row"><button class="btn-primary" onclick="copyJSON()">📋 複製</button></div>
+    <div class="btn-row"><button class="btn-primary" onclick="copyJSON()">?? 銴ˊ</button></div>
   </div>
 </div>
 
@@ -263,15 +263,15 @@ function renderLists() {
           ${item.thumbnail ? `<img src="${item.thumbnail}" style="width:80px;height:60px;object-fit:cover;border-radius:6px;margin-right:12px;">` : ''}
           <strong>${item.title}</strong>
           <span style="color: var(--text-light); margin-left: 8px;">${item.location}</span>
-          <span style="color: #999; margin-left: 8px; font-size: 0.85rem;">(${(item.images||[]).length}張)</span>
+          <span style="color: #999; margin-left: 8px; font-size: 0.85rem;">(${(item.images||[]).length}撘?</span>
         </div>
         <div class="case-item-actions">
-          <a href="case.html?id=${item.id}&type=${type}" target="_blank" class="btn-primary btn-sm">預覽</a>
-          <button class="btn-warning" onclick="editCase('${type}', ${i})">編輯</button>
-          <button class="btn-danger btn-sm" onclick="deleteCase('${type}', ${i})">刪除</button>
+          <a href="case.html?id=${item.id}&type=${type}" target="_blank" class="btn-primary btn-sm">?汗</a>
+          <button class="btn-warning" onclick="editCase('${type}', ${i})">蝺刻摩</button>
+          <button class="btn-danger btn-sm" onclick="deleteCase('${type}', ${i})">?芷</button>
         </div>
       </li>
-    `).join('') || '<li style="padding:16px;color:#999;">暫無案例</li>';
+    `).join('') || '<li style="padding:16px;color:#999;">?怎獢?</li>';
   });
 }
 
@@ -285,9 +285,9 @@ function showTab(tab) {
 // ============ Image Zones ============
 
 function addImageUrl(context, zone) {
-  const url = prompt('貼上圖片 URL：');
+  const url = prompt('鞎潔??? URL嚗?);
   if (!url || !url.trim()) return;
-  const caption = prompt('輸入圖片標題（例如：客廳、廚房）：') || '';
+  const caption = prompt('頛詨??璅?嚗?憒?摰Ｗ輒???選?嚗?) || '';
   const imgs = context === 'edit' ? editImages : newImages;
   imgs[zone].push({ url: url.trim(), caption: caption.trim() });
   renderZones(context);
@@ -302,9 +302,9 @@ function addImageToZone(context, zone) {
     const files = Array.from(e.target.files);
     if (!files.length) return;
     
-    const caption = prompt('輸入圖片標題（例如：客廳、廚房）：') || '';
+    const caption = prompt('頛詨??璅?嚗?憒?摰Ｗ輒???選?嚗?) || '';
     const statusEl = document.getElementById('save-status');
-    const zoneName = zone === 'before' ? '工程前' : zone === 'after' ? '工程後' : '一般';
+    const zoneName = zone === 'before' ? '撌亦??? : zone === 'after' ? '撌亦?敺? : '銝??;
     
     let successCount = 0;
     let failCount = 0;
@@ -317,11 +317,11 @@ function addImageToZone(context, zone) {
         // Step 1: Compress
         statusEl.innerHTML = `
           <div style="text-align:left;">
-            <span style="color:blue">🔄 ${progress} 壓縮中：${file.name}</span>
+            <span style="color:blue">?? ${progress} 憯葬銝哨?${file.name}</span>
             <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
               <div style="background:#2196F3;height:100%;width:30%;border-radius:4px;transition:width 0.3s;"></div>
             </div>
-            <span style="color:#999;font-size:0.85rem;">原始大小：${Math.round(file.size/1024)}KB</span>
+            <span style="color:#999;font-size:0.85rem;">??憭批?嚗?{Math.round(file.size/1024)}KB</span>
           </div>
         `;
         
@@ -334,11 +334,11 @@ function addImageToZone(context, zone) {
         // Step 2: Upload
         statusEl.innerHTML = `
           <div style="text-align:left;">
-            <span style="color:blue">📤 ${progress} 上傳中：${file.name}</span>
+            <span style="color:blue">? ${progress} 銝銝哨?${file.name}</span>
             <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
               <div style="background:#4CAF50;height:100%;width:60%;border-radius:4px;transition:width 0.3s;"></div>
             </div>
-            <span style="color:#999;font-size:0.85rem;">${origSize}KB → ${newSize}KB（節省 ${saved}%）</span>
+            <span style="color:#999;font-size:0.85rem;">${origSize}KB ??${newSize}KB嚗???${saved}%嚗?/span>
           </div>
         `;
         
@@ -346,7 +346,7 @@ function addImageToZone(context, zone) {
         
         const token = localStorage.getItem('github_token');
         if (!token) {
-          statusEl.innerHTML = '<span style="color:red">❌ 請先設定 GitHub Token</span>';
+          statusEl.innerHTML = '<span style="color:red">??隢?閮剖? GitHub Token</span>';
           document.getElementById('token-section').style.display = 'block';
           return;
         }
@@ -384,11 +384,11 @@ function addImageToZone(context, zone) {
           
           statusEl.innerHTML = `
             <div style="text-align:left;">
-              <span style="color:green">✅ ${progress} ${file.name} 完成！</span>
+              <span style="color:green">??${progress} ${file.name} 摰?嚗?/span>
               <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
                 <div style="background:#4CAF50;height:100%;width:100%;border-radius:4px;"></div>
               </div>
-              <span style="color:#4CAF50;font-size:0.85rem;">${origSize}KB → ${newSize}KB（節省 ${saved}%）</span>
+              <span style="color:#4CAF50;font-size:0.85rem;">${origSize}KB ??${newSize}KB嚗???${saved}%嚗?/span>
             </div>
           `;
         } else {
@@ -397,16 +397,16 @@ function addImageToZone(context, zone) {
         }
       } catch (err) {
         failCount++;
-        statusEl.innerHTML = `<span style="color:red">❌ ${progress} ${file.name} 失敗: ${err.message}</span>`;
+        statusEl.innerHTML = `<span style="color:red">??${progress} ${file.name} 憭望?: ${err.message}</span>`;
       }
     }
     
     renderZones(context);
     statusEl.innerHTML = `
       <div style="text-align:left;">
-        <span style="color:green">✅ 完成！成功 ${successCount} 張</span>
-        ${failCount > 0 ? `<span style="color:red;margin-left:12px;">失敗 ${failCount} 張</span>` : ''}
-        <br><span style="color:#999;font-size:0.85rem;">Cloudflare 約1分鐘後生效，撳「🔄 重新載入」刷新</span>
+        <span style="color:green">??摰?嚗???${successCount} 撘?/span>
+        ${failCount > 0 ? `<span style="color:red;margin-left:12px;">憭望? ${failCount} 撘?/span>` : ''}
+        <br><span style="color:#999;font-size:0.85rem;">Cloudflare 蝝???敺????喋???頛???/span>
       </div>
     `;
   };
@@ -466,7 +466,7 @@ function removeImageFromZone(context, zone, index) {
 function editCaption(context, zone, index) {
   const imgs = context === 'edit' ? editImages : newImages;
   const current = imgs[zone][index].caption || '';
-  const newCaption = prompt('輸入圖片標題（例如：客廳、廚房）：', current);
+  const newCaption = prompt('頛詨??璅?嚗?憒?摰Ｗ輒???選?嚗?, current);
   if (newCaption !== null) {
     imgs[zone][index].caption = newCaption.trim();
     renderZones(context);
@@ -483,13 +483,13 @@ function renderZones(context) {
     grid.innerHTML = imgs[zone].map((img, i) => {
       const displayUrl = img.raw_url || img.url;
       return `
-        <div class="image-item" title="${img.caption || '無標題'}">
-          <img src="${displayUrl}" alt="${img.caption || '圖片'}" ondblclick="editCaption('${context}','${zone}',${i})">
-          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);color:white;font-size:10px;padding:2px 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;" ondblclick="editCaption('${context}','${zone}',${i})">${img.caption || '無標題'}</div>
-          <button class="btn-remove" onclick="removeImageFromZone('${context}','${zone}',${i})">✕</button>
+        <div class="image-item" title="${img.caption || '?⊥?憿?}">
+          <img src="${displayUrl}" alt="${img.caption || '??'}" ondblclick="editCaption('${context}','${zone}',${i})">
+          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);color:white;font-size:10px;padding:2px 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;" ondblclick="editCaption('${context}','${zone}',${i})">${img.caption || '?⊥?憿?}</div>
+          <button class="btn-remove" onclick="removeImageFromZone('${context}','${zone}',${i})">??/button>
         </div>
       `;
-    }).join('') || '<div class="empty-msg">拖入圖片或撳「+ 加圖」</div>';
+    }).join('') || '<div class="empty-msg">?????? ????/div>';
     
     // Destroy old sortable
     const key = `${context}-${zone}`;
@@ -525,10 +525,10 @@ function renderZones(context) {
     liveEl.style.display = 'grid';
     document.getElementById(`${context}-before-preview`).innerHTML = imgs.before.length
       ? imgs.before.map(img => `<div style="text-align:center;"><img src="${img.url}"><div style="font-size:11px;color:#666;margin-top:4px;">${img.caption || ''}</div></div>`).join('')
-      : '<span class="empty-msg">尚未添加</span>';
+      : '<span class="empty-msg">撠瘛餃?</span>';
     document.getElementById(`${context}-after-preview`).innerHTML = imgs.after.length
       ? imgs.after.map(img => `<div style="text-align:center;"><img src="${img.url}"><div style="font-size:11px;color:#666;margin-top:4px;">${img.caption || ''}</div></div>`).join('')
-      : '<span class="empty-msg">尚未添加</span>';
+      : '<span class="empty-msg">撠瘛餃?</span>';
   } else {
     liveEl.style.display = 'none';
   }
@@ -540,7 +540,7 @@ function editCase(type, index) {
   const item = portfolioData[type][index];
   document.getElementById('edit-index').value = index;
   document.getElementById('edit-type').value = type;
-  document.getElementById('edit-type-display').value = type === 'renovation' ? '全屋翻新工程' : '維修案例';
+  document.getElementById('edit-type-display').value = type === 'renovation' ? '?典?蝧餅撌亦?' : '蝬凋耨獢?';
   document.getElementById('edit-title').value = item.title;
   document.getElementById('edit-location').value = item.location;
   document.getElementById('edit-category').value = item.type;
@@ -608,7 +608,7 @@ async function uploadThumbnail(context) {
       // Compress
       statusEl.innerHTML = `
         <div style="text-align:left;">
-          <span style="color:blue">🔄 壓縮封面中：${file.name}</span>
+          <span style="color:blue">?? 憯葬撠銝哨?${file.name}</span>
           <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
             <div style="background:#2196F3;height:100%;width:40%;border-radius:4px;"></div>
           </div>
@@ -623,11 +623,11 @@ async function uploadThumbnail(context) {
       // Upload
       statusEl.innerHTML = `
         <div style="text-align:left;">
-          <span style="color:blue">📤 上傳封面中...</span>
+          <span style="color:blue">? 銝撠銝?..</span>
           <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
             <div style="background:#4CAF50;height:100%;width:70%;border-radius:4px;"></div>
           </div>
-          <span style="color:#999;font-size:0.85rem;">${origSize}KB → ${newSize}KB</span>
+          <span style="color:#999;font-size:0.85rem;">${origSize}KB ??${newSize}KB</span>
         </div>
       `;
       
@@ -654,18 +654,18 @@ async function uploadThumbnail(context) {
         previewEditImage();
         statusEl.innerHTML = `
           <div style="text-align:left;">
-            <span style="color:green">✅ 封面上傳成功！</span>
+            <span style="color:green">??撠銝??嚗?/span>
             <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
               <div style="background:#4CAF50;height:100%;width:100%;border-radius:4px;"></div>
             </div>
-            <span style="color:#4CAF50;font-size:0.85rem;">${origSize}KB → ${newSize}KB（節省 ${Math.round((1-newSize/origSize)*100)}%）</span>
+            <span style="color:#4CAF50;font-size:0.85rem;">${origSize}KB ??${newSize}KB嚗???${Math.round((1-newSize/origSize)*100)}%嚗?/span>
           </div>
         `;
       } else {
         throw new Error((await resp.json()).message);
       }
     } catch (err) {
-      statusEl.innerHTML = `<span style="color:red">❌ 上傳失敗: ${err.message}</span>`;
+      statusEl.innerHTML = `<span style="color:red">??銝憭望?: ${err.message}</span>`;
     }
   };
   input.click();
@@ -682,7 +682,7 @@ function updateCase() {
   const type = document.getElementById('edit-type').value;
   const title = document.getElementById('edit-title').value;
   const location = document.getElementById('edit-location').value;
-  if (!title || !location) { document.getElementById('save-status').innerHTML = '<span style="color:red">❌ 請填寫標題和地區</span>'; return; }
+  if (!title || !location) { document.getElementById('save-status').innerHTML = '<span style="color:red">??隢‵撖急?憿??啣?</span>'; return; }
   
   const cleanImages = (arr) => arr.map(img => ({ url: img.url, caption: img.caption || '' }));
   const images = [...cleanImages(editImages.before), ...cleanImages(editImages.after), ...cleanImages(editImages.normal)];
@@ -698,13 +698,13 @@ function updateCase() {
   renderLists(); updateJSON();
   document.getElementById('edit-tab-btn').style.display = 'none';
   showTab(type);
-  document.getElementById('save-status').innerHTML = '<span style="color:green">✅ 已更新</span>';
+  document.getElementById('save-status').innerHTML = '<span style="color:green">??撌脫??/span>';
 }
 
 function cancelEdit() { document.getElementById('edit-tab-btn').style.display = 'none'; showTab('renovation'); }
 
 function deleteCase(type, i) {
-  if (confirm('確定刪除？')) { portfolioData[type].splice(i, 1); renderLists(); updateJSON(); document.getElementById('save-status').innerHTML = '<span style="color:orange">⚠️ 已刪除</span>'; }
+  if (confirm('蝣箏??芷嚗?)) { portfolioData[type].splice(i, 1); renderLists(); updateJSON(); document.getElementById('save-status').innerHTML = '<span style="color:orange">?? 撌脣??/span>'; }
 }
 
 function previewNewImage() {
@@ -717,7 +717,7 @@ function addCase() {
   const type = document.getElementById('new-type').value;
   const title = document.getElementById('new-title').value;
   const location = document.getElementById('new-location').value;
-  if (!title || !location) { document.getElementById('save-status').innerHTML = '<span style="color:red">❌ 請填寫標題和地區</span>'; return; }
+  if (!title || !location) { document.getElementById('save-status').innerHTML = '<span style="color:red">??隢‵撖急?憿??啣?</span>'; return; }
   
   const cleanImages = (arr) => arr.map(img => ({ url: img.url, caption: img.caption || '' }));
   const images = [...cleanImages(newImages.before), ...cleanImages(newImages.after), ...cleanImages(newImages.normal)];
@@ -738,17 +738,17 @@ function addCase() {
   newImages = { before: [], after: [], normal: [] };
   renderZones('new');
   showTab('renovation');
-  document.getElementById('save-status').innerHTML = '<span style="color:green">✅ 已加入</span>';
+  document.getElementById('save-status').innerHTML = '<span style="color:green">??撌脣???/span>';
 }
 
 function updateJSON() { document.getElementById('json-output').value = JSON.stringify(portfolioData, null, 2); }
-function copyJSON() { navigator.clipboard.writeText(document.getElementById('json-output').value); document.getElementById('save-status').innerHTML = '<span style="color:green">✅ 已複製</span>'; }
+function copyJSON() { navigator.clipboard.writeText(document.getElementById('json-output').value); document.getElementById('save-status').innerHTML = '<span style="color:green">??撌脰?鋆?/span>'; }
 
 async function saveData() {
   const s = document.getElementById('save-status');
-  s.innerHTML = '<span style="color:blue">⏳ 儲存中...</span>';
+  s.innerHTML = '<span style="color:blue">???脣?銝?..</span>';
   let token = localStorage.getItem('github_token');
-  if (!token) { document.getElementById('token-section').style.display = 'block'; s.innerHTML = '<span style="color:orange">⚠️ 請先輸入 Token</span>'; return; }
+  if (!token) { document.getElementById('token-section').style.display = 'block'; s.innerHTML = '<span style="color:orange">?? 隢?頛詨 Token</span>'; return; }
   try {
     const repo = 'desskwok/castinghomecraft-site', fp = 'data/portfolio.json';
     const json = JSON.stringify(portfolioData, null, 2);
@@ -759,18 +759,18 @@ async function saveData() {
       headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
       body: JSON.stringify({ message: 'Update portfolio via admin', content: btoa(unescape(encodeURIComponent(json))), sha })
     });
-    if (r2.ok) s.innerHTML = '<span style="color:green">✅ 已儲存！約1分鐘更新。</span>';
+    if (r2.ok) s.innerHTML = '<span style="color:green">??撌脣摮?蝝????湔??/span>';
     else throw new Error((await r2.json()).message);
-  } catch (e) { s.innerHTML = `<span style="color:red">❌ ${e.message}</span>`; }
+  } catch (e) { s.innerHTML = `<span style="color:red">??${e.message}</span>`; }
 }
 
-function clearToken() { localStorage.removeItem('github_token'); document.getElementById('save-status').innerHTML = '<span style="color:orange">⚠️ Token 已清除</span>'; }
+function clearToken() { localStorage.removeItem('github_token'); document.getElementById('save-status').innerHTML = '<span style="color:orange">?? Token 撌脫???/span>'; }
 function saveToken() {
   const t = document.getElementById('token-input').value.trim();
   if (!t) return;
   localStorage.setItem('github_token', t);
   document.getElementById('token-section').style.display = 'none';
-  document.getElementById('save-status').innerHTML = '<span style="color:green">✅ Token 已儲存</span>';
+  document.getElementById('save-status').innerHTML = '<span style="color:green">??Token 撌脣摮?/span>';
 }
 
 loadData();
@@ -778,3 +778,4 @@ loadData();
 
 </body>
 </html>
+
