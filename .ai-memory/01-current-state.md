@@ -20,7 +20,7 @@
 | 項目 | 內容 |
 |------|------|
 | **GitHub 用戶名** | desskwok |
-| **GitHub Token** | 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 |
+| **GitHub Token** | [已儲存在本地，唔會上傳到 GitHub] |
 | **Cloudflare Account ID** | 934e78ef2dc64f8e529c044119d13641 |
 
 ## 已完成功能
