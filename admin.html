@@ -304,18 +304,43 @@ function addImageToZone(context, zone) {
     
     const caption = prompt('輸入圖片標題（例如：客廳、廚房）：') || '';
     const statusEl = document.getElementById('save-status');
-    statusEl.innerHTML = '<span style="color:blue">⏳ 上傳圖片中...</span>';
+    const zoneName = zone === 'before' ? '工程前' : zone === 'after' ? '工程後' : '一般';
     
-    for (const file of files) {
+    let successCount = 0;
+    let failCount = 0;
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const progress = `[${i + 1}/${files.length}]`;
+      
       try {
-        statusEl.innerHTML = `<span style="color:blue">⏳ 壓縮 ${file.name}...</span>`;
+        // Step 1: Compress
+        statusEl.innerHTML = `
+          <div style="text-align:left;">
+            <span style="color:blue">🔄 ${progress} 壓縮中：${file.name}</span>
+            <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
+              <div style="background:#2196F3;height:100%;width:30%;border-radius:4px;transition:width 0.3s;"></div>
+            </div>
+            <span style="color:#999;font-size:0.85rem;">原始大小：${Math.round(file.size/1024)}KB</span>
+          </div>
+        `;
         
-        // Compress image before upload
         const compressed = await compressImage(file, 1200, 0.8);
         const base64 = await fileToBase64(compressed);
         const origSize = Math.round(file.size / 1024);
         const newSize = Math.round(compressed.size / 1024);
-        statusEl.innerHTML = `<span style="color:blue">⏳ 上傳 ${file.name}（${origSize}KB → ${newSize}KB）...</span>`;
+        const saved = Math.round((1 - newSize/origSize) * 100);
+        
+        // Step 2: Upload
+        statusEl.innerHTML = `
+          <div style="text-align:left;">
+            <span style="color:blue">📤 ${progress} 上傳中：${file.name}</span>
+            <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
+              <div style="background:#4CAF50;height:100%;width:60%;border-radius:4px;transition:width 0.3s;"></div>
+            </div>
+            <span style="color:#999;font-size:0.85rem;">${origSize}KB → ${newSize}KB（節省 ${saved}%）</span>
+          </div>
+        `;
         
         const filename = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_').replace(/\.[^.]+$/, '.jpg')}`;
         
@@ -352,22 +377,38 @@ function addImageToZone(context, zone) {
         });
         
         if (uploadResp.ok) {
-          // Use GitHub raw URL for immediate display, then switch to local path after deploy
           const rawUrl = `https://raw.githubusercontent.com/${repo}/main/${path}`;
           const imgs = context === 'edit' ? editImages : newImages;
           imgs[zone].push({ url: path, raw_url: rawUrl, caption: caption.trim() });
-          statusEl.innerHTML = `<span style="color:green">✅ ${file.name} 上傳成功（Cloudflare 約1分鐘後生效）</span>`;
+          successCount++;
+          
+          statusEl.innerHTML = `
+            <div style="text-align:left;">
+              <span style="color:green">✅ ${progress} ${file.name} 完成！</span>
+              <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
+                <div style="background:#4CAF50;height:100%;width:100%;border-radius:4px;"></div>
+              </div>
+              <span style="color:#4CAF50;font-size:0.85rem;">${origSize}KB → ${newSize}KB（節省 ${saved}%）</span>
+            </div>
+          `;
         } else {
           const err = await uploadResp.json();
           throw new Error(err.message || 'Upload failed');
         }
       } catch (err) {
-        statusEl.innerHTML = `<span style="color:red">❌ ${file.name} 上傳失敗: ${err.message}</span>`;
+        failCount++;
+        statusEl.innerHTML = `<span style="color:red">❌ ${progress} ${file.name} 失敗: ${err.message}</span>`;
       }
     }
     
     renderZones(context);
-    statusEl.innerHTML = `<span style="color:green">✅ ${files.length} 張圖片已上傳</span>`;
+    statusEl.innerHTML = `
+      <div style="text-align:left;">
+        <span style="color:green">✅ 完成！成功 ${successCount} 張</span>
+        ${failCount > 0 ? `<span style="color:red;margin-left:12px;">失敗 ${failCount} 張</span>` : ''}
+        <br><span style="color:#999;font-size:0.85rem;">Cloudflare 約1分鐘後生效，撳「🔄 重新載入」刷新</span>
+      </div>
+    `;
   };
   input.click();
 }
@@ -511,10 +552,19 @@ function editCase(type, index) {
   
   editImages = { before: [], after: [], normal: [] };
   
-  // Helper to normalize image to object format
+  // Helper to normalize image to object format, add raw_url for local images
   const normalizeImg = (img) => {
-    if (typeof img === 'string') return { url: img, caption: '' };
-    return img;
+    let result;
+    if (typeof img === 'string') {
+      result = { url: img, caption: '' };
+    } else {
+      result = { ...img };
+    }
+    // Add raw_url for local images (images/...)
+    if (result.url && result.url.startsWith('images/')) {
+      result.raw_url = `https://raw.githubusercontent.com/desskwok/castinghomecraft-site/main/${result.url}`;
+    }
+    return result;
   };
   
   // Build sets of before/after URLs for categorization
@@ -553,11 +603,34 @@ async function uploadThumbnail(context) {
     if (!file) return;
     
     const statusEl = document.getElementById('save-status');
-    statusEl.innerHTML = '<span style="color:blue">⏳ 上傳封面...</span>';
     
     try {
+      // Compress
+      statusEl.innerHTML = `
+        <div style="text-align:left;">
+          <span style="color:blue">🔄 壓縮封面中：${file.name}</span>
+          <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
+            <div style="background:#2196F3;height:100%;width:40%;border-radius:4px;"></div>
+          </div>
+        </div>
+      `;
+      
       const compressed = await compressImage(file, 800, 0.8);
       const base64 = await fileToBase64(compressed);
+      const origSize = Math.round(file.size / 1024);
+      const newSize = Math.round(compressed.size / 1024);
+      
+      // Upload
+      statusEl.innerHTML = `
+        <div style="text-align:left;">
+          <span style="color:blue">📤 上傳封面中...</span>
+          <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
+            <div style="background:#4CAF50;height:100%;width:70%;border-radius:4px;"></div>
+          </div>
+          <span style="color:#999;font-size:0.85rem;">${origSize}KB → ${newSize}KB</span>
+        </div>
+      `;
+      
       const filename = `thumbnail_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_').replace(/\.[^.]+$/, '.jpg')}`;
       const token = localStorage.getItem('github_token');
       if (!token) { document.getElementById('token-section').style.display = 'block'; return; }
@@ -579,7 +652,15 @@ async function uploadThumbnail(context) {
         const fieldId = context === 'edit' ? 'edit-thumbnail' : 'new-thumbnail';
         document.getElementById(fieldId).value = path;
         previewEditImage();
-        statusEl.innerHTML = '<span style="color:green">✅ 封面上傳成功</span>';
+        statusEl.innerHTML = `
+          <div style="text-align:left;">
+            <span style="color:green">✅ 封面上傳成功！</span>
+            <div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;">
+              <div style="background:#4CAF50;height:100%;width:100%;border-radius:4px;"></div>
+            </div>
+            <span style="color:#4CAF50;font-size:0.85rem;">${origSize}KB → ${newSize}KB（節省 ${Math.round((1-newSize/origSize)*100)}%）</span>
+          </div>
+        `;
       } else {
         throw new Error((await resp.json()).message);
       }
