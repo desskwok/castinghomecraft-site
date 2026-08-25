@@ -8,18 +8,48 @@
       "thumbnail": "images/IMG_20240420_175800.jpg",
       "description": "這間屋呈現現代簡約風，以白色、淺木色為主調，設計簡潔實用，線條流暢。強調儲物功能與空間利用，營造出明亮、溫馨且高效能的居家環境。",
       "before_images": [
-        { "url": "images/IMG_20240420_175800.jpg", "caption": "大廳施工前" },
-        { "url": "images/IMG_20240420_175810.jpg", "caption": "廚房施工前" }
+        {
+          "url": "images/IMG_20240420_175800.jpg",
+          "caption": "大廳施工前"
+        },
+        {
+          "url": "images/IMG_20240420_175810.jpg",
+          "caption": "廚房施工前"
+        }
       ],
       "after_images": [
-        { "url": "images/IMG_20240420_175817.jpg", "caption": "大廳施工後" }
+        {
+          "url": "images/IMG_20240420_175817.jpg",
+          "caption": "大廳施工後"
+        }
       ],
       "images": [
-        { "url": "images/IMG_20240420_175800.jpg", "caption": "大廳施工前" },
-        { "url": "images/IMG_20240420_175810.jpg", "caption": "廚房施工前" },
-        { "url": "images/IMG_20240420_175817.jpg", "caption": "大廳施工後" }
+        {
+          "url": "images/IMG_20240420_175800.jpg",
+          "caption": "大廳施工前"
+        },
+        {
+          "url": "images/IMG_20240420_175810.jpg",
+          "caption": "廚房施工前"
+        },
+        {
+          "url": "images/IMG_20240420_175817.jpg",
+          "caption": "大廳施工後"
+        }
       ],
       "order": 1
+    },
+    {
+      "id": "test",
+      "title": "test",
+      "location": "test",
+      "type": "",
+      "thumbnail": "",
+      "description": "",
+      "images": [],
+      "before_images": [],
+      "after_images": [],
+      "order": 2
     }
   ],
   "maintenance": [
