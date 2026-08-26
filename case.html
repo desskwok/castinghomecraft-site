@@ -177,12 +177,14 @@ async function loadCase() {
     
     // Before/After Compare
     if (hasBeforeAfter) {
+      const afterImgUrl = typeof caseData.after_images[0] === 'string' ? caseData.after_images[0] : caseData.after_images[0].url;
+      const beforeImgUrl = typeof caseData.before_images[0] === 'string' ? caseData.before_images[0] : caseData.before_images[0].url;
       html += `
         <div class="compare-section">
           <h2>🔄 工程前後對比</h2>
           <div class="compare-slider" id="compareSlider">
-            <img src="${caseData.after_images[0]}" alt="工程後" class="after-img">
-            <img src="${caseData.before_images[0]}" alt="工程前" class="before-img" id="beforeImg">
+            <img src="${afterImgUrl}" alt="工程後" class="after-img">
+            <img src="${beforeImgUrl}" alt="工程前" class="before-img" id="beforeImg">
             <div class="slider-line" id="sliderLine"></div>
             <div class="slider-handle" id="sliderHandle">⟷</div>
           </div>
