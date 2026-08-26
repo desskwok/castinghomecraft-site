@@ -52,9 +52,19 @@
     
     /* Gallery */
     .case-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 40px; }
-    .case-gallery-item { border-radius: var(--radius); overflow: hidden; }
+    .case-gallery-item { border-radius: var(--radius); overflow: hidden; cursor: pointer; }
     .case-gallery-item img { width: 100%; height: 300px; object-fit: cover; transition: transform 0.3s; }
     .case-gallery-item:hover img { transform: scale(1.02); }
+    
+    /* Lightbox */
+    .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; cursor: pointer; }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 90%; max-height: 90vh; object-fit: contain; border-radius: 8px; }
+    .lightbox-close { position: absolute; top: 20px; right: 30px; color: white; font-size: 2rem; cursor: pointer; z-index: 10000; }
+    .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 2rem; cursor: pointer; padding: 20px; z-index: 10000; }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .lightbox-caption { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.7); padding: 8px 16px; border-radius: 8px; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -85,6 +95,15 @@
     </div>
   </div>
 </section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <span class="lightbox-close">&times;</span>
+  <span class="lightbox-nav lightbox-prev" onclick="prevImage(event)">‹</span>
+  <span class="lightbox-nav lightbox-next" onclick="nextImage(event)">›</span>
+  <img src="" alt="" id="lightbox-img">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
 
 <!-- Footer -->
 <footer>
@@ -232,8 +251,8 @@ async function loadCase() {
           result += `<h3 style="font-size: 1rem; font-weight: 600; margin: 20px 0 12px; color: #555;">${caption}</h3>`;
         }
         result += `<div class="case-gallery">`;
-        result += groupImgs.map(img => `
-          <div class="case-gallery-item">
+        result += groupImgs.map((img, idx) => `
+          <div class="case-gallery-item" onclick="openLightbox('${img.url}', '${img.caption || label}', ${idx}, '${JSON.stringify(groupImgs.map(i=>i.url)).replace(/'/g,"\\'")}', '${JSON.stringify(groupImgs.map(i=>i.caption||label)).replace(/'/g,"\\'")}')">
             <img src="${img.url}" alt="${img.caption || label}">
             ${img.caption ? `<div style="padding:8px;text-align:center;font-size:0.9rem;color:#555;">${img.caption}</div>` : ''}
           </div>
@@ -296,6 +315,55 @@ function initCompareSlider() {
   document.addEventListener('mouseup', () => isDragging = false);
   document.addEventListener('touchend', () => isDragging = false);
 }
+
+// ============ Lightbox ============
+let lightboxImages = [];
+let lightboxCaptions = [];
+let lightboxIndex = 0;
+
+function openLightbox(url, caption, idx, urlsJson, captionsJson) {
+  lightboxImages = JSON.parse(urlsJson);
+  lightboxCaptions = JSON.parse(captionsJson);
+  lightboxIndex = idx;
+  
+  const lightbox = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  const cap = document.getElementById('lightbox-caption');
+  
+  img.src = url;
+  cap.textContent = caption;
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox(e) {
+  if (e.target === document.getElementById('lightbox') || e.target.classList.contains('lightbox-close')) {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function prevImage(e) {
+  e.stopPropagation();
+  lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+  document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex];
+  document.getElementById('lightbox-caption').textContent = lightboxCaptions[lightboxIndex];
+}
+
+function nextImage(e) {
+  e.stopPropagation();
+  lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+  document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex];
+  document.getElementById('lightbox-caption').textContent = lightboxCaptions[lightboxIndex];
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('lightbox').classList.contains('active')) return;
+  if (e.key === 'Escape') { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow = ''; }
+  if (e.key === 'ArrowLeft') { lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length; document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex]; document.getElementById('lightbox-caption').textContent = lightboxCaptions[lightboxIndex]; }
+  if (e.key === 'ArrowRight') { lightboxIndex = (lightboxIndex + 1) % lightboxImages.length; document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex]; document.getElementById('lightbox-caption').textContent = lightboxCaptions[lightboxIndex]; }
+});
 
 loadCase();
 </script>
