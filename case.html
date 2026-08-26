@@ -250,17 +250,14 @@ async function loadCase() {
         if (caption !== '其他' || Object.keys(groups).length === 1) {
           result += `<h3 style="font-size: 1rem; font-weight: 600; margin: 20px 0 12px; color: #555;">${caption}</h3>`;
         }
-        const galleryId = `gallery-${Date.now()}-${Math.random().toString(36).substr(2,9)}`;
-        result += `<div class="case-gallery" id="${galleryId}">`;
+        result += `<div class="case-gallery">`;
         groupImgs.forEach((img, idx) => {
-          result += `<div class="case-gallery-item" onclick="openLightboxById('${galleryId}', ${idx})">`;
+          result += `<div class="case-gallery-item" onclick="openLightboxByData(this)" data-url="${img.url}" data-caption="${img.caption || label}">`;
           result += `<img src="${img.url}" alt="${img.caption || label}">`;
           if (img.caption) result += `<div style="padding:8px;text-align:center;font-size:0.9rem;color:#555;">${img.caption}</div>`;
           result += `</div>`;
         });
         result += `</div>`;
-        // Store gallery data for lightbox
-        result += `<script>window._galleries = window._galleries || {}; window._galleries['${galleryId}'] = ${JSON.stringify(groupImgs.map(i => ({url: i.url, caption: i.caption || label)}))};<\/script>`;
       });
       return result;
     };
@@ -323,19 +320,26 @@ function initCompareSlider() {
 let lightboxImages = [];
 let lightboxIndex = 0;
 
-function openLightboxById(galleryId, idx) {
-  const gallery = window._galleries[galleryId];
-  if (!gallery) return;
+function openLightboxByData(el) {
+  const url = el.getAttribute('data-url');
+  const caption = el.getAttribute('data-caption');
   
-  lightboxImages = gallery;
-  lightboxIndex = idx;
+  // Get all images in the same gallery
+  const gallery = el.closest('.case-gallery');
+  const items = gallery.querySelectorAll('.case-gallery-item');
+  lightboxImages = Array.from(items).map(item => ({
+    url: item.getAttribute('data-url'),
+    caption: item.getAttribute('data-caption')
+  }));
+  
+  lightboxIndex = Array.from(items).indexOf(el);
   
   const lightbox = document.getElementById('lightbox');
   const img = document.getElementById('lightbox-img');
   const cap = document.getElementById('lightbox-caption');
   
-  img.src = gallery[idx].url;
-  cap.textContent = gallery[idx].caption;
+  img.src = url;
+  cap.textContent = caption;
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
