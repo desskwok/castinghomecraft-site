@@ -250,14 +250,17 @@ async function loadCase() {
         if (caption !== '其他' || Object.keys(groups).length === 1) {
           result += `<h3 style="font-size: 1rem; font-weight: 600; margin: 20px 0 12px; color: #555;">${caption}</h3>`;
         }
-        result += `<div class="case-gallery">`;
-        result += groupImgs.map((img, idx) => `
-          <div class="case-gallery-item" onclick="openLightbox('${img.url}', '${img.caption || label}', ${idx}, '${JSON.stringify(groupImgs.map(i=>i.url)).replace(/'/g,"\\'")}', '${JSON.stringify(groupImgs.map(i=>i.caption||label)).replace(/'/g,"\\'")}')">
-            <img src="${img.url}" alt="${img.caption || label}">
-            ${img.caption ? `<div style="padding:8px;text-align:center;font-size:0.9rem;color:#555;">${img.caption}</div>` : ''}
-          </div>
-        `).join('');
+        const galleryId = `gallery-${Date.now()}-${Math.random().toString(36).substr(2,9)}`;
+        result += `<div class="case-gallery" id="${galleryId}">`;
+        groupImgs.forEach((img, idx) => {
+          result += `<div class="case-gallery-item" onclick="openLightboxById('${galleryId}', ${idx})">`;
+          result += `<img src="${img.url}" alt="${img.caption || label}">`;
+          if (img.caption) result += `<div style="padding:8px;text-align:center;font-size:0.9rem;color:#555;">${img.caption}</div>`;
+          result += `</div>`;
+        });
         result += `</div>`;
+        // Store gallery data for lightbox
+        result += `<script>window._galleries = window._galleries || {}; window._galleries['${galleryId}'] = ${JSON.stringify(groupImgs.map(i => ({url: i.url, caption: i.caption || label)}))};<\/script>`;
       });
       return result;
     };
@@ -318,20 +321,21 @@ function initCompareSlider() {
 
 // ============ Lightbox ============
 let lightboxImages = [];
-let lightboxCaptions = [];
 let lightboxIndex = 0;
 
-function openLightbox(url, caption, idx, urlsJson, captionsJson) {
-  lightboxImages = JSON.parse(urlsJson);
-  lightboxCaptions = JSON.parse(captionsJson);
+function openLightboxById(galleryId, idx) {
+  const gallery = window._galleries[galleryId];
+  if (!gallery) return;
+  
+  lightboxImages = gallery;
   lightboxIndex = idx;
   
   const lightbox = document.getElementById('lightbox');
   const img = document.getElementById('lightbox-img');
   const cap = document.getElementById('lightbox-caption');
   
-  img.src = url;
-  cap.textContent = caption;
+  img.src = gallery[idx].url;
+  cap.textContent = gallery[idx].caption;
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -346,23 +350,23 @@ function closeLightbox(e) {
 function prevImage(e) {
   e.stopPropagation();
   lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
-  document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex];
-  document.getElementById('lightbox-caption').textContent = lightboxCaptions[lightboxIndex];
+  document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex].url;
+  document.getElementById('lightbox-caption').textContent = lightboxImages[lightboxIndex].caption;
 }
 
 function nextImage(e) {
   e.stopPropagation();
   lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
-  document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex];
-  document.getElementById('lightbox-caption').textContent = lightboxCaptions[lightboxIndex];
+  document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex].url;
+  document.getElementById('lightbox-caption').textContent = lightboxImages[lightboxIndex].caption;
 }
 
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
   if (!document.getElementById('lightbox').classList.contains('active')) return;
   if (e.key === 'Escape') { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow = ''; }
-  if (e.key === 'ArrowLeft') { lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length; document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex]; document.getElementById('lightbox-caption').textContent = lightboxCaptions[lightboxIndex]; }
-  if (e.key === 'ArrowRight') { lightboxIndex = (lightboxIndex + 1) % lightboxImages.length; document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex]; document.getElementById('lightbox-caption').textContent = lightboxCaptions[lightboxIndex]; }
+  if (e.key === 'ArrowLeft') { lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length; document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex].url; document.getElementById('lightbox-caption').textContent = lightboxImages[lightboxIndex].caption; }
+  if (e.key === 'ArrowRight') { lightboxIndex = (lightboxIndex + 1) % lightboxImages.length; document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex].url; document.getElementById('lightbox-caption').textContent = lightboxImages[lightboxIndex].caption; }
 });
 
 loadCase();
