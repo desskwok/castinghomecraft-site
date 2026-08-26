@@ -213,6 +213,15 @@ async function loadCase() {
           </div>
         </div>
       `;
+    } else if (caseData.thumbnail) {
+      // No before/after images, show thumbnail instead
+      html += `
+        <div class="compare-section">
+          <div class="compare-slider" style="max-height:500px;overflow:hidden;">
+            <img src="${caseData.thumbnail}" alt="${caseData.title}" style="width:100%;height:auto;display:block;">
+          </div>
+        </div>
+      `;
     }
     
     // Helper to normalize image
