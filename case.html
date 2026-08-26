@@ -201,7 +201,7 @@ async function loadCase() {
       html += `
         <div class="compare-section">
           <h2>🔄 工程前後對比</h2>
-          <div class="compare-slider" id="compareSlider">
+          <div class="compare-slider" id="compareSlider" style="cursor:pointer;" onclick="openCompareLightbox()">
             <img src="${afterImgUrl}" alt="工程後" class="after-img">
             <img src="${beforeImgUrl}" alt="工程前" class="before-img" id="beforeImg">
             <div class="slider-line" id="sliderLine"></div>
@@ -340,6 +340,27 @@ function openLightboxByData(el) {
   
   img.src = url;
   cap.textContent = caption;
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function openCompareLightbox() {
+  const beforeImg = document.querySelector('.compare-slider .before-img');
+  const afterImg = document.querySelector('.compare-slider .after-img');
+  if (!beforeImg || !afterImg) return;
+  
+  lightboxImages = [
+    { url: beforeImg.src, caption: '🔴 工程前' },
+    { url: afterImg.src, caption: '🟢 工程後' }
+  ];
+  lightboxIndex = 0;
+  
+  const lightbox = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  const cap = document.getElementById('lightbox-caption');
+  
+  img.src = lightboxImages[0].url;
+  cap.textContent = lightboxImages[0].caption;
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
