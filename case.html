@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>獢?閰單? | ?振撌亥?</title>
-  <link rel="icon" type="image/png" href="images/favicon.png">`n  <link rel="stylesheet" href="css/style.css">
+  <title>案例詳情 | 鑄家工藝</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
   <style>
     .case-hero { min-height: 60vh; padding-top: 120px; }
     .case-info { max-width: 900px; margin: 0 auto; }
@@ -61,15 +62,15 @@
 <!-- Header -->
 <header id="header">
   <nav>
-    <a href="index.html" class="logo">?振<span>撌亥?</span></a>
+    <a href="index.html" class="logo"><img src="images/logo.png" alt="鑄家工藝" style="height:56px;width:auto;"><span style="color:#1a1a2e;font-weight:800;">鑄家<span style="color:#e8b931;">工藝</span></span></a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="index.html">擐?</a></li>
-      <li><a href="services.html">???</a></li>
-      <li><a href="portfolio.html" class="active">蝎暸雿?</a></li>
-      <li><a href="contact.html">?舐窗??/a></li>
-      <li><a href="https://wa.me/85268427217" class="nav-cta" target="_blank">WhatsApp ?亥岷</a></li>
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="services.html">服務項目</a></li>
+      <li><a href="portfolio.html" class="active">精選作品</a></li>
+      <li><a href="contact.html">聯絡我們</a></li>
+      <li><a href="https://wa.me/85268427217" class="nav-cta" target="_blank">WhatsApp 查詢</a></li>
     </ul>
-    <button class="menu-toggle" id="menuToggle" aria-label="?詨">
+    <button class="menu-toggle" id="menuToggle" aria-label="選單">
       <span></span><span></span><span></span>
     </button>
   </nav>
@@ -78,9 +79,9 @@
 <!-- Case Content -->
 <section class="case-hero">
   <div class="container">
-    <a href="portfolio.html" class="back-link">??餈?雿??”</a>
+    <a href="portfolio.html" class="back-link">← 返回作品列表</a>
     <div class="case-info" id="case-content">
-      <p>頛銝?..</p>
+      <p>載入中...</p>
     </div>
   </div>
 </section>
@@ -90,17 +91,17 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="logo">?振<span>撌亥?</span></div>
-        <p>撠平摰文鋆耨??嚗極??蝢拙?鞈芰?瘣颯?/p>
+        <div class="logo">鑄家<span>工藝</span></div>
+        <p>專業室內裝修服務，工藝定義品質生活。</p>
       </div>
       <div class="footer-col">
-        <h4>?舐窗鞈?</h4>
-        <a href="tel:+85268427217">?? 68427217</a>
-        <a href="mailto:info@castinghomecraft.dpdns.org">?? info@castinghomecraft.dpdns.org</a>
+        <h4>聯絡資料</h4>
+        <a href="tel:+85268427217">☎️ 68427217</a>
+        <a href="mailto:info@castinghomecraft.dpdns.org">✉️ info@castinghomecraft.dpdns.org</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>穢 2024-2026 ?振撌亥? Casting Home Craft. All rights reserved.</span>
+      <span>© 2024-2026 鑄家工藝 Casting Home Craft. All rights reserved.</span>
     </div>
   </div>
 </footer>
@@ -121,7 +122,7 @@ async function loadCase() {
   const caseType = params.get('type');
   
   if (!caseId || !caseType) {
-    document.getElementById('case-content').innerHTML = '<p>?曆??唳?靘?/p>';
+    document.getElementById('case-content').innerHTML = '<p>找不到案例</p>';
     return;
   }
   
@@ -133,11 +134,11 @@ async function loadCase() {
     const caseData = cases.find(c => c.id === caseId);
     
     if (!caseData) {
-      document.getElementById('case-content').innerHTML = '<p>?曆??唳?靘?/p>';
+      document.getElementById('case-content').innerHTML = '<p>找不到案例</p>';
       return;
     }
     
-    document.title = `${caseData.title} | ?振撌亥?`;
+    document.title = `${caseData.title} | 鑄家工藝`;
     
     const hasBeforeAfter = (caseData.before_images?.length > 0) && (caseData.after_images?.length > 0);
     
@@ -145,13 +146,13 @@ async function loadCase() {
       <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 24px; color: var(--primary);">${caseData.title}</h1>
       <div class="case-meta">
         <div class="case-meta-item">
-          <span>??</span>
-          <span class="case-meta-label">?啣?嚗?/span>
+          <span>📍</span>
+          <span class="case-meta-label">地區：</span>
           <span class="case-meta-value">${caseData.location}</span>
         </div>
         <div class="case-meta-item">
-          <span>?</span>
-          <span class="case-meta-label">撌亦?憿?嚗?/span>
+          <span>🔨</span>
+          <span class="case-meta-label">工程類型：</span>
           <span class="case-meta-value">${caseData.type}</span>
         </div>
       </div>
@@ -162,76 +163,52 @@ async function loadCase() {
     if (hasBeforeAfter) {
       html += `
         <div class="compare-section">
-          <h2>?? 撌亦???撠?</h2>
+          <h2>🔄 工程前後對比</h2>
           <div class="compare-slider" id="compareSlider">
-            <img src="${caseData.after_images[0]}" alt="撌亦?敺? class="after-img">
-            <img src="${caseData.before_images[0]}" alt="撌亦??? class="before-img" id="beforeImg">
+            <img src="${caseData.after_images[0]}" alt="工程後" class="after-img">
+            <img src="${caseData.before_images[0]}" alt="工程前" class="before-img" id="beforeImg">
             <div class="slider-line" id="sliderLine"></div>
-            <div class="slider-handle" id="sliderHandle">??/div>
+            <div class="slider-handle" id="sliderHandle">⟷</div>
           </div>
           <div class="compare-labels">
-            <span class="before-label">??撌亦???/span>
-            <span class="after-label">撌亦?敺???/span>
+            <span class="before-label">← 工程前</span>
+            <span class="after-label">工程後 →</span>
           </div>
         </div>
       `;
     }
     
-    // Helper to normalize image
-    const normalizeImg = (img) => {
-      if (typeof img === 'string') return { url: img, caption: '' };
-      return img;
-    };
-    
-    // Normalize all images
-    const beforeImgs = (caseData.before_images || []).map(normalizeImg);
-    const afterImgs = (caseData.after_images || []).map(normalizeImg);
-    const allImgs = (caseData.images || []).map(normalizeImg);
-    const beforeUrls = new Set(beforeImgs.map(i => i.url));
-    const afterUrls = new Set(afterImgs.map(i => i.url));
-    const normalImgs = allImgs.filter(i => !beforeUrls.has(i.url) && !afterUrls.has(i.url));
-    
-    // Group images by caption
-    const groupByCaption = (imgs) => {
-      const groups = {};
-      imgs.forEach(img => {
-        const key = img.caption || '?嗡?';
-        if (!groups[key]) groups[key] = [];
-        groups[key].push(img);
-      });
-      return groups;
-    };
-    
-    // Render grouped images
-    const renderGroupedGallery = (imgs, color, label) => {
-      if (imgs.length === 0) return '';
-      const groups = groupByCaption(imgs);
-      let result = `<h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: ${color};">${label}</h2>`;
-      
-      Object.entries(groups).forEach(([caption, groupImgs]) => {
-        if (caption !== '?嗡?' || Object.keys(groups).length === 1) {
-          result += `<h3 style="font-size: 1rem; font-weight: 600; margin: 20px 0 12px; color: #555;">${caption}</h3>`;
-        }
-        result += `<div class="case-gallery">`;
-        result += groupImgs.map(img => `
-          <div class="case-gallery-item">
-            <img src="${img.url}" alt="${img.caption || label}">
-            ${img.caption ? `<div style="padding:8px;text-align:center;font-size:0.9rem;color:#555;">${img.caption}</div>` : ''}
-          </div>
-        `).join('');
-        result += `</div>`;
-      });
-      return result;
-    };
-    
     // Before images
-    html += renderGroupedGallery(beforeImgs, '#ff6b6b', '? 撌亦???);
+    const beforeImgs = caseData.before_images || [];
+    const afterImgs = caseData.after_images || [];
+    const normalImgs = (caseData.images || []).filter(url => !beforeImgs.includes(url) && !afterImgs.includes(url));
     
-    // After images
-    html += renderGroupedGallery(afterImgs, '#51cf66', '? 撌亦?敺?);
+    if (beforeImgs.length > 0) {
+      html += `
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: #ff6b6b;">🔴 工程前</h2>
+        <div class="case-gallery">
+          ${beforeImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="工程前"></div>`).join('')}
+        </div>
+      `;
+    }
     
-    // Normal images
-    html += renderGroupedGallery(normalImgs, 'var(--primary)', '? ?嗡???');
+    if (afterImgs.length > 0) {
+      html += `
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: #51cf66;">🟢 工程後</h2>
+        <div class="case-gallery">
+          ${afterImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="工程後"></div>`).join('')}
+        </div>
+      `;
+    }
+    
+    if (normalImgs.length > 0) {
+      html += `
+        <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 40px; margin-bottom: 16px; color: var(--primary);">📸 其他圖片</h2>
+        <div class="case-gallery">
+          ${normalImgs.map(img => `<div class="case-gallery-item"><img src="${img}" alt="${caseData.title}"></div>`).join('')}
+        </div>
+      `;
+    }
     
     document.getElementById('case-content').innerHTML = html;
     
@@ -242,7 +219,7 @@ async function loadCase() {
     
   } catch (error) {
     console.error('Error loading case:', error);
-    document.getElementById('case-content').innerHTML = '<p>頛憭望?嚗?蝔??岫??/p>';
+    document.getElementById('case-content').innerHTML = '<p>載入失敗，請稍後再試。</p>';
   }
 }
 
@@ -283,6 +260,3 @@ loadCase();
 
 </body>
 </html>
-
-
-
