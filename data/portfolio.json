@@ -220,6 +220,221 @@
         }
       ],
       "order": 2
+    },
+    {
+      "id": "富豪花園-全屋翻新",
+      "title": "富豪花園-全屋翻新",
+      "location": "富豪花園",
+      "type": "全屋翻新",
+      "thumbnail": "images/thumbnail_1787775427544_IMG_20240202_145928.jpg",
+      "description": "",
+      "images": [
+        {
+          "url": "images/1787775618482_IMG_20230703_124754.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775555085_IMG_20230703_124518.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775560791_IMG_20230703_124539.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775566365_IMG_20230703_124547.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775573054_IMG_20230703_124621.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775578863_IMG_20230703_124642.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775584969_IMG_20230703_124652.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775590470_IMG_20230703_124657.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775607423_IMG_20230703_124729.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775612910_IMG_20230703_124742.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775624454_IMG_20230703_124802.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775629913_IMG_20230703_124812.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775895971_______9_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775866752_______2_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775868852_______3_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775873965_______4_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775878658_______5_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775883716_______6_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775889036_______7_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775893089_______8_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775898914_______10_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775902922_______11_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775905967_______12_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775908837_______13_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775911847_______14_.jpg",
+          "caption": ""
+        }
+      ],
+      "before_images": [
+        {
+          "url": "images/1787775618482_IMG_20230703_124754.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775555085_IMG_20230703_124518.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775560791_IMG_20230703_124539.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775566365_IMG_20230703_124547.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775573054_IMG_20230703_124621.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775578863_IMG_20230703_124642.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775584969_IMG_20230703_124652.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775590470_IMG_20230703_124657.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775607423_IMG_20230703_124729.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775612910_IMG_20230703_124742.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775624454_IMG_20230703_124802.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775629913_IMG_20230703_124812.jpg",
+          "caption": ""
+        }
+      ],
+      "after_images": [
+        {
+          "url": "images/1787775895971_______9_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775866752_______2_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775868852_______3_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775873965_______4_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775878658_______5_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775883716_______6_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775889036_______7_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775893089_______8_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775898914_______10_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775902922_______11_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775905967_______12_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775908837_______13_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787775911847_______14_.jpg",
+          "caption": ""
+        }
+      ],
+      "order": 3
     }
   ],
   "maintenance": [
