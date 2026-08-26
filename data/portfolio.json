@@ -228,11 +228,32 @@
       "title": "東威大廈 - 天花維修",
       "location": "東威大廈",
       "type": "天花維修",
-      "thumbnail": "",
+      "thumbnail": "images/thumbnail_1787771598714_IMG_2024.jpg",
       "description": "專業天花維修，恢復原有面貌。處理天花剝落、漏水等問題。",
       "before_images": [],
       "after_images": [],
-      "images": [],
+      "images": [
+        {
+          "url": "images/1787771575491_IMG_2017.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787771578242_IMG_2024.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787771580829_IMG_2032.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787771583652_IMG_2039.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787771586665_IMG_2115.jpg",
+          "caption": ""
+        }
+      ],
       "order": 1
     }
   ]
