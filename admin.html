@@ -8,160 +8,254 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
-    body { background: #f5f5f5; }
-    .admin-container { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
-    .admin-card { background: white; border-radius: 12px; padding: 32px; margin-bottom: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--primary); }
+    body { background: #f5f5f5; margin: 0; }
+    .admin-header { background: #1a237e; color: white; padding: 20px 24px; margin-bottom: 24px; }
+    .admin-header h1 { margin: 0; font-size: 1.4rem; font-weight: 700; }
+    .admin-header p { margin: 4px 0 0; opacity: 0.8; font-size: 0.9rem; }
+    .admin-container { max-width: 1000px; margin: 0 auto; padding: 0 24px 40px; }
+    .admin-card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 6px; color: #333; font-size: 0.9rem; }
     .form-group input, .form-group textarea, .form-group select {
-      width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: inherit;
+      width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem; font-family: inherit;
     }
     .form-group textarea { min-height: 100px; resize: vertical; }
-    .btn-row { display: flex; gap: 12px; margin-top: 24px; }
-    .btn-success { background: #28a745; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-    .btn-success:hover { background: #218838; }
-    .btn-danger { background: #dc3545; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-    .btn-danger:hover { background: #c82333; }
-    .btn-primary { background: var(--accent); color: var(--primary); padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-    .btn-warning { background: #ffc107; color: #333; padding: 8px 16px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
-    .case-list { list-style: none; padding: 0; }
-    .case-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 12px; }
-    .case-item { cursor: grab; }
-    .case-item:hover { background: #f9f9f9; }
-    .case-item.sortable-ghost { opacity: 0.4; background: #e8f4fd; border: 2px dashed var(--primary); }
-    .case-item.sortable-chosen { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .case-item-actions { display: flex; gap: 8px; }
-    .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
-    .tab-nav { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; }
-    .tab-btn { padding: 12px 24px; border: none; background: #eee; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 600; }
-    .tab-btn.active { background: var(--primary); color: white; }
+    
+    /* Tab Nav - underline style */
+    .tab-nav { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; }
+    .tab-btn { padding: 10px 20px; border: none; background: transparent; cursor: pointer; font-weight: 600; font-size: 0.9rem; color: #666; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+    .tab-btn:hover { color: #1a237e; }
+    .tab-btn.active { color: #1a237e; border-bottom-color: #1a237e; }
+    .tab-btn .badge { background: #e0e0e0; color: #666; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 6px; font-weight: 600; }
+    .tab-btn.active .badge { background: #c5a55a; color: white; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .preview-img { max-width: 200px; max-height: 120px; object-fit: cover; border-radius: 8px; margin-top: 8px; }
-    .image-zones { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
-    .image-zone { border: 2px solid #eee; border-radius: 12px; padding: 16px; min-height: 160px; }
+    
+    /* Case List */
+    .case-list { list-style: none; padding: 0; margin: 0; }
+    .case-item { display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px solid #e0e0e0; cursor: grab; transition: background 0.2s; gap: 16px; }
+    .case-item:last-child { border-bottom: none; }
+    .case-item:hover { background: #f8f9fa; }
+    .case-item.sortable-ghost { opacity: 0.4; background: #e8f4fd; }
+    .case-item.sortable-chosen { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .case-thumb { width: 120px; height: 90px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+    .case-info { flex: 1; min-width: 0; }
+    .case-info h4 { margin: 0 0 4px; font-size: 1rem; color: #1a237e; }
+    .case-info p { margin: 0; font-size: 0.85rem; color: #666; }
+    .case-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .btn-icon { width: 36px; height: 36px; border: 1px solid #ddd; border-radius: 8px; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: all 0.2s; }
+    .btn-icon:hover { background: #f0f0f0; border-color: #bbb; }
+    .btn-icon.danger:hover { background: #fee; border-color: #dc3545; color: #dc3545; }
+    
+    /* Bottom Actions */
+    .bottom-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .btn-save { background: #1a237e; color: white; padding: 10px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
+    .btn-save:hover { background: #283593; }
+    .link-btn { background: none; border: none; color: #666; cursor: pointer; font-size: 0.85rem; text-decoration: underline; padding: 0; }
+    .link-btn:hover { color: #1a237e; }
+    
+    /* JSON Collapsible */
+    details { margin-top: 20px; }
+    details summary { cursor: pointer; font-weight: 600; color: #666; padding: 10px 0; font-size: 0.9rem; }
+    details summary:hover { color: #1a237e; }
+    details textarea { width: 100%; height: 200px; font-family: monospace; font-size: 0.8rem; padding: 12px; border: 1px solid #ddd; border-radius: 6px; margin-top: 8px; }
+    
+    /* Status */
+    .status-msg { font-size: 0.85rem; font-weight: 600; margin-top: 8px; }
+    
+    /* Form styles for edit/add */
+    .preview-img { max-width: 180px; max-height: 120px; object-fit: cover; border-radius: 6px; margin-top: 8px; }
+    .image-zones { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .image-zone { border: 2px solid #eee; border-radius: 10px; padding: 12px; min-height: 140px; }
     .image-zone.zone-before { border-color: #ff6b6b; background: #fff5f5; }
     .image-zone.zone-after { border-color: #51cf66; background: #f0fff4; }
     .image-zone.zone-normal { border-color: #ddd; background: #fafafa; margin-top: 12px; }
-    .zone-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .zone-header h4 { margin: 0; font-size: 1rem; }
+    .zone-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .zone-header h4 { margin: 0; font-size: 0.9rem; }
     .zone-before h4 { color: #ff6b6b; }
     .zone-after h4 { color: #51cf66; }
     .zone-normal h4 { color: #666; }
-    .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; min-height: 60px; }
-    .image-item { position: relative; border-radius: 8px; overflow: hidden; cursor: grab; border: 2px solid transparent; transition: all 0.2s; background: white; }
-    .image-item:hover { border-color: var(--accent); }
-    .image-item.sortable-ghost { opacity: 0.4; border-color: var(--primary); }
-    .image-item img { width: 100%; height: 70px; object-fit: cover; display: block; }
-    .image-item .btn-remove { position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%; border: none; background: rgba(0,0,0,0.6); color: white; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
+    .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 8px; min-height: 50px; }
+    .image-item { position: relative; border-radius: 6px; overflow: hidden; cursor: grab; border: 2px solid transparent; transition: all 0.2s; background: white; }
+    .image-item:hover { border-color: #c5a55a; }
+    .image-item.sortable-ghost { opacity: 0.4; border-color: #1a237e; }
+    .image-item img { width: 100%; height: 65px; object-fit: cover; display: block; }
+    .image-item .btn-remove { position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%; border: none; background: rgba(0,0,0,0.6); color: white; cursor: pointer; font-size: 9px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
     .image-item:hover .btn-remove { opacity: 1; }
-    .add-image-btn { width: 100%; height: 50px; border: 2px dashed #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #999; font-size: 0.85rem; transition: all 0.2s; }
-    .add-image-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .compare-live { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
-    .compare-live-box { border-radius: 12px; overflow: hidden; border: 2px solid #eee; }
+    .compare-live { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .compare-live-box { border-radius: 10px; overflow: hidden; border: 2px solid #eee; }
     .compare-live-box.before-box { border-color: #ff6b6b; }
     .compare-live-box.after-box { border-color: #51cf66; }
-    .compare-live-box h4 { margin: 0; padding: 8px; font-size: 0.85rem; text-align: center; }
+    .compare-live-box h4 { margin: 0; padding: 6px; font-size: 0.8rem; text-align: center; }
     .compare-live-box.before-box h4 { background: #ff6b6b; color: white; }
     .compare-live-box.after-box h4 { background: #51cf66; color: white; }
-    .compare-live-box .preview-images { display: flex; gap: 4px; overflow-x: auto; padding: 8px; min-height: 80px; align-items: center; }
-    .compare-live-box .preview-images img { height: 70px; width: auto; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
-    .empty-msg { color: #999; font-size: 0.85rem; padding: 20px; text-align: center; width: 100%; }
-    @media (max-width: 768px) { .image-zones { grid-template-columns: 1fr; } .compare-live { grid-template-columns: 1fr; } }
+    .compare-live-box .preview-images { display: flex; gap: 4px; overflow-x: auto; padding: 6px; min-height: 60px; align-items: center; }
+    .compare-live-box .preview-images img { height: 55px; width: auto; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+    .empty-msg { color: #999; font-size: 0.8rem; padding: 16px; text-align: center; width: 100%; }
+    @media (max-width: 768px) { .image-zones { grid-template-columns: 1fr; } .compare-live { grid-template-columns: 1fr; } .case-item { flex-wrap: wrap; } }
   </style>
 </head>
 <body>
+
+<div class="admin-header">
+  <h1>🔧 鑄家工藝 · 後台管理</h1>
+  <p>管理你的裝修案例，改完之後撳「儲存」就會自動更新網站</p>
+</div>
+
 <div class="admin-container">
   <div class="admin-card">
-    <h1 style="margin-bottom: 8px;">🔧 後台管理系統</h1>
-    <p style="color: var(--text-light); margin-bottom: 32px;">管理你的裝修案例，改完之後撳「儲存」就會自動更新網站。</p>
     <div class="tab-nav">
-      <button class="tab-btn active" data-tab="renovation" onclick="showTab('renovation')">全屋翻新工程</button>
-      <button class="tab-btn" data-tab="maintenance" onclick="showTab('maintenance')">維修案例</button>
+      <button class="tab-btn active" data-tab="renovation" onclick="showTab('renovation')">全屋翻新工程<span class="badge" id="badge-renovation">0</span></button>
+      <button class="tab-btn" data-tab="maintenance" onclick="showTab('maintenance')">維修案例<span class="badge" id="badge-maintenance">0</span></button>
       <button class="tab-btn" data-tab="add" onclick="showTab('add')">➕ 加新案例</button>
-      <button class="tab-btn" data-tab="edit" onclick="showTab('edit')" id="edit-tab-btn" style="display:none;">✏️ 編輯案例</button>
+      <button class="tab-btn" data-tab="edit" onclick="showTab('edit')" id="edit-tab-btn" style="display:none;">✏️ 編輯</button>
     </div>
-    <div class="tab-content active" id="tab-renovation"><h3>全屋翻新工程</h3><ul class="case-list" id="renovation-list"></ul></div>
-    <div class="tab-content" id="tab-maintenance"><h3>維修案例</h3><ul class="case-list" id="maintenance-list"></ul></div>
+    
+    <div class="tab-content active" id="tab-renovation">
+      <ul class="case-list" id="renovation-list"></ul>
+      <p id="empty-renovation" style="color:#999;text-align:center;padding:20px;display:none;">暫無案例，撳「➕ 加新案例」新增</p>
+    </div>
+    
+    <div class="tab-content" id="tab-maintenance">
+      <ul class="case-list" id="maintenance-list"></ul>
+      <p id="empty-maintenance" style="color:#999;text-align:center;padding:20px;display:none;">暫無案例，撳「➕ 加新案例」新增</p>
+    </div>
+    
     <div class="tab-content" id="tab-edit">
-      <h3>編輯案例</h3>
       <input type="hidden" id="edit-index"><input type="hidden" id="edit-type">
       <div class="form-group"><label>案例分類</label><input type="text" id="edit-type-display" disabled style="background:#f0f0f0;"></div>
       <div class="form-group"><label>標題</label><input type="text" id="edit-title"></div>
       <div class="form-group"><label>地區</label><input type="text" id="edit-location"></div>
       <div class="form-group"><label>工程類型</label><input type="text" id="edit-category"></div>
-      <div class="form-group"><label>封面圖片</label><div style="display:flex; gap:8px; align-items:center;"><input type="text" id="edit-thumbnail" oninput="previewEditImage()" style="flex:1;" placeholder="貼上圖片 URL"><button class="btn-warning" onclick="uploadThumbnail('edit')" style="white-space:nowrap;">📁 上傳</button></div><img id="edit-preview" class="preview-img" style="display:none;"></div>
+      <div class="form-group"><label>封面圖片</label><div style="display:flex; gap:8px; align-items:center;"><input type="text" id="edit-thumbnail" oninput="previewEditImage()" style="flex:1;" placeholder="貼上圖片 URL"><button class="btn-icon" onclick="uploadThumbnail('edit')" title="上傳">📁</button></div><img id="edit-preview" class="preview-img" style="display:none;"></div>
       <div class="form-group"><label>介紹</label><textarea id="edit-description"></textarea></div>
-      <div class="form-group"><label>📸 圖片管理（拖拽排位，跨區拖動）</label>
+      <div class="form-group"><label>📸 圖片管理</label>
         <div class="image-zones">
-          <div class="image-zone zone-before"><div class="zone-header"><h4>🔴 工程前</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="uploadImages('edit','before')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('edit','before')" style="font-size:0.8rem;">🔗 網址</button></div></div><div class="image-grid" id="edit-before-grid" data-zone="before"></div></div>
-          <div class="image-zone zone-after"><div class="zone-header"><h4>🟢 工程後</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="uploadImages('edit','after')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('edit','after')" style="font-size:0.8rem;">🔗 網址</button></div></div><div class="image-grid" id="edit-after-grid" data-zone="after"></div></div>
+          <div class="image-zone zone-before"><div class="zone-header"><h4>🔴 工程前</h4><div style="display:flex;gap:4px;"><button class="btn-icon" onclick="uploadImages('edit','before')" title="上傳">📁</button><button class="btn-icon" onclick="addImageUrl('edit','before')" title="從網址新增">🔗</button></div></div><div class="image-grid" id="edit-before-grid" data-zone="before"></div></div>
+          <div class="image-zone zone-after"><div class="zone-header"><h4>🟢 工程後</h4><div style="display:flex;gap:4px;"><button class="btn-icon" onclick="uploadImages('edit','after')" title="上傳">📁</button><button class="btn-icon" onclick="addImageUrl('edit','after')" title="從網址新增">🔗</button></div></div><div class="image-grid" id="edit-after-grid" data-zone="after"></div></div>
         </div>
-        <div class="image-zone zone-normal"><div class="zone-header"><h4>📷 一般圖片</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="uploadImages('edit','normal')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('edit','normal')" style="font-size:0.8rem;">🔗 網址</button></div></div><div class="image-grid" id="edit-normal-grid" data-zone="normal"></div></div>
+        <div class="image-zone zone-normal"><div class="zone-header"><h4>📷 一般圖片</h4><div style="display:flex;gap:4px;"><button class="btn-icon" onclick="uploadImages('edit','normal')" title="上傳">📁</button><button class="btn-icon" onclick="addImageUrl('edit','normal')" title="從網址新增">🔗</button></div></div><div class="image-grid" id="edit-normal-grid" data-zone="normal"></div></div>
         <div class="compare-live" id="edit-compare-live" style="display:none;"><div class="compare-live-box before-box"><h4>🔴 工程前預覽</h4><div class="preview-images" id="edit-before-preview"></div></div><div class="compare-live-box after-box"><h4>🟢 工程後預覽</h4><div class="preview-images" id="edit-after-preview"></div></div></div>
       </div>
       <div class="btn-row"><button class="btn-success" onclick="updateCase()">✅ 更新案例</button><button class="btn-danger" onclick="cancelEdit()">取消</button></div>
     </div>
+    
     <div class="tab-content" id="tab-add">
-      <h3>加新案例</h3>
       <div class="form-group"><label>案例分類</label><select id="new-type"><option value="renovation">全屋翻新工程</option><option value="maintenance">維修案例</option></select></div>
       <div class="form-group"><label>標題</label><input type="text" id="new-title" placeholder="例：海怡半島 - 全屋翻新"></div>
       <div class="form-group"><label>地區</label><input type="text" id="new-location" placeholder="例：海怡半島"></div>
       <div class="form-group"><label>工程類型</label><input type="text" id="new-category" placeholder="例：全屋翻新 / 天花維修"></div>
-      <div class="form-group"><label>封面圖片</label><div style="display:flex; gap:8px; align-items:center;"><input type="text" id="new-thumbnail" placeholder="貼上圖片 URL" oninput="previewNewImage()" style="flex:1;"><button class="btn-warning" onclick="uploadThumbnail('new')" style="white-space:nowrap;">📁 上傳</button></div><img id="new-preview" class="preview-img" style="display:none;"></div>
+      <div class="form-group"><label>封面圖片</label><div style="display:flex; gap:8px; align-items:center;"><input type="text" id="new-thumbnail" placeholder="貼上圖片 URL" oninput="previewNewImage()" style="flex:1;"><button class="btn-icon" onclick="uploadThumbnail('new')" title="上傳">📁</button></div><img id="new-preview" class="preview-img" style="display:none;"></div>
       <div class="form-group"><label>介紹</label><textarea id="new-description" placeholder="描述這個案例..."></textarea></div>
       <div class="form-group"><label>📸 圖片管理</label>
         <div class="image-zones">
-          <div class="image-zone zone-before"><div class="zone-header"><h4>🔴 工程前</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="uploadImages('new','before')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('new','before')" style="font-size:0.8rem;">🔗 網址</button></div></div><div class="image-grid" id="new-before-grid" data-zone="before"></div></div>
-          <div class="image-zone zone-after"><div class="zone-header"><h4>🟢 工程後</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="uploadImages('new','after')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('new','after')" style="font-size:0.8rem;">🔗 網址</button></div></div><div class="image-grid" id="new-after-grid" data-zone="after"></div></div>
+          <div class="image-zone zone-before"><div class="zone-header"><h4>🔴 工程前</h4><div style="display:flex;gap:4px;"><button class="btn-icon" onclick="uploadImages('new','before')" title="上傳">📁</button><button class="btn-icon" onclick="addImageUrl('new','before')" title="從網址新增">🔗</button></div></div><div class="image-grid" id="new-before-grid" data-zone="before"></div></div>
+          <div class="image-zone zone-after"><div class="zone-header"><h4>🟢 工程後</h4><div style="display:flex;gap:4px;"><button class="btn-icon" onclick="uploadImages('new','after')" title="上傳">📁</button><button class="btn-icon" onclick="addImageUrl('new','after')" title="從網址新增">🔗</button></div></div><div class="image-grid" id="new-after-grid" data-zone="after"></div></div>
         </div>
-        <div class="image-zone zone-normal"><div class="zone-header"><h4>📷 一般圖片</h4><div style="display:flex;gap:4px;"><button class="btn-sm btn-success" onclick="uploadImages('new','normal')" style="font-size:0.8rem;">📁 上傳</button><button class="btn-sm btn-primary" onclick="addImageUrl('new','normal')" style="font-size:0.8rem;">🔗 網址</button></div></div><div class="image-grid" id="new-normal-grid" data-zone="normal"></div></div>
+        <div class="image-zone zone-normal"><div class="zone-header"><h4>📷 一般圖片</h4><div style="display:flex;gap:4px;"><button class="btn-icon" onclick="uploadImages('new','normal')" title="上傳">📁</button><button class="btn-icon" onclick="addImageUrl('new','normal')" title="從網址新增">🔗</button></div></div><div class="image-grid" id="new-normal-grid" data-zone="normal"></div></div>
         <div class="compare-live" id="new-compare-live" style="display:none;"><div class="compare-live-box before-box"><h4>🔴 工程前預覽</h4><div class="preview-images" id="new-before-preview"></div></div><div class="compare-live-box after-box"><h4>🟢 工程後預覽</h4><div class="preview-images" id="new-after-preview"></div></div></div>
       </div>
       <div class="btn-row"><button class="btn-success" onclick="addCase()">✅ 加入案例</button></div>
     </div>
   </div>
-  <div class="admin-card" style="text-align: center;">
-    <p style="margin-bottom: 16px; color: var(--text-light);">改完之後撳「儲存」更新網站</p>
-    <button class="btn-success" style="font-size: 1.1rem; padding: 16px 48px;" onclick="saveData()">💾 儲存並更新網站</button>
-    <button class="btn-primary btn-sm" style="margin-left: 12px;" onclick="loadData()">🔄 重新載入</button>
-    <button class="btn-danger btn-sm" style="margin-left: 12px;" onclick="clearToken()">🔑 重新設定 Token</button>
-    <div id="token-section" style="display:none; margin-top: 20px; padding: 20px; background: #f0f0f0; border-radius: 8px;">
-      <p style="margin-bottom: 12px; color: var(--primary); font-weight: 600;">輸入 GitHub Token</p>
-      <p style="margin-bottom: 12px; color: var(--text-light); font-size: 0.9rem;">去 <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--accent-dark);">GitHub Settings</a> 建立一個，勾選「repo」權限。</p>
-      <div style="display: flex; gap: 8px;"><input type="password" id="token-input" placeholder="貼上你的 GitHub Token" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px;"><button class="btn-success" onclick="saveToken()">確認</button></div>
+  
+  <!-- Bottom Actions -->
+  <div class="admin-card">
+    <div class="bottom-actions">
+      <button class="btn-save" onclick="saveData()">💾 儲存並更新網站</button>
+      <button class="link-btn" onclick="loadData()">🔄 重新載入</button>
+      <button class="link-btn" onclick="clearToken()">🔑 重新設定 Token</button>
+      <span class="status-msg" id="save-status"></span>
     </div>
-    <p id="save-status" style="margin-top: 16px; font-weight: 600;"></p>
+    <div id="token-section" style="display:none; margin-top: 16px; padding: 16px; background: #f5f5f5; border-radius: 8px;">
+      <p style="margin: 0 0 10px; font-weight: 600; font-size: 0.9rem;">輸入 GitHub Token</p>
+      <p style="margin: 0 0 10px; color: #666; font-size: 0.85rem;">去 <a href="https://github.com/settings/tokens" target="_blank" style="color: #1a237e;">GitHub Settings</a> 建立，勾選「repo」權限。</p>
+      <div style="display: flex; gap: 8px;">
+        <input type="password" id="token-input" placeholder="貼上你的 GitHub Token" style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+        <button class="btn-save" onclick="saveToken()">確認</button>
+      </div>
+    </div>
   </div>
-  <div class="admin-card"><h3>匯出 JSON</h3><textarea id="json-output" style="width: 100%; height: 200px; font-family: monospace; font-size: 0.85rem; padding: 12px; border: 1px solid #ddd; border-radius: 8px;" readonly></textarea><div class="btn-row"><button class="btn-primary" onclick="copyJSON()">📋 複製</button></div></div>
+  
+  <!-- JSON Collapsible -->
+  <div class="admin-card">
+    <details>
+      <summary>📋 匯出 JSON</summary>
+      <textarea id="json-output" readonly></textarea>
+      <div style="margin-top: 8px;"><button class="link-btn" onclick="copyJSON()">複製到剪貼簿</button></div>
+    </details>
+  </div>
 </div>
+
 <script>
 let portfolioData = { renovation: [], maintenance: [] };
 let editImages = { before: [], after: [], normal: [] };
 let newImages = { before: [], after: [], normal: [] };
 let sortableInstances = {};
+
 function loadData() { fetch('data/portfolio.json').then(r => r.json()).then(d => { portfolioData = d; renderLists(); updateJSON(); }); }
+
 function renderLists() {
   ['renovation', 'maintenance'].forEach(type => {
-    document.getElementById(`${type}-list`).innerHTML = portfolioData[type].map((item, i) => `<li class="case-item" data-index="${i}"><div>${item.thumbnail ? `<img src="${item.thumbnail}" style="width:80px;height:60px;object-fit:cover;border-radius:6px;margin-right:12px;">` : ''}<strong>${item.title}</strong> <span style="color:var(--text-light);margin-left:8px;">${item.location}</span> <span style="color:#999;margin-left:8px;font-size:0.85rem;">(${(item.images||[]).length}張)</span></div><div class="case-item-actions"><a href="case.html?id=${item.id}&type=${type}" target="_blank" class="btn-primary btn-sm">預覽</a><button class="btn-warning" onclick="editCase('${type}',${i})">編輯</button><button class="btn-danger btn-sm" onclick="deleteCase('${type}',${i})">刪除</button></div></li>`).join('') || '<li style="padding:16px;color:#999;">暫無案例</li>';
-    // Initialize SortableJS for drag-and-drop reordering
     const list = document.getElementById(`${type}-list`);
+    const empty = document.getElementById(`empty-${type}`);
+    const badge = document.getElementById(`badge-${type}`);
+    
+    badge.textContent = portfolioData[type].length;
+    
+    if (portfolioData[type].length === 0) {
+      list.style.display = 'none';
+      empty.style.display = 'block';
+      return;
+    }
+    
+    list.style.display = 'block';
+    empty.style.display = 'none';
+    
+    list.innerHTML = portfolioData[type].map((item, i) => `
+      <li class="case-item" data-index="${i}">
+        <img class="case-thumb" src="${item.thumbnail || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2290%22><rect fill=%22%23ddd%22 width=%22120%22 height=%2290%22/><text x=%2260%22 y=%2250%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2214%22>無圖片</text></svg>'}" alt="${item.title}">
+        <div class="case-info">
+          <h4>${item.title}</h4>
+          <p>${item.location} · ${(item.images||[]).length} 張圖片</p>
+        </div>
+        <div class="case-actions">
+          <a href="case.html?id=${item.id}&type=${type}" target="_blank" class="btn-icon" title="預覽">👁️</a>
+          <button class="btn-icon" onclick="editCase('${type}',${i})" title="編輯">✏️</button>
+          <button class="btn-icon danger" onclick="deleteCase('${type}',${i})" title="刪除">🗑️</button>
+        </div>
+      </li>
+    `).join('');
+    
     if (sortableInstances[`${type}-list`]) sortableInstances[`${type}-list`].destroy();
     sortableInstances[`${type}-list`] = Sortable.create(list, {
-      animation: 150,
-      ghostClass: 'sortable-ghost',
-      handle: '.case-item',
+      animation: 150, ghostClass: 'sortable-ghost',
       onEnd: function(evt) {
         const item = portfolioData[type].splice(evt.oldIndex, 1)[0];
         portfolioData[type].splice(evt.newIndex, 0, item);
         updateJSON();
-        document.getElementById('save-status').innerHTML = '<span style="color:orange;">⚠️ 排序已變更，請撳「儲存」</span>';
+        document.getElementById('save-status').innerHTML = '<span style="color:#c5a55a;">⚠️ 排序已變更，請儲存</span>';
       }
     });
   });
 }
-function showTab(tab) { document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active')); const t = document.getElementById(`tab-${tab}`); if (t) t.classList.add('active'); const b = document.querySelector(`.tab-btn[data-tab="${tab}"]`); if (b) b.classList.add('active'); }
-function addImageUrl(context, zone) { const url = prompt('貼上圖片 URL：'); if (!url || !url.trim()) return; const caption = prompt('輸入圖片標題（例如：客廳、廚房）：') || ''; const imgs = context === 'edit' ? editImages : newImages; imgs[zone].push({ url: url.trim(), caption: caption.trim() }); renderZones(context); }
+
+function showTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  const t = document.getElementById(`tab-${tab}`); if (t) t.classList.add('active');
+  const b = document.querySelector(`.tab-btn[data-tab="${tab}"]`); if (b) b.classList.add('active');
+}
+
+function addImageUrl(context, zone) {
+  const url = prompt('貼上圖片 URL：');
+  if (!url || !url.trim()) return;
+  const caption = prompt('輸入圖片標題（例如：客廳、廚房）：') || '';
+  const imgs = context === 'edit' ? editImages : newImages;
+  imgs[zone].push({ url: url.trim(), caption: caption.trim() });
+  renderZones(context);
+}
+
 function uploadImages(context, zone) {
   const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*'; input.multiple = true;
   input.onchange = async (e) => {
@@ -172,48 +266,149 @@ function uploadImages(context, zone) {
     for (let i = 0; i < files.length; i++) {
       const file = files[i]; const progress = `[${i+1}/${files.length}]`;
       try {
-        statusEl.innerHTML = `<div style="text-align:left;"><span style="color:blue">🔄 ${progress} 壓縮中：${file.name}</span><div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;"><div style="background:#2196F3;height:100%;width:30%;border-radius:4px;"></div></div></div>`;
+        statusEl.innerHTML = `<span style="color:#1a237e;">🔄 ${progress} 壓縮中：${file.name}</span>`;
         const compressed = await compressImage(file, 1200, 0.8); const base64 = await fileToBase64(compressed);
         const origSize = Math.round(file.size/1024), newSize = Math.round(compressed.size/1024);
-        statusEl.innerHTML = `<div style="text-align:left;"><span style="color:blue">📤 ${progress} 上傳中：${file.name}</span><div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;"><div style="background:#4CAF50;height:100%;width:60%;border-radius:4px;"></div></div><span style="color:#999;font-size:0.85rem;">${origSize}KB → ${newSize}KB</span></div>`;
+        statusEl.innerHTML = `<span style="color:#1a237e;">📤 ${progress} 上傳中：${file.name}</span>`;
         const filename = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g,'_').replace(/\.[^.]+$/,'.jpg')}`;
         const token = localStorage.getItem('github_token');
         if (!token) { document.getElementById('token-section').style.display = 'block'; return; }
         const repo = 'desskwok/castinghomecraft-site', path = `images/${filename}`;
         let sha = null; try { const r = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,{headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json'}}); if(r.ok){sha=(await r.json()).sha;} } catch(e){}
         const resp = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,{method:'PUT',headers:{'Authorization':`token ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify({message:`Upload: ${filename}`,content:base64,sha})});
-        if (resp.ok) { const rawUrl=`https://raw.githubusercontent.com/${repo}/main/${path}`; const imgs=context==='edit'?editImages:newImages; imgs[zone].push({url:path,raw_url:rawUrl,caption:caption.trim()}); successCount++; statusEl.innerHTML=`<div style="text-align:left;"><span style="color:green">✅ ${progress} ${file.name} 完成！</span><div style="background:#e0e0e0;border-radius:4px;height:8px;margin:8px 0;"><div style="background:#4CAF50;height:100%;width:100%;border-radius:4px;"></div></div><span style="color:#4CAF50;font-size:0.85rem;">${origSize}KB → ${newSize}KB（節省 ${Math.round((1-newSize/origSize)*100)}%）</span></div>`;
-        } else { throw new Error((await resp.json()).message); }
-      } catch(err) { failCount++; statusEl.innerHTML=`<span style="color:red">❌ ${progress} ${file.name} 失敗: ${err.message}</span>`; }
+        if (resp.ok) { const rawUrl=`https://raw.githubusercontent.com/${repo}/main/${path}`; const imgs=context==='edit'?editImages:newImages; imgs[zone].push({url:path,raw_url:rawUrl,caption:caption.trim()}); successCount++; statusEl.innerHTML=`<span style="color:#28a745;">✅ ${progress} ${file.name} 完成！</span>`; } else { throw new Error((await resp.json()).message); }
+      } catch (err) { failCount++; statusEl.innerHTML=`<span style="color:#dc3545;">❌ ${progress} ${file.name} 失敗</span>`; }
     }
     renderZones(context);
-    statusEl.innerHTML=`<div style="text-align:left;"><span style="color:green">✅ 完成！成功 ${successCount} 張</span>${failCount>0?`<span style="color:red;margin-left:12px;">失敗 ${failCount} 張</span>`:''}<br><span style="color:#999;font-size:0.85rem;">Cloudflare 約1分鐘後生效</span></div>`;
+    statusEl.innerHTML=`<span style="color:#28a745;">✅ 完成！成功 ${successCount} 張</span>`;
   }; input.click();
 }
+
 function compressImage(file, maxWidth=1200, quality=0.8) { return new Promise(resolve=>{const reader=new FileReader();reader.onload=e=>{const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');let w=img.width,h=img.height;if(w>maxWidth){h=(h*maxWidth)/w;w=maxWidth;}canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);canvas.toBlob(blob=>resolve(blob||file),'image/jpeg',quality);};img.src=e.target.result;};reader.readAsDataURL(file);}); }
 function fileToBase64(file) { return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=reject;reader.readAsDataURL(file);}); }
-function uploadThumbnail(context) { const input=document.createElement('input');input.type='file';input.accept='image/*';input.onchange=async e=>{const file=e.target.files[0];if(!file)return;const statusEl=document.getElementById('save-status');try{statusEl.innerHTML='<span style="color:blue">⏳ 壓縮封面...</span>';const compressed=await compressImage(file,800,0.8);const base64=await fileToBase64(compressed);statusEl.innerHTML='<span style="color:blue">⏳ 上傳封面...</span>';const filename=`thumbnail_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g,'_').replace(/\.[^.]+$/,'.jpg')}`;const token=localStorage.getItem('github_token');if(!token){document.getElementById('token-section').style.display='block';return;}const repo='desskwok/castinghomecraft-site',path=`images/${filename}`;const resp=await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,{method:'PUT',headers:{'Authorization':`token ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify({message:`Upload thumbnail: ${filename}`,content:base64})});if(resp.ok){document.getElementById(context==='edit'?'edit-thumbnail':'new-thumbnail').value=path;previewEditImage();statusEl.innerHTML='<span style="color:green">✅ 封面上傳成功</span>';}else{throw new Error((await resp.json()).message);}}catch(err){statusEl.innerHTML=`<span style="color:red">❌ 上傳失敗: ${err.message}</span>`;}};input.click(); }
-function removeImageFromZone(context,zone,index){const imgs=context==='edit'?editImages:newImages;imgs[zone].splice(index,1);renderZones(context);}
-function editCaption(context,zone,index){const imgs=context==='edit'?editImages:newImages;const current=imgs[zone][index].caption||'';const newCaption=prompt('輸入圖片標題（例如：客廳、廚房）：',current);if(newCaption!==null){imgs[zone][index].caption=newCaption.trim();renderZones(context);}}
-function renderZones(context){
-  const imgs=context==='edit'?editImages:newImages;
-  ['before','after','normal'].forEach(zone=>{const grid=document.getElementById(`${context}-${zone}-grid`);if(!grid)return;grid.innerHTML=imgs[zone].map((img,i)=>{const displayUrl=img.raw_url||img.url;return`<div class="image-item" title="${img.caption||'無標題'}"><img src="${displayUrl}" alt="${img.caption||'圖片'}" ondblclick="editCaption('${context}','${zone}',${i})"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);color:white;font-size:10px;padding:2px 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;" ondblclick="editCaption('${context}','${zone}',${i})">${img.caption||'無標題'}</div><button class="btn-remove" onclick="removeImageFromZone('${context}','${zone}',${i})">✕</button></div>`;}).join('')||'<div class="empty-msg">拖入圖片或撳「+ 加圖」</div>';const key=`${context}-${zone}`;if(sortableInstances[key])sortableInstances[key].destroy();sortableInstances[key]=Sortable.create(grid,{group:`${context}-all-images`,animation:150,ghostClass:'sortable-ghost',chosenClass:'sortable-chosen',onEnd:function(evt){const fromZone=evt.item.closest('.image-grid').dataset.zone;const toZone=evt.to.dataset.zone;if(fromZone===toZone){const item=imgs[fromZone].splice(evt.oldIndex,1)[0];imgs[toZone].splice(evt.newIndex,0,item);}else{const item=imgs[fromZone].splice(evt.oldIndex,1)[0];imgs[toZone].splice(evt.newIndex,0,item);}renderZones(context);}});});
-  const hasBefore=imgs.before.length>0,hasAfter=imgs.after.length>0;const liveEl=document.getElementById(`${context}-compare-live`);
-  if(hasBefore||hasAfter){liveEl.style.display='grid';document.getElementById(`${context}-before-preview`).innerHTML=imgs.before.length?imgs.before.map(img=>`<div style="text-align:center;"><img src="${img.raw_url||img.url}"><div style="font-size:11px;color:#666;margin-top:4px;">${img.caption||''}</div></div>`).join(''):'<span class="empty-msg">尚未添加</span>';document.getElementById(`${context}-after-preview`).innerHTML=imgs.after.length?imgs.after.map(img=>`<div style="text-align:center;"><img src="${img.raw_url||img.url}"><div style="font-size:11px;color:#666;margin-top:4px;">${img.caption||''}</div></div>`).join(''):'<span class="empty-msg">尚未添加</span>';}else{liveEl.style.display='none';}
+
+function uploadThumbnail(context) {
+  const input = document.createElement('input'); input.type='file'; input.accept='image/*';
+  input.onchange = async e => {
+    const file = e.target.files[0]; if (!file) return;
+    const statusEl = document.getElementById('save-status');
+    try {
+      statusEl.innerHTML='<span style="color:#1a237e;">⏳ 壓縮封面...</span>';
+      const compressed = await compressImage(file, 800, 0.8); const base64 = await fileToBase64(compressed);
+      statusEl.innerHTML='<span style="color:#1a237e;">⏳ 上傳封面...</span>';
+      const filename=`thumbnail_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g,'_').replace(/\.[^.]+$/,'.jpg')}`;
+      const token=localStorage.getItem('github_token');
+      if(!token){document.getElementById('token-section').style.display='block';return;}
+      const repo='desskwok/castinghomecraft-site',path=`images/${filename}`;
+      const resp=await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,{method:'PUT',headers:{'Authorization':`token ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify({message:`Upload: ${filename}`,content:base64})});
+      if(resp.ok){document.getElementById(context==='edit'?'edit-thumbnail':'new-thumbnail').value=path;previewEditImage();statusEl.innerHTML='<span style="color:#28a745;">✅ 封面上傳成功</span>';}else{throw new Error((await resp.json()).message);}
+    }catch(err){statusEl.innerHTML=`<span style="color:#dc3545;">❌ 上傳失敗</span>`;}
+  };input.click();
 }
-function editCase(type,index){const item=portfolioData[type][index];document.getElementById('edit-index').value=index;document.getElementById('edit-type').value=type;document.getElementById('edit-type-display').value=type==='renovation'?'全屋翻新工程':'維修案例';document.getElementById('edit-title').value=item.title;document.getElementById('edit-location').value=item.location;document.getElementById('edit-category').value=item.type;document.getElementById('edit-thumbnail').value=item.thumbnail||'';document.getElementById('edit-description').value=item.description;if(item.thumbnail){document.getElementById('edit-preview').src=item.thumbnail;document.getElementById('edit-preview').style.display='block';}else{document.getElementById('edit-preview').style.display='none';}editImages={before:[],after:[],normal:[]};const normalizeImg=img=>{let result=typeof img==='string'?{url:img,caption:''}:{...img};if(result.url&&result.url.startsWith('images/')){result.raw_url=`https://raw.githubusercontent.com/desskwok/castinghomecraft-site/main/${result.url}`;}return result;};const bUrls=new Set((item.before_images||[]).map(img=>normalizeImg(img).url));const aUrls=new Set((item.after_images||[]).map(img=>normalizeImg(img).url));(item.images||[]).forEach(img=>{const n=normalizeImg(img);if(bUrls.has(n.url))editImages.before.push(n);else if(aUrls.has(n.url))editImages.after.push(n);else editImages.normal.push(n);});(item.before_images||[]).forEach(img=>{const n=normalizeImg(img);if(!(item.images||[]).some(i=>normalizeImg(i).url===n.url))editImages.before.push(n);});(item.after_images||[]).forEach(img=>{const n=normalizeImg(img);if(!(item.images||[]).some(i=>normalizeImg(i).url===n.url))editImages.after.push(n);});renderZones('edit');document.getElementById('edit-tab-btn').style.display='block';showTab('edit');}
+
+function removeImageFromZone(context,zone,index){const imgs=context==='edit'?editImages:newImages;imgs[zone].splice(index,1);renderZones(context);}
+function editCaption(context,zone,index){const imgs=context==='edit'?editImages:newImages;const current=imgs[zone][index].caption||'';const nc=prompt('輸入圖片標題：',current);if(nc!==null){imgs[zone][index].caption=nc.trim();renderZones(context);}}
+
+function renderZones(context) {
+  const imgs=context==='edit'?editImages:newImages;
+  ['before','after','normal'].forEach(zone=>{
+    const grid=document.getElementById(`${context}-${zone}-grid`);
+    if(!grid)return;
+    grid.innerHTML=imgs[zone].map((img,i)=>{
+      const displayUrl=img.raw_url||img.url;
+      return`<div class="image-item" title="${img.caption||''}"><img src="${displayUrl}" alt="${img.caption||''}" ondblclick="editCaption('${context}','${zone}',${i})"><button class="btn-remove" onclick="removeImageFromZone('${context}','${zone}',${i})">✕</button></div>`;
+    }).join('')||'<div class="empty-msg">拖入或點擊上傳</div>';
+    const key=`${context}-${zone}`;
+    if(sortableInstances[key])sortableInstances[key].destroy();
+    sortableInstances[key]=Sortable.create(grid,{group:`${context}-all-images`,animation:150,ghostClass:'sortable-ghost',onEnd:function(evt){
+      const fromZone=evt.item.closest('.image-grid').dataset.zone;const toZone=evt.to.dataset.zone;
+      const imgs2=context==='edit'?editImages:newImages;
+      if(fromZone===toZone){const item=imgs2[fromZone].splice(evt.oldIndex,1)[0];imgs2[toZone].splice(evt.newIndex,0,item);}
+      else{const item=imgs2[fromZone].splice(evt.oldIndex,1)[0];imgs2[toZone].splice(evt.newIndex,0,item);}
+      renderZones(context);
+    }});
+  });
+  const hasBefore=imgs.before.length>0,hasAfter=imgs.after.length>0;
+  const liveEl=document.getElementById(`${context}-compare-live`);
+  if(hasBefore||hasAfter){liveEl.style.display='grid';
+    document.getElementById(`${context}-before-preview`).innerHTML=imgs.before.length?imgs.before.map(img=>`<div style="text-align:center;"><img src="${img.raw_url||img.url}"><div style="font-size:10px;color:#666;margin-top:2px;">${img.caption||''}</div></div>`).join(''):'<span class="empty-msg">尚未添加</span>';
+    document.getElementById(`${context}-after-preview`).innerHTML=imgs.after.length?imgs.after.map(img=>`<div style="text-align:center;"><img src="${img.raw_url||img.url}"><div style="font-size:10px;color:#666;margin-top:2px;">${img.caption||''}</div></div>`).join(''):'<span class="empty-msg">尚未添加</span>';
+  }else{liveEl.style.display='none';}
+}
+
+function editCase(type,index){
+  const item=portfolioData[type][index];
+  document.getElementById('edit-index').value=index;
+  document.getElementById('edit-type').value=type;
+  document.getElementById('edit-type-display').value=type==='renovation'?'全屋翻新工程':'維修案例';
+  document.getElementById('edit-title').value=item.title;
+  document.getElementById('edit-location').value=item.location;
+  document.getElementById('edit-category').value=item.type;
+  document.getElementById('edit-thumbnail').value=item.thumbnail||'';
+  document.getElementById('edit-description').value=item.description;
+  if(item.thumbnail){document.getElementById('edit-preview').src=item.thumbnail;document.getElementById('edit-preview').style.display='block';}else{document.getElementById('edit-preview').style.display='none';}
+  editImages={before:[],after:[],normal:[]};
+  const normalizeImg=img=>{let r=typeof img==='string'?{url:img,caption:''}:{...img};if(r.url&&r.url.startsWith('images/')){r.raw_url=`https://raw.githubusercontent.com/desskwok/castinghomecraft-site/main/${r.url}`;}return r;};
+  const bUrls=new Set((item.before_images||[]).map(img=>normalizeImg(img).url));
+  const aUrls=new Set((item.after_images||[]).map(img=>normalizeImg(img).url));
+  (item.images||[]).forEach(img=>{const n=normalizeImg(img);if(bUrls.has(n.url))editImages.before.push(n);else if(aUrls.has(n.url))editImages.after.push(n);else editImages.normal.push(n);});
+  (item.before_images||[]).forEach(img=>{const n=normalizeImg(img);if(!(item.images||[]).some(i=>normalizeImg(i).url===n.url))editImages.before.push(n);});
+  (item.after_images||[]).forEach(img=>{const n=normalizeImg(img);if(!(item.images||[]).some(i=>normalizeImg(i).url===n.url))editImages.after.push(n);});
+  renderZones('edit');
+  document.getElementById('edit-tab-btn').style.display='block';showTab('edit');
+}
+
 function previewEditImage(){const u=document.getElementById('edit-thumbnail').value;const p=document.getElementById('edit-preview');if(u){p.src=u;p.style.display='block';}else p.style.display='none';}
-function updateCase(){const index=parseInt(document.getElementById('edit-index').value);const type=document.getElementById('edit-type').value;const title=document.getElementById('edit-title').value;const location=document.getElementById('edit-location').value;if(!title||!location){document.getElementById('save-status').innerHTML='<span style="color:red">❌ 請填寫標題和地區</span>';return;}const cleanImages=arr=>arr.map(img=>({url:img.url,caption:img.caption||''}));const images=[...cleanImages(editImages.before),...cleanImages(editImages.after),...cleanImages(editImages.normal)];portfolioData[type][index]={...portfolioData[type][index],title,location,type:document.getElementById('edit-category').value,thumbnail:document.getElementById('edit-thumbnail').value,description:document.getElementById('edit-description').value,images,before_images:cleanImages(editImages.before),after_images:cleanImages(editImages.after)};renderLists();updateJSON();document.getElementById('edit-tab-btn').style.display='none';showTab(type);document.getElementById('save-status').innerHTML='<span style="color:green">✅ 已更新</span>';}
+function updateCase(){
+  const index=parseInt(document.getElementById('edit-index').value),type=document.getElementById('edit-type').value;
+  const title=document.getElementById('edit-title').value,location=document.getElementById('edit-location').value;
+  if(!title||!location){document.getElementById('save-status').innerHTML='<span style="color:#dc3545;">❌ 請填寫標題和地區</span>';return;}
+  const clean=arr=>arr.map(img=>({url:img.url,caption:img.caption||''}));
+  const images=[...clean(editImages.before),...clean(editImages.after),...clean(editImages.normal)];
+  portfolioData[type][index]={...portfolioData[type][index],title,location,type:document.getElementById('edit-category').value,thumbnail:document.getElementById('edit-thumbnail').value,description:document.getElementById('edit-description').value,images,before_images:clean(editImages.before),after_images:clean(editImages.after)};
+  renderLists();updateJSON();document.getElementById('edit-tab-btn').style.display='none';showTab(type);
+  document.getElementById('save-status').innerHTML='<span style="color:#28a745;">✅ 已更新</span>';
+}
 function cancelEdit(){document.getElementById('edit-tab-btn').style.display='none';showTab('renovation');}
-function deleteCase(type,i){if(confirm('確定刪除？')){portfolioData[type].splice(i,1);renderLists();updateJSON();document.getElementById('save-status').innerHTML='<span style="color:orange">⚠️ 已刪除</span>';}}
+function deleteCase(type,i){if(confirm('確定刪除？')){portfolioData[type].splice(i,1);renderLists();updateJSON();document.getElementById('save-status').innerHTML='<span style="color:#c5a55a;">⚠️ 已刪除</span>';}}
+
 function previewNewImage(){const u=document.getElementById('new-thumbnail').value;const p=document.getElementById('new-preview');if(u){p.src=u;p.style.display='block';}else p.style.display='none';}
-function addCase(){const type=document.getElementById('new-type').value;const title=document.getElementById('new-title').value;const location=document.getElementById('new-location').value;if(!title||!location){document.getElementById('save-status').innerHTML='<span style="color:red">❌ 請填寫標題和地區</span>';return;}const cleanImages=arr=>arr.map(img=>({url:img.url,caption:img.caption||''}));const images=[...cleanImages(newImages.before),...cleanImages(newImages.after),...cleanImages(newImages.normal)];const id=title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'-').replace(/^-|-$/g,'')||`case-${Date.now()}`;portfolioData[type].push({id,title,location,type:document.getElementById('new-category').value,thumbnail:document.getElementById('new-thumbnail').value,description:document.getElementById('new-description').value,images,before_images:cleanImages(newImages.before),after_images:cleanImages(newImages.after),order:portfolioData[type].length+1});renderLists();updateJSON();['new-title','new-location','new-category','new-thumbnail','new-description'].forEach(id=>document.getElementById(id).value='');document.getElementById('new-preview').style.display='none';newImages={before:[],after:[],normal:[]};renderZones('new');showTab('renovation');document.getElementById('save-status').innerHTML='<span style="color:green">✅ 已加入</span>';}
+function addCase(){
+  const type=document.getElementById('new-type').value,title=document.getElementById('new-title').value,location=document.getElementById('new-location').value;
+  if(!title||!location){document.getElementById('save-status').innerHTML='<span style="color:#dc3545;">❌ 請填寫標題和地區</span>';return;}
+  const clean=arr=>arr.map(img=>({url:img.url,caption:img.caption||''}));
+  const images=[...clean(newImages.before),...clean(newImages.after),...clean(newImages.normal)];
+  const id=title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'-').replace(/^-|-$/g,'')||`case-${Date.now()}`;
+  portfolioData[type].push({id,title,location,type:document.getElementById('new-category').value,thumbnail:document.getElementById('new-thumbnail').value,description:document.getElementById('new-description').value,images,before_images:clean(newImages.before),after_images:clean(newImages.after),order:portfolioData[type].length+1});
+  renderLists();updateJSON();
+  ['new-title','new-location','new-category','new-thumbnail','new-description'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('new-preview').style.display='none';
+  newImages={before:[],after:[],normal:[]};renderZones('new');showTab('renovation');
+  document.getElementById('save-status').innerHTML='<span style="color:#28a745;">✅ 已加入</span>';
+}
+
 function updateJSON(){document.getElementById('json-output').value=JSON.stringify(portfolioData,null,2);}
-function copyJSON(){navigator.clipboard.writeText(document.getElementById('json-output').value);document.getElementById('save-status').innerHTML='<span style="color:green">✅ 已複製</span>';}
-async function saveData(){const s=document.getElementById('save-status');s.innerHTML='<span style="color:blue">⏳ 儲存中...</span>';let token=localStorage.getItem('github_token');if(!token){document.getElementById('token-section').style.display='block';s.innerHTML='<span style="color:orange">⚠️ 請先輸入 Token</span>';return;}try{const repo='desskwok/castinghomecraft-site',fp='data/portfolio.json';const json=JSON.stringify(portfolioData,null,2);const r1=await fetch(`https://api.github.com/repos/${repo}/contents/${fp}`,{headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json'}});let sha=null;if(r1.ok){sha=(await r1.json()).sha;}const r2=await fetch(`https://api.github.com/repos/${repo}/contents/${fp}`,{method:'PUT',headers:{'Authorization':`token ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify({message:'Update portfolio via admin',content:btoa(unescape(encodeURIComponent(json))),sha})});if(r2.ok)s.innerHTML='<span style="color:green">✅ 已儲存！約1分鐘更新。</span>';else throw new Error((await r2.json()).message);}catch(e){s.innerHTML=`<span style="color:red">❌ ${e.message}</span>`;}}
-function clearToken(){localStorage.removeItem('github_token');document.getElementById('save-status').innerHTML='<span style="color:orange">⚠️ Token 已清除</span>';}
-function saveToken(){const t=document.getElementById('token-input').value.trim();if(!t)return;localStorage.setItem('github_token',t);document.getElementById('token-section').style.display='none';document.getElementById('save-status').innerHTML='<span style="color:green">✅ Token 已儲存</span>';}
+function copyJSON(){navigator.clipboard.writeText(document.getElementById('json-output').value);document.getElementById('save-status').innerHTML='<span style="color:#28a745;">✅ 已複製</span>';}
+
+async function saveData(){
+  const s=document.getElementById('save-status');s.innerHTML='<span style="color:#1a237e;">⏳ 儲存中...</span>';
+  let token=localStorage.getItem('github_token');
+  if(!token){document.getElementById('token-section').style.display='block';s.innerHTML='<span style="color:#c5a55a;">⚠️ 請先輸入 Token</span>';return;}
+  try{
+    const repo='desskwok/castinghomecraft-site',fp='data/portfolio.json';
+    const json=JSON.stringify(portfolioData,null,2);
+    const r1=await fetch(`https://api.github.com/repos/${repo}/contents/${fp}`,{headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json'}});
+    let sha=null;if(r1.ok){sha=(await r1.json()).sha;}
+    const r2=await fetch(`https://api.github.com/repos/${repo}/contents/${fp}`,{method:'PUT',headers:{'Authorization':`token ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify({message:'Update portfolio via admin',content:btoa(unescape(encodeURIComponent(json))),sha})});
+    if(r2.ok)s.innerHTML='<span style="color:#28a745;">✅ 已儲存！約1分鐘更新。</span>';
+    else throw new Error((await r2.json()).message);
+  }catch(e){s.innerHTML=`<span style="color:#dc3545;">❌ ${e.message}</span>`;}
+}
+function clearToken(){localStorage.removeItem('github_token');document.getElementById('save-status').innerHTML='<span style="color:#c5a55a;">⚠️ Token 已清除</span>';}
+function saveToken(){const t=document.getElementById('token-input').value.trim();if(!t)return;localStorage.setItem('github_token',t);document.getElementById('token-section').style.display='none';document.getElementById('save-status').innerHTML='<span style="color:#28a745;">✅ Token 已儲存</span>';}
+
 loadData();
 </script>
+
 </body>
 </html>
