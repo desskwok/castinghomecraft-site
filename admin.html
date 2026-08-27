@@ -112,6 +112,7 @@
   <div class="admin-card">
     <div class="tab-nav">
       <button class="tab-btn active" data-tab="renovation" onclick="showTab('renovation')">全屋翻新工程<span class="badge" id="badge-renovation">0</span></button>
+      <button class="tab-btn" data-tab="shop" onclick="showTab('shop')">商舖裝修<span class="badge" id="badge-shop">0</span></button>
       <button class="tab-btn" data-tab="maintenance" onclick="showTab('maintenance')">維修案例<span class="badge" id="badge-maintenance">0</span></button>
       <button class="tab-btn" data-tab="add" onclick="showTab('add')">➕ 加新案例</button>
       <button class="tab-btn" data-tab="edit" onclick="showTab('edit')" id="edit-tab-btn" style="display:none;">✏️ 編輯</button>
@@ -120,6 +121,11 @@
     <div class="tab-content active" id="tab-renovation">
       <ul class="case-list" id="renovation-list"></ul>
       <p id="empty-renovation" style="color:#999;text-align:center;padding:20px;display:none;">暫無案例，撳「➕ 加新案例」新增</p>
+    </div>
+    
+    <div class="tab-content" id="tab-shop">
+      <ul class="case-list" id="shop-list"></ul>
+      <p id="empty-shop" style="color:#999;text-align:center;padding:20px;display:none;">暫無案例，撳「➕ 加新案例」新增</p>
     </div>
     
     <div class="tab-content" id="tab-maintenance">
@@ -147,7 +153,7 @@
     </div>
     
     <div class="tab-content" id="tab-add">
-      <div class="form-group"><label>案例分類</label><select id="new-type"><option value="renovation">全屋翻新工程</option><option value="maintenance">維修案例</option></select></div>
+      <div class="form-group"><label>案例分類</label><select id="new-type"><option value="renovation">全屋翻新工程</option><option value="shop">商舖裝修</option><option value="maintenance">維修案例</option></select></div>
       <div class="form-group"><label>標題</label><input type="text" id="new-title" placeholder="例：海怡半島 - 全屋翻新"></div>
       <div class="form-group"><label>地區</label><input type="text" id="new-location" placeholder="例：海怡半島"></div>
       <div class="form-group"><label>工程類型</label><input type="text" id="new-category" placeholder="例：全屋翻新 / 天花維修"></div>
@@ -194,7 +200,7 @@
 </div>
 
 <script>
-let portfolioData = { renovation: [], maintenance: [] };
+let portfolioData = { renovation: [], shop: [], maintenance: [] };
 let editImages = { before: [], after: [], normal: [] };
 let newImages = { before: [], after: [], normal: [] };
 let sortableInstances = {};
@@ -202,7 +208,7 @@ let sortableInstances = {};
 function loadData() { fetch('data/portfolio.json').then(r => r.json()).then(d => { portfolioData = d; renderLists(); updateJSON(); }); }
 
 function renderLists() {
-  ['renovation', 'maintenance'].forEach(type => {
+  ['renovation', 'shop', 'maintenance'].forEach(type => {
     const list = document.getElementById(`${type}-list`);
     const empty = document.getElementById(`empty-${type}`);
     const badge = document.getElementById(`badge-${type}`);
@@ -346,7 +352,7 @@ function editCase(type,index){
   const item=portfolioData[type][index];
   document.getElementById('edit-index').value=index;
   document.getElementById('edit-type').value=type;
-  document.getElementById('edit-type-display').value=type==='renovation'?'全屋翻新工程':'維修案例';
+  document.getElementById('edit-type-display').value=type==='renovation'?'全屋翻新工程':type==='shop'?'商舖裝修':'維修案例';
   document.getElementById('edit-title').value=item.title;
   document.getElementById('edit-location').value=item.location;
   document.getElementById('edit-category').value=item.type;
