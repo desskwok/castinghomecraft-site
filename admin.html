@@ -135,7 +135,7 @@
     
     <div class="tab-content" id="tab-edit">
       <input type="hidden" id="edit-index"><input type="hidden" id="edit-type">
-      <div class="form-group"><label>案例分類</label><input type="text" id="edit-type-display" disabled style="background:#f0f0f0;"></div>
+      <div class="form-group"><label>案例分類</label><select id="edit-type-select"><option value="renovation">全屋翻新工程</option><option value="shop">商舖裝修</option><option value="maintenance">維修案例</option></select></div>
       <div class="form-group"><label>標題</label><input type="text" id="edit-title"></div>
       <div class="form-group"><label>地區</label><input type="text" id="edit-location"></div>
       <div class="form-group"><label>工程類型</label><input type="text" id="edit-category"></div>
@@ -352,7 +352,7 @@ function editCase(type,index){
   const item=portfolioData[type][index];
   document.getElementById('edit-index').value=index;
   document.getElementById('edit-type').value=type;
-  document.getElementById('edit-type-display').value=type==='renovation'?'全屋翻新工程':type==='shop'?'商舖裝修':'維修案例';
+  document.getElementById('edit-type-select').value=type;
   document.getElementById('edit-title').value=item.title;
   document.getElementById('edit-location').value=item.location;
   document.getElementById('edit-category').value=item.type;
@@ -372,14 +372,28 @@ function editCase(type,index){
 
 function previewEditImage(){const u=document.getElementById('edit-thumbnail').value;const p=document.getElementById('edit-preview');if(u){p.src=u;p.style.display='block';}else p.style.display='none';}
 function updateCase(){
-  const index=parseInt(document.getElementById('edit-index').value),type=document.getElementById('edit-type').value;
+  const index=parseInt(document.getElementById('edit-index').value);
+  const oldType=document.getElementById('edit-type').value;
+  const newType=document.getElementById('edit-type-select').value;
   const title=document.getElementById('edit-title').value,location=document.getElementById('edit-location').value;
   if(!title||!location){document.getElementById('save-status').innerHTML='<span style="color:#dc3545;">❌ 請填寫標題和地區</span>';return;}
   const clean=arr=>arr.map(img=>({url:img.url,caption:img.caption||''}));
   const images=[...clean(editImages.before),...clean(editImages.after),...clean(editImages.normal)];
-  portfolioData[type][index]={...portfolioData[type][index],title,location,type:document.getElementById('edit-category').value,thumbnail:document.getElementById('edit-thumbnail').value,description:document.getElementById('edit-description').value,images,before_images:clean(editImages.before),after_images:clean(editImages.after)};
-  renderLists();updateJSON();document.getElementById('edit-tab-btn').style.display='none';showTab(type);
-  document.getElementById('save-status').innerHTML='<span style="color:#28a745;">✅ 已更新</span>';
+  
+  // Build updated case data
+  const caseData={...portfolioData[oldType][index],title,location,type:document.getElementById('edit-category').value,thumbnail:document.getElementById('edit-thumbnail').value,description:document.getElementById('edit-description').value,images,before_images:clean(editImages.before),after_images:clean(editImages.after)};
+  
+  // If category changed, move the case
+  if(oldType!==newType){
+    portfolioData[oldType].splice(index,1);
+    portfolioData[newType].push(caseData);
+    document.getElementById('save-status').innerHTML=`<span style="color:#28a745;">✅ 已更新並移至「${newType==='renovation'?'全屋翻新工程':newType==='shop'?'商舖裝修':'維修案例'}」</span>`;
+  }else{
+    portfolioData[oldType][index]=caseData;
+    document.getElementById('save-status').innerHTML='<span style="color:#28a745;">✅ 已更新</span>';
+  }
+  
+  renderLists();updateJSON();document.getElementById('edit-tab-btn').style.display='none';showTab(newType);
 }
 function cancelEdit(){document.getElementById('edit-tab-btn').style.display='none';showTab('renovation');}
 function deleteCase(type,i){if(confirm('確定刪除？')){portfolioData[type].splice(i,1);renderLists();updateJSON();document.getElementById('save-status').innerHTML='<span style="color:#c5a55a;">⚠️ 已刪除</span>';}}
