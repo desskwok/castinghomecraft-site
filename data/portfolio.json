@@ -437,109 +437,6 @@
       "order": 3
     },
     {
-      "id": "尖沙咀isquare-商舖翻新",
-      "title": "尖沙咀iSquare-商舖裝修",
-      "location": "尖沙咀iSquare",
-      "type": "商舖翻新",
-      "thumbnail": "images/thumbnail_1787777789391_PHOTO_2026_07_04_11_14_10.jpg",
-      "description": "本商舖完成空間優化，移除傳統固定展櫃，釋放開闊動線與靈活陳列空間。以現代簡約美學為基底，結合明亮通透的燈光規劃，打造出適應多元高端零售、品牌展示及體驗互動的多功能舞台，賦予空間無限商業潛力。 ",
-      "images": [
-        {
-          "url": "images/1787777875874_Gemini_Generated_Image_ekzot2ekzot2ekzo.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777878446_Gemini_Generated_Image_vwnbx1vwnbx1vwnb.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777870215_Gemini_Generated_Image_48lkxz48lkxz48lk.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777873228_Gemini_Generated_Image_ctkl0lctkl0lctkl.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777842650_IMG_3876.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777838983_IMG_3875.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777845914_IMG_3877.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777829387_IMG_3872.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777832458_IMG_3873.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777836484_IMG_3874.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777923253_PHOTO_2026_07_04_11_14_10.jpg",
-          "caption": ""
-        }
-      ],
-      "before_images": [
-        {
-          "url": "images/1787777875874_Gemini_Generated_Image_ekzot2ekzot2ekzo.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777878446_Gemini_Generated_Image_vwnbx1vwnbx1vwnb.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777870215_Gemini_Generated_Image_48lkxz48lkxz48lk.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777873228_Gemini_Generated_Image_ctkl0lctkl0lctkl.jpg",
-          "caption": ""
-        }
-      ],
-      "after_images": [
-        {
-          "url": "images/1787777842650_IMG_3876.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777838983_IMG_3875.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777845914_IMG_3877.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777829387_IMG_3872.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777832458_IMG_3873.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777836484_IMG_3874.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787777923253_PHOTO_2026_07_04_11_14_10.jpg",
-          "caption": ""
-        }
-      ],
-      "order": 4
-    },
-    {
       "id": "鑽石山-全屋翻新",
       "title": "鑽石山-全屋翻新",
       "location": "鑽石山",
@@ -632,77 +529,6 @@
         }
       ],
       "order": 5
-    },
-    {
-      "id": "荃新天地2-商舖裝修",
-      "title": "荃新天地2-商舖裝修",
-      "location": "荃新天地2",
-      "type": "商舖裝修",
-      "thumbnail": "images/thumbnail_1787860443128_IMG_20230110_235520.jpg",
-      "description": "",
-      "images": [
-        {
-          "url": "images/1787860588116_IMG_20221009_145049.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860590718_IMG_20221009_145343.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860584508_IMG_20220917_165757.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860502573_IMG_20230110_235542.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860505154_IMG_20230110_235602.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860499790_IMG_20230110_235520.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860496808_IMG_20230110_235515.jpg",
-          "caption": ""
-        }
-      ],
-      "before_images": [
-        {
-          "url": "images/1787860588116_IMG_20221009_145049.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860590718_IMG_20221009_145343.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860584508_IMG_20220917_165757.jpg",
-          "caption": ""
-        }
-      ],
-      "after_images": [
-        {
-          "url": "images/1787860502573_IMG_20230110_235542.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860505154_IMG_20230110_235602.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860499790_IMG_20230110_235520.jpg",
-          "caption": ""
-        },
-        {
-          "url": "images/1787860496808_IMG_20230110_235515.jpg",
-          "caption": ""
-        }
-      ],
-      "order": 6
     }
   ],
   "maintenance": [
@@ -848,6 +674,182 @@
         }
       ],
       "order": 2
+    }
+  ],
+  "shop": [
+    {
+      "id": "尖沙咀isquare-商舖翻新",
+      "title": "尖沙咀iSquare-商舖裝修",
+      "location": "尖沙咀iSquare",
+      "type": "商舖翻新",
+      "thumbnail": "images/thumbnail_1787777789391_PHOTO_2026_07_04_11_14_10.jpg",
+      "description": "本商舖完成空間優化，移除傳統固定展櫃，釋放開闊動線與靈活陳列空間。以現代簡約美學為基底，結合明亮通透的燈光規劃，打造出適應多元高端零售、品牌展示及體驗互動的多功能舞台，賦予空間無限商業潛力。 ",
+      "images": [
+        {
+          "url": "images/1787777875874_Gemini_Generated_Image_ekzot2ekzot2ekzo.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777878446_Gemini_Generated_Image_vwnbx1vwnbx1vwnb.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777870215_Gemini_Generated_Image_48lkxz48lkxz48lk.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777873228_Gemini_Generated_Image_ctkl0lctkl0lctkl.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777842650_IMG_3876.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777838983_IMG_3875.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777845914_IMG_3877.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777829387_IMG_3872.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777832458_IMG_3873.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777836484_IMG_3874.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777923253_PHOTO_2026_07_04_11_14_10.jpg",
+          "caption": ""
+        }
+      ],
+      "before_images": [
+        {
+          "url": "images/1787777875874_Gemini_Generated_Image_ekzot2ekzot2ekzo.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777878446_Gemini_Generated_Image_vwnbx1vwnbx1vwnb.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777870215_Gemini_Generated_Image_48lkxz48lkxz48lk.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777873228_Gemini_Generated_Image_ctkl0lctkl0lctkl.jpg",
+          "caption": ""
+        }
+      ],
+      "after_images": [
+        {
+          "url": "images/1787777842650_IMG_3876.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777838983_IMG_3875.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777845914_IMG_3877.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777829387_IMG_3872.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777832458_IMG_3873.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777836484_IMG_3874.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787777923253_PHOTO_2026_07_04_11_14_10.jpg",
+          "caption": ""
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "荃新天地2-商舖裝修",
+      "title": "荃新天地2-商舖裝修",
+      "location": "荃新天地2",
+      "type": "商舖裝修",
+      "thumbnail": "images/thumbnail_1787860443128_IMG_20230110_235520.jpg",
+      "description": "",
+      "images": [
+        {
+          "url": "images/1787860588116_IMG_20221009_145049.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860590718_IMG_20221009_145343.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860584508_IMG_20220917_165757.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860502573_IMG_20230110_235542.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860505154_IMG_20230110_235602.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860499790_IMG_20230110_235520.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860496808_IMG_20230110_235515.jpg",
+          "caption": ""
+        }
+      ],
+      "before_images": [
+        {
+          "url": "images/1787860588116_IMG_20221009_145049.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860590718_IMG_20221009_145343.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860584508_IMG_20220917_165757.jpg",
+          "caption": ""
+        }
+      ],
+      "after_images": [
+        {
+          "url": "images/1787860502573_IMG_20230110_235542.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860505154_IMG_20230110_235602.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860499790_IMG_20230110_235520.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860496808_IMG_20230110_235515.jpg",
+          "caption": ""
+        }
+      ],
+      "order": 6
     }
   ]
 }
