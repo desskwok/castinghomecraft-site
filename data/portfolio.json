@@ -698,6 +698,85 @@
         }
       ],
       "order": 2
+    },
+    {
+      "id": "太古康怡花園-10日牆身翻新",
+      "title": "太古康怡花園-10日牆身翻新",
+      "location": "太古康怡花園",
+      "type": "10日牆身翻新",
+      "thumbnail": "images/thumbnail_1787804499702_IMG_2418.jpg",
+      "description": "",
+      "images": [
+        {
+          "url": "images/1787854894940_IMG_2426.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787854898937____2_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787854901695____4_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787854905388____5_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804587922_IMG_2418.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804593402_IMG_2419.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804597336_IMG_2457.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804601387____5_.jpg",
+          "caption": ""
+        }
+      ],
+      "before_images": [
+        {
+          "url": "images/1787854894940_IMG_2426.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787854898937____2_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787854901695____4_.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787854905388____5_.jpg",
+          "caption": ""
+        }
+      ],
+      "after_images": [
+        {
+          "url": "images/1787804587922_IMG_2418.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804593402_IMG_2419.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804597336_IMG_2457.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804601387____5_.jpg",
+          "caption": ""
+        }
+      ],
+      "order": 3
     }
   ]
 }
