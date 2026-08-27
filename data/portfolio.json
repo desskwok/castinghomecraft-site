@@ -632,6 +632,77 @@
         }
       ],
       "order": 5
+    },
+    {
+      "id": "荃新天地2-商舖裝修",
+      "title": "荃新天地2-商舖裝修",
+      "location": "荃新天地2",
+      "type": "商舖裝修",
+      "thumbnail": "images/thumbnail_1787860443128_IMG_20230110_235520.jpg",
+      "description": "",
+      "images": [
+        {
+          "url": "images/1787860588116_IMG_20221009_145049.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860590718_IMG_20221009_145343.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860584508_IMG_20220917_165757.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860502573_IMG_20230110_235542.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860505154_IMG_20230110_235602.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860499790_IMG_20230110_235520.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860496808_IMG_20230110_235515.jpg",
+          "caption": ""
+        }
+      ],
+      "before_images": [
+        {
+          "url": "images/1787860588116_IMG_20221009_145049.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860590718_IMG_20221009_145343.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860584508_IMG_20220917_165757.jpg",
+          "caption": ""
+        }
+      ],
+      "after_images": [
+        {
+          "url": "images/1787860502573_IMG_20230110_235542.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860505154_IMG_20230110_235602.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860499790_IMG_20230110_235520.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787860496808_IMG_20230110_235515.jpg",
+          "caption": ""
+        }
+      ],
+      "order": 6
     }
   ],
   "maintenance": [
