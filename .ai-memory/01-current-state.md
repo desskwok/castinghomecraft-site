@@ -26,10 +26,10 @@
 ## 已完成功能
 
 ### 網站頁面
-- ✅ 首頁（index.html）— 服務介紹、數據展示
+- ✅ 首頁（index.html）— Logo + 文字、服務介紹、數據展示
 - ✅ 服務項目（services.html）— 5大服務詳情
 - ✅ 精選作品（portfolio.html）— 動態載入 JSON
-- ✅ 案例詳細（case.html）— 前後對比分組顯示
+- ✅ 案例詳細（case.html）— 前後對比分組 + Lightbox + 封面圖
 - ✅ 聯絡我們（contact.html）— WhatsApp 表單
 
 ### 後台管理系統
@@ -38,26 +38,53 @@
 - ✅ 拖拽排圖（SortableJS）
 - ✅ 前後對比標記（🔴工程前 / 🟢工程後）
 - ✅ 圖片分組顯示（按標題）
-- ✅ 圖片上傳（GitHub API）
-- ✅ 自動壓縮（Canvas API，1200px，80% quality）
-- ✅ 進度條（壓縮 + 上傳）
+- ✅ 圖片上傳（GitHub API）+ 自動壓縮（1200px, 80%）
+- ✅ 進度條顯示壓縮 + 上傳狀態
+- ✅ 封面圖片上傳
 - ✅ GitHub Token 自動儲存
+- ✅ 重新載入按鈕
 
-### 技術特性
+### 案例詳細頁功能
+- ✅ 前後對比滑動器（冇對比時顯示封面圖）
+- ✅ 圖片按標題分組顯示
+- ✅ Lightbox 放大功能（點擊圖片全螢幕）
+- ✅ 鍵盤導航（← → 切換，ESC 關閉）
+
+### 設計特色
+- ✅ Logo 圖片 + 文字（Header/Footer，金色 #e8b931）
 - ✅ 響應式設計（手機/電腦）
-- ✅ SEO 友善
-- ✅ 自動部署（Cloudflare Pages）
+- ✅ Favicon + OG Image
+
+### 案例數據結構
+```json
+{
+  "id": "案例ID",
+  "title": "標題",
+  "location": "地區",
+  "type": "工程類型",
+  "thumbnail": "封面圖片URL",
+  "description": "介紹",
+  "before_images": [{"url": "...", "caption": ""}],
+  "after_images": [{"url": "...", "caption": ""}],
+  "images": [{"url": "...", "caption": ""}]
+}
+```
 
 ## 待辦事項
 
-- [ ] 加更多案例數據
-- [ ] 綁定自訂域名（castinghomecraft.dpdns.org）
+- [ ] 考慮買自訂域名（castinghomecraft.com）
 - [ ] 提交 Google Search Console
 - [ ] 加 Google Analytics
-- [ ] 加 Google Map 到聯絡頁
 
-## 已知問題
+## Debug 經驗
 
-1. **Google Sites 圖片 CORS 限制** — 舊網站嘅圖片唔可以直接嵌入，需要下載到本地
-2. **GitHub Token 安全** — Token 喺前端暴露，唔安全（但係免費方案嘅限制）
-3. **部署延遲** — Cloudflare Pages 部署需要約 1 分鐘
+| 問題 | 原因 | 解決 |
+|------|------|------|
+| 圖片手機睇唔到 | Google Sites CORS 限制 | 下載到本地 images/ |
+| 後台 Tab 切換唔 work | alert() 引號未關閉 | 修復引號 |
+| 案例頁停喺「載入中」 | escaped backticks | 改用正常 backticks |
+| JSON 編碼損壞 | PowerShell BOM 問題 | 用 edit 工具 |
+| Git push 被拒絕 | 遠端有新變更 | 先 pull --rebase |
+| Git SSL 錯誤 | Windows schannel | 用 openssl backend |
+| Logo 搞壞 HTML | PowerShell replace 損壞編碼 | 用 edit 工具 |
+| Lightbox 冇效 | `<\/script>` 喺 template literal | 用 data attributes |
