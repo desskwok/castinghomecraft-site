@@ -26,7 +26,10 @@
     .btn-warning { background: #ffc107; color: #333; padding: 8px 16px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
     .case-list { list-style: none; padding: 0; }
     .case-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 12px; }
+    .case-item { cursor: grab; }
     .case-item:hover { background: #f9f9f9; }
+    .case-item.sortable-ghost { opacity: 0.4; background: #e8f4fd; border: 2px dashed var(--primary); }
+    .case-item.sortable-chosen { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     .case-item-actions { display: flex; gap: 8px; }
     .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
     .tab-nav { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; }
@@ -140,7 +143,21 @@ let sortableInstances = {};
 function loadData() { fetch('data/portfolio.json').then(r => r.json()).then(d => { portfolioData = d; renderLists(); updateJSON(); }); }
 function renderLists() {
   ['renovation', 'maintenance'].forEach(type => {
-    document.getElementById(`${type}-list`).innerHTML = portfolioData[type].map((item, i) => `<li class="case-item"><div>${item.thumbnail ? `<img src="${item.thumbnail}" style="width:80px;height:60px;object-fit:cover;border-radius:6px;margin-right:12px;">` : ''}<strong>${item.title}</strong> <span style="color:var(--text-light);margin-left:8px;">${item.location}</span> <span style="color:#999;margin-left:8px;font-size:0.85rem;">(${(item.images||[]).length}張)</span></div><div class="case-item-actions"><a href="case.html?id=${item.id}&type=${type}" target="_blank" class="btn-primary btn-sm">預覽</a><button class="btn-warning" onclick="editCase('${type}',${i})">編輯</button><button class="btn-danger btn-sm" onclick="deleteCase('${type}',${i})">刪除</button></div></li>`).join('') || '<li style="padding:16px;color:#999;">暫無案例</li>';
+    document.getElementById(`${type}-list`).innerHTML = portfolioData[type].map((item, i) => `<li class="case-item" data-index="${i}"><div>${item.thumbnail ? `<img src="${item.thumbnail}" style="width:80px;height:60px;object-fit:cover;border-radius:6px;margin-right:12px;">` : ''}<strong>${item.title}</strong> <span style="color:var(--text-light);margin-left:8px;">${item.location}</span> <span style="color:#999;margin-left:8px;font-size:0.85rem;">(${(item.images||[]).length}張)</span></div><div class="case-item-actions"><a href="case.html?id=${item.id}&type=${type}" target="_blank" class="btn-primary btn-sm">預覽</a><button class="btn-warning" onclick="editCase('${type}',${i})">編輯</button><button class="btn-danger btn-sm" onclick="deleteCase('${type}',${i})">刪除</button></div></li>`).join('') || '<li style="padding:16px;color:#999;">暫無案例</li>';
+    // Initialize SortableJS for drag-and-drop reordering
+    const list = document.getElementById(`${type}-list`);
+    if (sortableInstances[`${type}-list`]) sortableInstances[`${type}-list`].destroy();
+    sortableInstances[`${type}-list`] = Sortable.create(list, {
+      animation: 150,
+      ghostClass: 'sortable-ghost',
+      handle: '.case-item',
+      onEnd: function(evt) {
+        const item = portfolioData[type].splice(evt.oldIndex, 1)[0];
+        portfolioData[type].splice(evt.newIndex, 0, item);
+        updateJSON();
+        document.getElementById('save-status').innerHTML = '<span style="color:orange;">⚠️ 排序已變更，請撳「儲存」</span>';
+      }
+    });
   });
 }
 function showTab(tab) { document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active')); const t = document.getElementById(`tab-${tab}`); if (t) t.classList.add('active'); const b = document.querySelector(`.tab-btn[data-tab="${tab}"]`); if (b) b.classList.add('active'); }
