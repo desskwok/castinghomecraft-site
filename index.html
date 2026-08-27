@@ -124,10 +124,13 @@ fetch('data/portfolio.json')
     const grid = document.getElementById('home-portfolio-grid');
     if (!grid) return;
     
-    // Take first 2 renovation cases + first 2 maintenance cases
+    // Take first 2 renovation + first 2 shop + first 2 maintenance cases
     const cases = [];
     (data.renovation || []).slice(0, 2).forEach(item => {
       cases.push({ ...item, type: 'renovation' });
+    });
+    (data.shop || []).slice(0, 2).forEach(item => {
+      cases.push({ ...item, type: 'shop' });
     });
     (data.maintenance || []).slice(0, 2).forEach(item => {
       cases.push({ ...item, type: 'maintenance' });
@@ -136,12 +139,12 @@ fetch('data/portfolio.json')
     grid.innerHTML = cases.map(item => `
       <a href="case.html?id=${item.id}&type=${item.type}" class="portfolio-card" style="text-decoration:none; color:inherit;">
         <div class="portfolio-img">
-          ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}">` : '🏠'}
+          ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}">` : (item.type === 'shop' ? '🏪' : '🏠')}
         </div>
         <div class="portfolio-info">
           <h3>${item.title}</h3>
           <p>${item.description || '專業裝修服務'}</p>
-          <span class="portfolio-tag">${item.type === 'renovation' ? '全屋翻新' : '維修工程'}</span>
+          <span class="portfolio-tag">${item.type === 'renovation' ? '全屋翻新' : item.type === 'shop' ? '商舖裝修' : '維修工程'}</span>
         </div>
       </a>
     `).join('');

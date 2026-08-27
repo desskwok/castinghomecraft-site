@@ -51,6 +51,19 @@
   </div>
 </section>
 
+<!-- Shop Cases -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">商舖裝修</span>
+      <h2>商舖裝修案例</h2>
+    </div>
+    <div class="portfolio-grid" id="shop-grid">
+      <!-- 動態載入 -->
+    </div>
+  </div>
+</section>
+
 <!-- Maintenance Cases -->
 <section style="background: white;">
   <div class="container">
@@ -135,11 +148,26 @@ async function loadPortfolio() {
         </div>
         <div class="portfolio-info">
           <h3>${item.title}</h3>
-          <p>${item.description}</p>
+          <p>${item.description || '專業裝修服務'}</p>
           <span class="portfolio-tag">${item.type}</span>
         </div>
       </a>
-    `).join('') || '';
+    `).join('') || '<p style="color:#999;text-align:center;">暫無案例</p>';
+    
+    // Render shop cases
+    const shopGrid = document.getElementById('shop-grid');
+    shopGrid.innerHTML = data.shop?.map(item => `
+      <a href="case.html?id=${item.id}&type=shop" class="portfolio-card" style="text-decoration:none; color:inherit;">
+        <div class="portfolio-img">
+          ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}">` : '🏪'}
+        </div>
+        <div class="portfolio-info">
+          <h3>${item.title}</h3>
+          <p>${item.description || '專業商舖裝修服務'}</p>
+          <span class="portfolio-tag">${item.type}</span>
+        </div>
+      </a>
+    `).join('') || '<p style="color:#999;text-align:center;">暫無案例</p>';
     
     // Render maintenance cases
     const maintenanceGrid = document.getElementById('maintenance-grid');
@@ -150,7 +178,7 @@ async function loadPortfolio() {
         </div>
         <div class="portfolio-info">
           <h3>${item.title}</h3>
-          <p>${item.description}</p>
+          <p>${item.description || '專業維修服務'}</p>
           <span class="portfolio-tag">${item.type}</span>
         </div>
       </a>
