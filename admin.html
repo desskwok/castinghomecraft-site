@@ -10,9 +10,11 @@
   <style>
     body { background: #f5f5f5; margin: 0; }
     .admin-header { background: #1a1a2e; color: white; padding: 20px 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
-    .admin-header img { height: 48px; width: auto; }
-    .admin-header h1 { margin: 0; font-size: 1.4rem; font-weight: 700; color: #c5a55a; }
-    .admin-header p { margin: 4px 0 0; opacity: 0.8; font-size: 0.9rem; }
+    .admin-header img { height: 64px; width: auto; }
+    .admin-header h1 { margin: 0; font-size: 1.4rem; font-weight: 700; }
+    .admin-header h1 .gold { color: #c5a55a; }
+    .admin-header h1 .gray { color: #b0b0b0; font-weight: 400; }
+    .admin-header p { margin: 4px 0 0; opacity: 0.7; font-size: 0.85rem; }
     .admin-container { max-width: 1000px; margin: 0 auto; padding: 0 24px 40px; }
     .admin-card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
     .form-group { margin-bottom: 16px; }
@@ -101,7 +103,7 @@
 <div class="admin-header">
   <img src="images/logo.png" alt="鑄家工藝">
   <div>
-    <h1>🔧 後台管理系統</h1>
+    <h1><span class="gold">鑄家工藝</span> <span class="gray">後台管理系統</span></h1>
     <p>管理你的裝修案例，改完之後撳「儲存」就會自動更新網站</p>
   </div>
 </div>
