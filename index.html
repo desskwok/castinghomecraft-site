@@ -107,37 +107,47 @@
       <h2>精選項目案例</h2>
       <p>展現我們的工藝實力，每一個項目都是品質的見證</p>
     </div>
-    <div class="portfolio-grid">
-      <div class="portfolio-card">
-        <div class="portfolio-img">🏠</div>
-        <div class="portfolio-info">
-          <h3>海怡半島 - 全屋翻新工程</h3>
-          <p>全面翻新設計，打造現代簡約風格的理想家居</p>
-          <span class="portfolio-tag">全屋翻新</span>
-        </div>
-      </div>
-      <div class="portfolio-card">
-        <div class="portfolio-img">🏢</div>
-        <div class="portfolio-info">
-          <h3>利東邨 - 全屋翻新工程</h3>
-          <p>舊屋大改造，空間利用最大化</p>
-          <span class="portfolio-tag">全屋翻新</span>
-        </div>
-      </div>
-      <div class="portfolio-card">
-        <div class="portfolio-img">🔨</div>
-        <div class="portfolio-info">
-          <h3>東威大廈 - 天花維修</h3>
-          <p>專業天花維修，恢復原有面貌</p>
-          <span class="portfolio-tag">維修工程</span>
-        </div>
-      </div>
+    <div class="portfolio-grid" id="home-portfolio-grid">
+      <!-- 動態載入 -->
     </div>
     <div style="text-align: center; margin-top: 40px;">
       <a href="portfolio.html" class="btn btn-primary">查看全部作品 →</a>
     </div>
   </div>
 </section>
+
+<script>
+// Load portfolio preview on homepage
+fetch('data/portfolio.json')
+  .then(r => r.json())
+  .then(data => {
+    const grid = document.getElementById('home-portfolio-grid');
+    if (!grid) return;
+    
+    // Take first 3 renovation cases + first maintenance case
+    const cases = [];
+    (data.renovation || []).slice(0, 2).forEach(item => {
+      cases.push({ ...item, type: 'renovation' });
+    });
+    (data.maintenance || []).slice(0, 1).forEach(item => {
+      cases.push({ ...item, type: 'maintenance' });
+    });
+    
+    grid.innerHTML = cases.map(item => `
+      <a href="case.html?id=${item.id}&type=${item.type}" class="portfolio-card" style="text-decoration:none; color:inherit;">
+        <div class="portfolio-img">
+          ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}">` : '🏠'}
+        </div>
+        <div class="portfolio-info">
+          <h3>${item.title}</h3>
+          <p>${item.description || '專業裝修服務'}</p>
+          <span class="portfolio-tag">${item.type === 'renovation' ? '全屋翻新' : '維修工程'}</span>
+        </div>
+      </a>
+    `).join('');
+  })
+  .catch(err => console.error('Error loading portfolio:', err));
+</script>
 
 <!-- About -->
 <section id="about">
