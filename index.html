@@ -124,12 +124,12 @@ fetch('data/portfolio.json')
     const grid = document.getElementById('home-portfolio-grid');
     if (!grid) return;
     
-    // Take first 3 renovation cases + first maintenance case
+    // Take first 2 renovation cases + first 2 maintenance cases
     const cases = [];
     (data.renovation || []).slice(0, 2).forEach(item => {
       cases.push({ ...item, type: 'renovation' });
     });
-    (data.maintenance || []).slice(0, 1).forEach(item => {
+    (data.maintenance || []).slice(0, 2).forEach(item => {
       cases.push({ ...item, type: 'maintenance' });
     });
     
