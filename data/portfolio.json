@@ -538,6 +538,100 @@
         }
       ],
       "order": 4
+    },
+    {
+      "id": "鑽石山-全屋翻新",
+      "title": "鑽石山-全屋翻新",
+      "location": "鑽石山",
+      "type": "全屋翻新",
+      "thumbnail": "images/thumbnail_1787804242717_WhatsApp_Image_2020_05_08_at_2.13.24_PM.jpg",
+      "description": "這間屋以現代簡約風為主，線條簡潔利落，設計著重功能與實用性。主要採用白色與淺木色系，配合深色點綴，營造出明亮、舒適且具備強大收納功能的居家空間。 ",
+      "images": [
+        {
+          "url": "images/1787804252852_WhatsApp_Image_2020_05_08_at_2.13.15_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804255483_WhatsApp_Image_2020_05_08_at_2.13.18_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804258585_WhatsApp_Image_2020_05_08_at_2.13.24_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804262411_WhatsApp_Image_2020_05_08_at_2.13.25_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804265658_WhatsApp_Image_2020_05_08_at_2.13.30_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804268595_WhatsApp_Image_2020_05_08_at_2.13.32_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804271405_WhatsApp_Image_2020_05_08_at_2.13.34_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804274146_WhatsApp_Image_2020_05_08_at_2.13.40_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804277426_WhatsApp_Image_2020_05_08_at_2.13.44_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804280868_WhatsApp_Image_2020_05_08_at_2.13.46_PM.jpg",
+          "caption": ""
+        }
+      ],
+      "before_images": [],
+      "after_images": [
+        {
+          "url": "images/1787804252852_WhatsApp_Image_2020_05_08_at_2.13.15_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804255483_WhatsApp_Image_2020_05_08_at_2.13.18_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804258585_WhatsApp_Image_2020_05_08_at_2.13.24_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804262411_WhatsApp_Image_2020_05_08_at_2.13.25_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804265658_WhatsApp_Image_2020_05_08_at_2.13.30_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804268595_WhatsApp_Image_2020_05_08_at_2.13.32_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804271405_WhatsApp_Image_2020_05_08_at_2.13.34_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804274146_WhatsApp_Image_2020_05_08_at_2.13.40_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804277426_WhatsApp_Image_2020_05_08_at_2.13.44_PM.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1787804280868_WhatsApp_Image_2020_05_08_at_2.13.46_PM.jpg",
+          "caption": ""
+        }
+      ],
+      "order": 5
     }
   ],
   "maintenance": [
