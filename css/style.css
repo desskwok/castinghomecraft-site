@@ -265,6 +265,7 @@ footer {
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
+  .menu-toggle { display: block; }
   section { padding: 60px 0; }
   .portfolio-img { height: 180px; }
   .cta-section { padding: 50px 24px; }
