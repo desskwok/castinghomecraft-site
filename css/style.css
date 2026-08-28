@@ -286,8 +286,8 @@ footer {
   .hero-stats { flex-direction: column; gap: 24px; }
   .about-content { grid-template-columns: 1fr; }
   .about-visual { order: -1; }
-  .contact-grid { grid-template-columns: 1fr; gap: 24px; justify-items: center; }
-  .contact-info-card, .contact-form { width: 100%; box-sizing: border-box; }
+  .contact-grid { grid-template-columns: 1fr; gap: 24px; }
+  .contact-info-card, .contact-form { margin: 0 auto; }
   .form-row { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: 8px; }
