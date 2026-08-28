@@ -261,7 +261,18 @@ fetch('data/portfolio.json')
 // Mobile menu toggle
 const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.getElementById('navLinks');
-menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+menuToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  menuToggle.classList.toggle('open');
+});
+
+// Close menu when clicking outside
+navLinks.addEventListener('click', (e) => {
+  if (e.target === navLinks) {
+    navLinks.classList.remove('open');
+    menuToggle.classList.remove('open');
+  }
+});
 
 // Header scroll effect
 window.addEventListener('scroll', () => {
