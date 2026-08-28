@@ -1,6 +1,6 @@
 # 當前狀態
 
-## 最後更新：2026-08-21
+## 最後更新：2026-08-21（已包含 CSS mobile 修復）
 
 ## 項目概述
 
@@ -88,3 +88,19 @@
 | Git SSL 錯誤 | Windows schannel | 用 openssl backend |
 | Logo 搞壞 HTML | PowerShell replace 損壞編碼 | 用 edit 工具 |
 | Lightbox 冇效 | `<\/script>` 喺 template literal | 用 data attributes |
+| Hamburger menu 冇顯示 | 768px breakpoint 冇加 display: block | 加 .menu-toggle { display: block } |
+| Menu overlay 透明 + link 被遮住 | .nav-links 冇 z-index | 加 z-index: 9999 + background: #fff |
+
+## Mobile CSS 修復（css/style.css）
+
+```css
+/* 768px media query 入面 */
+.menu-toggle { display: block; }
+.nav-links { z-index: 9999 !important; background: #ffffff !important; }
+.nav-links.open { display: flex !important; }
+body { overflow-x: hidden; }
+.portfolio-grid, .services-grid { grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr)); }
+.cta-section { margin: 0; }
+section { padding: 60px 0; }
+.portfolio-img { height: 180px; }
+```
