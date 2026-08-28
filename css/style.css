@@ -273,7 +273,7 @@ footer {
   .nav-links { 
     display: none; position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
     background: white; flex-direction: column; padding: 40px 24px;
-    gap: 24px; align-items: flex-start;
+    gap: 24px; align-items: flex-start; z-index: 1001;
   }
   .nav-links.open { display: flex; }
   .menu-toggle span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
