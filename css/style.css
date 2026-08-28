@@ -225,7 +225,8 @@ section { padding: 100px 0; }
   font-size: 1.2rem; flex-shrink: 0;
 }
 .contact-item h4 { font-size: 0.85rem; color: var(--text-light); margin-bottom: 4px; }
-.contact-item p { font-size: 1rem; font-weight: 600; color: var(--primary); }
+.contact-item p { font-size: 1rem; font-weight: 600; color: var(--primary); overflow-wrap: break-word; word-break: break-word; }
+.contact-item > div { min-width: 0; }
 
 .contact-form {
   background: var(--card); border-radius: var(--radius); padding: 40px;
