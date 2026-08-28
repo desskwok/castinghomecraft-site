@@ -121,7 +121,16 @@
 <script>
 const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.getElementById('navLinks');
-menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+menuToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  menuToggle.classList.toggle('open');
+});
+navLinks.addEventListener('click', (e) => {
+  if (e.target === navLinks) {
+    navLinks.classList.remove('open');
+    menuToggle.classList.remove('open');
+  }
+});
 window.addEventListener('scroll', () => {
   document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
 });
