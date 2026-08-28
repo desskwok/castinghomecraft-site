@@ -271,11 +271,11 @@ footer {
   .cta-section { padding: 50px 24px; }
   .footer-grid { grid-template-columns: 1fr; }
   .nav-links { 
-    display: none; position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
-    background: white; flex-direction: column; padding: 40px 24px;
-    gap: 24px; align-items: flex-start; z-index: 1001;
+    display: none !important; position: fixed !important; top: 72px; left: 0; right: 0; bottom: 0;
+    background: #ffffff !important; flex-direction: column; padding: 40px 24px;
+    gap: 24px; align-items: flex-start; z-index: 9999 !important;
   }
-  .nav-links.open { display: flex; }
+  .nav-links.open { display: flex !important; }
   .menu-toggle span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
   .menu-toggle span:nth-child(2) { opacity: 0; }
   .menu-toggle span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
