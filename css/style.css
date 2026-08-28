@@ -216,8 +216,10 @@ section { padding: 100px 0; }
 .contact-info-card {
   background: var(--card); border-radius: var(--radius); padding: 40px;
   box-shadow: var(--shadow); border: 1px solid var(--border);
+  text-align: center;
 }
-.contact-item { display: flex; gap: 16px; margin-bottom: 28px; }
+.contact-info-card h2 { text-align: center; }
+.contact-item { display: flex; gap: 16px; margin-bottom: 28px; align-items: center; }
 .contact-item:last-child { margin-bottom: 0; }
 .contact-icon {
   width: 48px; height: 48px; background: rgba(232,185,49,0.15);
