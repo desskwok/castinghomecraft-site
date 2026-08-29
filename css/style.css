@@ -284,6 +284,7 @@ footer {
   .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
 
   .hero h1 { font-size: 2.2rem; }
+  .hero::before { display: none; }
   .hero-stats { flex-direction: column; gap: 24px; }
   .about-content { grid-template-columns: 1fr; }
   .about-visual { order: -1; }
