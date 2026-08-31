@@ -200,27 +200,6 @@ section { padding: 100px 0; }
 .about-visual .big-number { font-size: 4rem; font-weight: 800; color: var(--accent); line-height: 1; }
 .about-visual .big-label { font-size: 1.1rem; opacity: 0.8; }
 
-/* ===== Process ===== */
-.process-section { background: var(--primary); color: #fff; padding: 100px 0; }
-.process-section .section-tag { color: var(--accent); }
-.process-section .section-header h2 { color: #fff; }
-.process-section .section-header p { color: rgba(255,255,255,0.7); }
-.process-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
-  gap: 32px; margin-top: 48px;
-}
-.process-step { text-align: center; position: relative; }
-.process-num {
-  width: 48px; height: 48px; border-radius: 50%;
-  background: var(--accent); color: var(--primary);
-  font-size: 1.2rem; font-weight: 800;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
-}
-.process-icon { font-size: 2rem; margin-bottom: 12px; }
-.process-step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
-.process-step p { font-size: 0.9rem; opacity: 0.7; line-height: 1.5; }
-
 /* ===== CTA ===== */
 .cta-section {
   background: linear-gradient(135deg, var(--primary), #16213e);
@@ -246,8 +225,7 @@ section { padding: 100px 0; }
   font-size: 1.2rem; flex-shrink: 0;
 }
 .contact-item h4 { font-size: 0.85rem; color: var(--text-light); margin-bottom: 4px; }
-.contact-item p { font-size: 1rem; font-weight: 600; color: var(--primary); overflow-wrap: break-word; word-break: break-word; }
-.contact-item > div { min-width: 0; }
+.contact-item p { font-size: 1rem; font-weight: 600; color: var(--primary); }
 
 .contact-form {
   background: var(--card); border-radius: var(--radius); padding: 40px;
@@ -305,12 +283,11 @@ footer {
   .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
 
   .hero h1 { font-size: 2.2rem; }
-  .hero::before { display: none; }
   .hero-stats { flex-direction: column; gap: 24px; }
   .about-content { grid-template-columns: 1fr; }
   .about-visual { order: -1; }
-  .contact-grid { display: flex; flex-direction: column; gap: 24px; }
-  .contact-info-card, .contact-form { width: 100%; }
+  .contact-grid { grid-template-columns: 1fr; gap: 24px; }
+  .contact-info-card, .contact-form { margin: 0 auto; }
   .form-row { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: 8px; }
