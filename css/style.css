@@ -309,6 +309,7 @@ footer {
   .hero-stats { flex-direction: column; gap: 24px; }
   .about-content { grid-template-columns: 1fr; text-align: center; }
   .about-visual { order: -1; }
+  .about-features { text-align: left; }
   .contact-grid { display: flex; flex-direction: column; gap: 24px; }
   .contact-info-card, .contact-form { width: 100%; }
   .form-row { grid-template-columns: 1fr; }
