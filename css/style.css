@@ -206,20 +206,33 @@ section { padding: 100px 0; }
 .process-section .section-header h2 { color: #fff; }
 .process-section .section-header p { color: rgba(255,255,255,0.7); }
 .process-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
-  gap: 32px; margin-top: 48px;
+  display: flex; flex-direction: column;
+  gap: 0; margin-top: 48px;
+  max-width: 700px; margin-left: auto; margin-right: auto;
 }
-.process-step { text-align: center; position: relative; }
+.process-step {
+  display: flex; align-items: center; gap: 24px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  transition: background 0.3s;
+}
+.process-step:hover { background: rgba(255,255,255,0.14); }
 .process-num {
-  width: 48px; height: 48px; border-radius: 50%;
+  width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0;
   background: var(--accent); color: var(--primary);
-  font-size: 1.2rem; font-weight: 800;
+  font-size: 1.4rem; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
 }
-.process-icon { font-size: 2rem; margin-bottom: 12px; }
-.process-step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
-.process-step p { font-size: 0.9rem; opacity: 0.7; line-height: 1.5; }
+.process-step-content { flex: 1; }
+.process-icon { font-size: 1.6rem; margin-bottom: 4px; }
+.process-step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.process-step p { font-size: 0.9rem; opacity: 0.7; line-height: 1.5; margin: 0; }
+.process-arrow {
+  text-align: center; color: var(--accent);
+  font-size: 1.5rem; padding: 8px 0;
+}
 
 /* ===== CTA ===== */
 .cta-section {
@@ -316,6 +329,9 @@ footer {
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: 8px; }
   .portfolio-grid { grid-template-columns: 1fr; }
+  .process-step { padding: 16px 20px; gap: 16px; }
+  .process-num { width: 44px; height: 44px; font-size: 1.1rem; }
+  .process-icon { font-size: 1.3rem; }
 }
 
 @media (max-width: 480px) {
