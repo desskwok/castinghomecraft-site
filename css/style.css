@@ -212,13 +212,13 @@ section { padding: 100px 0; }
 }
 .process-step {
   display: flex; align-items: center; gap: 24px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius);
+  background: rgba(255,255,255,0.06);
+  border: 2px solid var(--accent);
+  border-radius: 20px;
   padding: 24px 32px;
   transition: background 0.3s;
 }
-.process-step:hover { background: rgba(255,255,255,0.14); }
+.process-step:hover { background: rgba(255,255,255,0.12); }
 .process-num {
   width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0;
   background: var(--accent); color: var(--primary);
