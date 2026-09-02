@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://castinghomecraft.pages.dev/</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://www.castinghomecraft.com/</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://castinghomecraft.pages.dev/services.html</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://www.castinghomecraft.com/services.html</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://castinghomecraft.pages.dev/portfolio.html</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://www.castinghomecraft.com/portfolio.html</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://castinghomecraft.pages.dev/contact.html</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://www.castinghomecraft.com/case.html</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.castinghomecraft.com/contact.html</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
