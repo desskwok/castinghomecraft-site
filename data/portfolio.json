@@ -745,6 +745,69 @@
         }
       ],
       "order": 4
+    },
+    {
+      "id": "大窩口邨-電箱維修",
+      "title": "大窩口邨-電箱維修",
+      "location": "大窩口邨",
+      "type": "電箱維修",
+      "thumbnail": "images/thumbnail_1788725710554_IMG_4322.jpg",
+      "description": "",
+      "images": [
+        {
+          "url": "images/1788725727953_IMG_4311.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1788725731213_IMG_4312.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1788725733801_IMG_4315.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1788725772405_IMG_4320.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1788725775561_IMG_4321.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1788725777916_IMG_4322.jpg",
+          "caption": ""
+        }
+      ],
+      "before_images": [
+        {
+          "url": "images/1788725727953_IMG_4311.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1788725731213_IMG_4312.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1788725733801_IMG_4315.jpg",
+          "caption": ""
+        }
+      ],
+      "after_images": [
+        {
+          "url": "images/1788725772405_IMG_4320.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1788725775561_IMG_4321.jpg",
+          "caption": ""
+        },
+        {
+          "url": "images/1788725777916_IMG_4322.jpg",
+          "caption": ""
+        }
+      ],
+      "order": 5
     }
   ],
   "shop": [
